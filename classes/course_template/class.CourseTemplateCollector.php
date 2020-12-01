@@ -40,7 +40,6 @@ class CourseTemplateCollector
             $template_type = $this->evaluateTemplateType($crs_ref_id);
             $status = CourseTemplateModel::STATUS_DRAFT;
             $creator_user_id = \ilObject::_lookupOwner($crs_obj_id);
-            $model = new CourseTemplate();
 
             try {
                 $this->crs_repo->createAndAddNewCourseTemplate($crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $this->container_ref_id);

@@ -112,7 +112,7 @@ class CourseTemplateRepository
             $statement_binding = ' OR ';
         }
 
-        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE ' . $or_statement;
+        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE '.self::COL_TEMPLATE_CONTAINER_REF_ID.' = '.$this->db->quote($container_ref_id, 'integer').' AND ' . $or_statement;
         $result = $this->db->query($sql);
 
         $templates = array();

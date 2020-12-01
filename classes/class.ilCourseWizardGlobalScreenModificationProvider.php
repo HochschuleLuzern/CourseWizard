@@ -19,6 +19,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
             if(ilObject::_lookupType($ref_id, true) == 'crs') {
                 $tpl = $DIC->ui()->mainTemplate();
                 $tpl->addJavaScript($this->plugin->getDirectory() . '/js/modal_functions.js');
+                $tpl->addCss($this->plugin->getDirectory() . '/templates/default/xcwi_modal_styles.css');
 
                 $ctrl = $this->dic->ctrl();
                 $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);

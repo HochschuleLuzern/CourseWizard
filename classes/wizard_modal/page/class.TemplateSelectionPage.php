@@ -3,23 +3,23 @@
 namespace CourseWizard\Modal\Page;
 
 use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
-use CourseWizard\CustomUI\MultiContentViewControl;
-use CourseWizard\CustomUI\TemplateSelectionRadioButtonGUI;
+use CourseWizard\CustomUI\RadioSelectionViewControlGUI;
+use CourseWizard\CustomUI\TemplateSelectionRadioGroupGUI;
 use CourseWizard\Modal\CourseTemplates\ModalBaseCourseTemplate;
 use CourseWizard\Modal\CourseTemplates\ModalCourseTemplate;
 
 class TemplateSelectionPage extends BaseModalPagePresenter
 {
     /** @var array */
-    protected $course_templates;
+    protected $view_control;
 
     protected const JS_POST_SELECTION_METHOD =  self::JS_NAMESPACE . '.' . 'pushTemplateSelection';
 
-    public function __construct(array $course_templates, StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
+    public function __construct(RadioSelectionViewControlGUI $view_control, StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
         parent::__construct($state_machine, $ui_factory);
 
-        $this->course_templates = $course_templates;
+        $this->view_control = $view_control;
     }
 
     private function buildTemplateSelection(CourseTemplateModel $course_template)
@@ -70,7 +70,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
     public function getModalPageAsComponentArray() : array
     {
         // TODO: Implement getContentAsUIComponent() method.
-
+/*
         $actions = array("Vorlagen Dep. Irgendwas" => "#", "Vorlagen HSLU Allgemein" => "#", "Aus vergangenem Kurs importieren" => "#");
         $vc = $this->ui_factory->viewControl()->mode($actions, 'aria_label');
 
@@ -80,13 +80,13 @@ class TemplateSelectionPage extends BaseModalPagePresenter
 
         $radio_gui = new TemplateSelectionRadioButtonGUI();
         /** @var $course_template CourseTemplateModel */
-        foreach($this->course_templates as $course_template) {
+        /*foreach($this->view_control as $course_template) {
             $radio_gui->addTemplateToList(new ModalBaseCourseTemplate($course_template, new \ilObjCourse($course_template->getCrsRefId())));
         }
         $view_control->addNewContent('helloworld', $radio_gui->render());
-        $view_control->addNewContent('empty', 'This is empty now');
+        $view_control->addNewContent('empty', 'This is empty now');*/
 
-        return $view_control->getAsComponentListObsolete();
+        return $this->view_control->getAsComponentList();
     }
 
     public function getJsPageActionMethod() : string

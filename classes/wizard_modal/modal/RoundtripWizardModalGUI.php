@@ -16,33 +16,20 @@ class RoundtripWizardModalGUI implements WizardModalGUI
         $this->ui_renderer = $ui_renderer;
     }
 
-    protected function getAsyncURL(\ILIAS\UI\Component\Modal\Modal $base_modal) {
-
-    }
-
-    protected function createModalObject(ilCourseWizardModalPresenter $presentation_gui) : \ILIAS\UI\Component\Modal\Modal
-    {
-    }
-
-
-
-    public function getRenderedModal() : string
+    public function getRenderedModal(bool $immediate_opening) : string
     {
         $modal = $this->presenter->getModalAsUIComponent();
-        $signal = $modal->getShowSignal();
 
-        $output = $this->ui_renderer->renderAsync($modal);
-        $output .= "<script>$(document).trigger('{$signal}', '{}');</script>";
-        return $output;
+        if($immediate_opening) {
+            $open_signal = $modal->getShowSignal();
+            $modal = $modal->withOnLoad($open_signal);
+        }
+
+        return $this->ui_renderer->renderAsync($modal);
     }
 
     public function getRenderedModalFromAsyncCall() : string
     {
         return $this->ui_renderer->renderAsync($this->presenter->getModalAsUIComponent());
-    }
-
-    public function getModalForAsyncRendering(string $async_url, bool $render_with_immediate_opening) : string
-    {
-        // TODO: Implement getModalForAsyncRendering() method.
     }
 }

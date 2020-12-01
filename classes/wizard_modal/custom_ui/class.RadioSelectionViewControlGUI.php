@@ -2,7 +2,7 @@
 
 namespace CourseWizard\CustomUI;
 
-class MultiContentViewControl
+class RadioSelectionViewControlGUI
 {
     /** @var \ILIAS\UI\Factory */
     protected $ui_factory;
@@ -30,7 +30,7 @@ class MultiContentViewControl
         $this->content_list[$vc_title] = $content;
     }
 
-    public function addNewSubPage(ViewControlSubpage $subpage)
+    public function addNewSubPage(RadioGroupViewControlSubPageGUI $subpage)
     {
         $this->view_control_subpages[] = $subpage;
     }
@@ -74,37 +74,70 @@ class MultiContentViewControl
 
     public function getAsComponentList() : array
     {
+        global $DIC;
+
         if(count($this->view_control_subpages) < 1) {
             return [$this->ui_factory->legacy("No View Control Elements available")];
         }
 
+        $components = array();
+        $vc_actions = array();
         $selected_element = $this->view_control_subpages[0]->getTitle();
+
+        /** @var RadioGroupViewControlSubPageGUI $subpage */
         foreach($this->view_control_subpages as $subpage) {
             $subpage_title = $subpage->getTitle();
             $hidden = $selected_element == $subpage_title ? '' : 'style="display: none;"';
 
-            $subpage_div = $this->ui_factory->legacy("<div id='$title' class='xcwi_content' $hidden>".$subpage->getContent()."</div>")
-                                                  ->withCustomSignal($title, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$title');");
-            $subpage_content = $subpage->getContent();
+            $content = $subpage->getContent();
+            $radios_rendered = $DIC->ui()->renderer()->render($content);
+
+            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_title' class='xcwi_content' $hidden>".$radios_rendered."</div>")
+                                                  ->withCustomSignal($subpage_title, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_title');");
+            $components[] = $subpage_div;
+
+            $vc_actions[$subpage_title] = $subpage_div->getCustomSignal($subpage_title);
         }
+
+        $view_control = $this->ui_factory->viewControl()->mode($vc_actions, 'some aria label');
+
+        $header_comps = array(
+            $this->ui_factory->legacy("<div class='xcwi_radio'><div style='text-align: center'>"),
+            $view_control,
+            $this->ui_factory->legacy("</div>"),
+            $this->getJsForSwitching()
+        );
+
+        return array_merge($header_comps, $components, [$this->ui_factory->legacy('</div>')]);
     }
 
     protected function getJsForSwitching()
     {
-        $js = '<script>'
-            . 'il.CourseWizardModalFunctions.switchViewControlContent = function (e, id){debugger;'
+        $js = "<script>
+            il.CourseWizardModalFunctions.switchViewControlContent = function (e, id){
             // e['target'] is the id for the button which was clicked (e.g. 'button#il_ui_fw_1234')
-            . "obj = $(e['target']);"
-            // Sets all buttons to the "unclicked" state
-            . "obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');"
-            . "obj.siblings().removeAttr('disabled');"
-            // Sets the clicked button into the "clicked" state
-            . "obj.addClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'true');"
-            . "obj.attr('disabled', 'disabled');"
+            obj = $(e['target']);
+            // Sets all buttons to the 'unclicked' state
+            obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');
+            obj.siblings().removeAttr('disabled');
+            // Sets the clicked button into the 'clicked' state
+            obj.addClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'true');
+            obj.attr('disabled', 'disabled');
             // Hide all instruction divs at first
-            . '$(".xcwi_content").hide();'
+            $('.xcwi_content').hide();
             // Show the div which is given as an argument
-            . '$("#"+id).show();}</script>';
+            $('#'+id).show();}
+            
+            
+            il.CourseWizardModalFunctions.switchSelectedTemplate = function(obj){
+                selected_obj = $(obj);
+                let container = selected_obj.closest('.xcwi_radio');
+                //console.log(container);console.log(container.children)
+                
+                container.find('.crs_tmp_checked').removeClass('crs_tmp_checked');
+                selected_obj.parents('.crs_tmp_option').addClass('crs_tmp_checked');
+            }
+            </script>";
 
         return $this->ui_factory->legacy($js);
     }

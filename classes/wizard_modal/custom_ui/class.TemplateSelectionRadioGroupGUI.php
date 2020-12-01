@@ -5,7 +5,7 @@ namespace CourseWizard\CustomUI;
 use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
 use CourseWizard\Modal\CourseTemplates\ModalCourseTemplate;
 
-class TemplateSelectionRadioButtonGUI
+class TemplateSelectionRadioGroupGUI
 {
     const RENDER_ITEM = 'item';
     const RENDER_PANEL = 'panel';
