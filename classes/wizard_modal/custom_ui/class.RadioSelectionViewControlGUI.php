@@ -80,6 +80,9 @@ class RadioSelectionViewControlGUI
             return [$this->ui_factory->legacy("No View Control Elements available")];
         }
 
+        $xcwi_vc_subpage_div = uniqid('xcwi');
+        $xcwi_radio_selection_div = uniqid('xcwi');
+
         $components = array();
         $vc_actions = array();
         $selected_element = $this->view_control_subpages[0]->getTitle();
@@ -92,7 +95,7 @@ class RadioSelectionViewControlGUI
             $content = $subpage->getContent();
             $radios_rendered = $DIC->ui()->renderer()->render($content);
 
-            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_title' class='xcwi_content' $hidden>".$radios_rendered."</div>")
+            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_title' class='$xcwi_vc_subpage_div' $hidden>".$radios_rendered."</div>")
                                                   ->withCustomSignal($subpage_title, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_title');");
             $components[] = $subpage_div;
 
@@ -102,38 +105,37 @@ class RadioSelectionViewControlGUI
         $view_control = $this->ui_factory->viewControl()->mode($vc_actions, 'some aria label');
 
         $header_comps = array(
-            $this->ui_factory->legacy("<div class='xcwi_radio'><div style='text-align: center'>"),
+            $this->ui_factory->legacy("<div class='$xcwi_radio_selection_div'><div style='text-align: center'>"),
             $view_control,
             $this->ui_factory->legacy("</div>"),
-            $this->getJsForSwitching()
+            $this->getJsForSwitching($xcwi_vc_subpage_div, $xcwi_radio_selection_div)
         );
 
         return array_merge($header_comps, $components, [$this->ui_factory->legacy('</div>')]);
     }
 
-    protected function getJsForSwitching()
+    protected function getJsForSwitching($xcwi_vc_subpage_div, $xcwi_radio_selection_div)
     {
         $js = "<script>
             il.CourseWizardModalFunctions.switchViewControlContent = function (e, id){
-            // e['target'] is the id for the button which was clicked (e.g. 'button#il_ui_fw_1234')
-            obj = $(e['target']);
-            // Sets all buttons to the 'unclicked' state
-            obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');
-            obj.siblings().removeAttr('disabled');
-            // Sets the clicked button into the 'clicked' state
-            obj.addClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'true');
-            obj.attr('disabled', 'disabled');
-            // Hide all instruction divs at first
-            $('.xcwi_content').hide();
-            // Show the div which is given as an argument
-            $('#'+id).show();}
+                // e['target'] is the id for the button which was clicked (e.g. 'button#il_ui_fw_1234')
+                obj = $(e['target']);
+                // Sets all buttons to the 'unclicked' state
+                obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');
+                obj.siblings().removeAttr('disabled');
+                // Sets the clicked button into the 'clicked' state
+                obj.addClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'true');
+                obj.attr('disabled', 'disabled');
+                // Hide all instruction divs at first
+                $('.$xcwi_vc_subpage_div').hide();
+                // Show the div which is given as an argument
+                $('#'+id).show();
+            }
             
             
             il.CourseWizardModalFunctions.switchSelectedTemplate = function(obj){
                 selected_obj = $(obj);
-                let container = selected_obj.closest('.xcwi_radio');
-                //console.log(container);console.log(container.children)
-                
+                let container = selected_obj.closest('.$xcwi_radio_selection_div');
                 container.find('.crs_tmp_checked').removeClass('crs_tmp_checked');
                 selected_obj.parents('.crs_tmp_option').addClass('crs_tmp_checked');
             }
