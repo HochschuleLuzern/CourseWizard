@@ -2,7 +2,8 @@
 
 namespace CourseWizard\CourseTemplate;
 
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
+use CourseWizard\DB\CourseTemplateRepository;
+use CourseWizard\DB\Models\CourseTemplate;
 
 class CourseTemplateManagementTableDataProvider
 {
@@ -42,9 +43,9 @@ class CourseTemplateManagementTableDataProvider
         $form->setId(uniqid('form'));
         $item = new \ilSelectInputGUI('Status', 'status');
         $item->setOptions(array(
-            CourseTemplateModel::STATUS_CHANGE_REQUESTED => $this->plugin->txt('change_requested'),
-            CourseTemplateModel::STATUS_APPROVED => $this->plugin->txt('approved'),
-            CourseTemplateModel::STATUS_DECLINED => $this->plugin->txt('declined')
+            CourseTemplate::STATUS_CHANGE_REQUESTED => $this->plugin->txt('change_requested'),
+            CourseTemplate::STATUS_APPROVED         => $this->plugin->txt('approved'),
+            CourseTemplate::STATUS_DECLINED         => $this->plugin->txt('declined')
         ));
         $form->addItem($item);
 
@@ -86,10 +87,10 @@ class CourseTemplateManagementTableDataProvider
 
     public function getCourseTemplatesForManagementTable()
     {
-        $allowed_status = array(CourseTemplateModel::STATUS_APPROVED, CourseTemplateModel::STATUS_PENDING, CourseTemplateModel::STATUS_CHANGE_REQUESTED, CourseTemplateModel::STATUS_DECLINED);
+        $allowed_status = array(CourseTemplate::STATUS_APPROVED, CourseTemplate::STATUS_PENDING, CourseTemplate::STATUS_CHANGE_REQUESTED, CourseTemplate::STATUS_DECLINED);
 
         $table_data = array();
-        /** @var CourseTemplateModel $model */
+        /** @var CourseTemplate $model */
         foreach($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
 
             $dropdown_and_modal = $this->createRenderedDropdownAndModal($model->getTemplateId());

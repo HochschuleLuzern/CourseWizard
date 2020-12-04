@@ -7,7 +7,7 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
     protected $template_model;
     protected $course_object;
 
-    public function __construct(\CourseWizard\CourseTemplate\Models\CourseTemplateModel $template_model, \ilObjCourse $course_object)
+    public function __construct(\CourseWizard\DB\Models\CourseTemplate $template_model, \ilObjCourse $course_object)
     {
         if($course_object->getRefId() != $template_model->getCrsRefId()
         || $course_object->getId() != $template_model->getCrsObjId()){

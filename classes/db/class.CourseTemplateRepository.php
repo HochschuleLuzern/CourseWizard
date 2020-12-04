@@ -1,9 +1,8 @@
 <?php
 
-namespace CourseWizard\CourseTemplate;
+namespace CourseWizard\DB;
 
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
-use CourseWizard\CourseTemplate\Models\CourseTemplate;
+use CourseWizard\DB\Models\CourseTemplate;
 
 class CourseTemplateRepository
 {
@@ -17,7 +16,7 @@ class CourseTemplateRepository
     const COL_CREATOR_USER_ID = 'creator_user_id';
     const COL_TEMPLATE_CONTAINER_REF_ID = 'template_container_ref_id';
 
-    /** @var \ilDB */
+    /** @var \ilDBInterface */
     protected $db;
 
     public function __construct(\ilDBInterface $db)
@@ -29,11 +28,11 @@ class CourseTemplateRepository
         }
     }
 
-    public function createAndAddNewCourseTemplate(int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id) : CourseTemplateModel
+    public function createAndAddNewCourseTemplate(int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id) : CourseTemplate
     {
         $template_id = $this->db->nextId(self::TABLE_NAME);
 
-        $model = new Models\CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $template_container_ref_id);
+        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $template_container_ref_id);
 
         $this->db->insert(self::TABLE_NAME, array(
             self::COL_TEMPLATE_ID => array('integer', $model->getTemplateId()),
@@ -139,7 +138,7 @@ class CourseTemplateRepository
 
     public function getAllApprovedCourseTemplates(int $container_ref_id) : array
     {
-        $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE template_container_ref_id = " . $this->db->quote($container_ref_id, 'integer') . " AND status_code = " . $this->db->quote(CourseTemplateModel::STATUS_APPROVED, 'integer');
+        $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE template_container_ref_id = " . $this->db->quote($container_ref_id, 'integer') . " AND status_code = " . $this->db->quote(CourseTemplate::STATUS_APPROVED, 'integer');
         $result = $this->db->query($sql);
 
         $templates = array();
@@ -167,7 +166,7 @@ class CourseTemplateRepository
         return $crs_ref_ids;
     }
 
-    public function updateTemplate(CourseTemplateModel $model)
+    public function updateTemplate(CourseTemplate $model)
     {
         $this->db->update(self::TABLE_NAME, array(
 
@@ -184,7 +183,7 @@ class CourseTemplateRepository
         );
     }
 
-    public function updateTemplateStatus(CourseTemplateModel $model, int $new_status)
+    public function updateTemplateStatus(CourseTemplate $model, int $new_status)
     {
         $this->db->update(self::TABLE_NAME,
             // VALUES
@@ -195,7 +194,7 @@ class CourseTemplateRepository
         );
     }
 
-    public function deleteTemplate(CourseTemplateModel $model)
+    public function deleteTemplate(CourseTemplate $model)
     {
         $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_ID . "=" . $this->db->quote($model->getTemplateId(), 'integer');
         $this->db->manipulate($sql);

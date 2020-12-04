@@ -2,8 +2,8 @@
 
 namespace CourseWizard\Modal;
 
-use CourseWizard\CourseTemplate\CourseTemplateRepository;
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
+use CourseWizard\DB\CourseTemplateRepository;
+use CourseWizard\DB\Models\CourseTemplate;
 use CourseWizard\CustomUI\RadioSelectionViewControlGUI;
 use CourseWizard\CustomUI\RadioGroupViewControlSubPageGUI;
 use CourseWizard\CustomUI\TemplateSelectionRadioOptionGUI;
@@ -51,12 +51,12 @@ class WizardModalFactory
                 break;
             case Page\StateMachine::TEMPLATE_SELECTION_PAGE:
                 global $DIC;
-                $crs_repo = new \CourseWizard\CourseTemplate\CourseTemplateRepository($DIC->database());
+                $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
 
                 $view_control = new RadioSelectionViewControlGUI($this->ui_factory);
 
                 $department_subpage = new RadioGroupViewControlSubPageGUI('Department');
-                /** @var CourseTemplateModel $crs_template */
+                /** @var CourseTemplate $crs_template */
                 foreach($this->template_repository->getAllApprovedCourseTemplates(193) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
                     $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));
@@ -64,7 +64,7 @@ class WizardModalFactory
                 $view_control->addNewSubPage($department_subpage);
 
                 $global_subpage = new RadioGroupViewControlSubPageGUI('Global');
-                /** @var CourseTemplateModel $crs_template */
+                /** @var CourseTemplate $crs_template */
                 foreach($this->template_repository->getAllApprovedCourseTemplates(217) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
                     $global_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));

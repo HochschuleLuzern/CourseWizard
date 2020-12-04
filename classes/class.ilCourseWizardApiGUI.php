@@ -53,7 +53,7 @@ class ilCourseWizardApiGUI
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
 
-                        $modal_factory = new Modal\WizardModalFactory($target_ref_id, new \CourseWizard\CourseTemplate\CourseTemplateRepository($DIC->database()),
+                        $modal_factory = new Modal\WizardModalFactory($target_ref_id, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer
@@ -73,7 +73,7 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        $modal_factory = new Modal\WizardModalFactory($target_ref_id,new \CourseWizard\CourseTemplate\CourseTemplateRepository($DIC->database()),
+                        $modal_factory = new Modal\WizardModalFactory($target_ref_id,new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer

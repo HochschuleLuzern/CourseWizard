@@ -2,7 +2,7 @@
 
 namespace CourseWizard\CustomUI;
 
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
+use CourseWizard\DB\Models\CourseTemplate;
 use CourseWizard\Modal\CourseTemplates\ModalCourseTemplate;
 
 class TemplateSelectionRadioGroupGUI

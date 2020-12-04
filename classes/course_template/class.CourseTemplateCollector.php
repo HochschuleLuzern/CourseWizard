@@ -2,9 +2,9 @@
 
 namespace CourseWizard\CourseTemplate;
 
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
-use CourseWizard\CourseTemplate\Models\CourseTemplateTraits;
-use CourseWizard\CourseTemplate\Models\CourseTemplate;
+use CourseWizard\DB\CourseTemplateRepository;
+use CourseWizard\DB\Models\CourseTemplate;
+use CourseWizard\DB\Models\CourseTemplateTraits;
 
 class CourseTemplateCollector
 {
@@ -38,7 +38,7 @@ class CourseTemplateCollector
         foreach($this->crs_repo->getNewlyCreatedCourses($this->container_ref_id) as $crs_ref_id) {
             $crs_obj_id = \ilObject::_lookupObjectId($crs_ref_id);
             $template_type = $this->evaluateTemplateType($crs_ref_id);
-            $status = CourseTemplateModel::STATUS_DRAFT;
+            $status = CourseTemplate::STATUS_DRAFT;
             $creator_user_id = \ilObject::_lookupOwner($crs_obj_id);
 
             try {
@@ -52,12 +52,12 @@ class CourseTemplateCollector
     public function evaluateTemplateType($crs_ref_id)
     {
         // TODO: Change this, if multi group functionality needs to be implemented
-        return CourseTemplateModel::TYPE_SINGLE_CLASS_COURSE;
+        return CourseTemplate::TYPE_SINGLE_CLASS_COURSE;
     }
 
     public function getCourseTemplatesForManagementTable()
     {
-        $allowed_status = array(CourseTemplateModel::STATUS_APPROVED, CourseTemplateModel::STATUS_PENDING, CourseTemplateModel::STATUS_CHANGE_REQUESTED);
+        $allowed_status = array(CourseTemplate::STATUS_APPROVED, CourseTemplate::STATUS_PENDING, CourseTemplate::STATUS_CHANGE_REQUESTED);
 
         $table_data = array();
         /** @var CourseTemplate $model */

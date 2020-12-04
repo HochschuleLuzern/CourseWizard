@@ -1,6 +1,6 @@
 <?php
 
-namespace CourseWizard\CourseTemplate\Models;
+namespace CourseWizard\DB\Models;
 
 trait CourseTemplateTraits
 {
@@ -13,24 +13,20 @@ trait CourseTemplateTraits
         // TODO: Add language
         switch($code)
         {
-            case CourseTemplateModel::STATUS_DRAFT:
-                return "Entwurf";
+            case CourseTemplate::STATUS_DRAFT:
+                return $lng->txt('status_draft');
 
-            case CourseTemplateModel::STATUS_PENDING:
-                return "Ausstehend";
-                break;
+            case CourseTemplate::STATUS_PENDING:
+                return $lng->txt('status_pending');
 
-            case CourseTemplateModel::STATUS_CHANGE_REQUESTED:
-                return "Änderung nötig";
-                break;
+            case CourseTemplate::STATUS_CHANGE_REQUESTED:
+                return $lng->txt('status_change_requested');
 
-            case CourseTemplateModel::STATUS_DECLINED:
-                return "Abgelehnt";
-                break;
+            case CourseTemplate::STATUS_DECLINED:
+                return $lng->txt('status_declined');
 
-            case CourseTemplateModel::STATUS_APPROVED:
-                return "Akzeptiert";
-                break;
+            case CourseTemplate::STATUS_APPROVED:
+                return $lng->txt('status_approved');
 
             default:
                 throw new \InvalidArgumentException("Unknown status code for course template provided: " . $code);
@@ -46,11 +42,11 @@ trait CourseTemplateTraits
         // TODO: Add language
         switch($code)
         {
-            case CourseTemplateModel::TYPE_SINGLE_CLASS_COURSE:
+            case CourseTemplate::TYPE_SINGLE_CLASS_COURSE:
                 return "Ausstehend";
                 break;
 
-            case CourseTemplateModel::TYPE_MULTI_CLASS_COURSE:
+            case CourseTemplate::TYPE_MULTI_CLASS_COURSE:
                 return "Änderung nötig";
                 break;
 

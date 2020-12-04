@@ -1,7 +1,7 @@
 <?php
 
 use CourseWizard\CourseTemplate\CourseTemplateCollector;
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
+use CourseWizard\DB\Models\CourseTemplate;
 
 /**
  * Class ilObjCourseWizardTemplateManagementGUI
@@ -71,7 +71,7 @@ class ilObjCourseWizardTemplateManagementGUI
         $table = new CourseWizard\CourseTemplate\CourseTemplateManagementTableGUI($this, self::CMD_MANAGE_PROPOSALS, $this->plugin);
 
         $data = array(array('template_title' => "Titel 1", 'template_description' => "Description", 'proposal_date'=>'Heute', 'status' => 'Pending'));
-        $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new CourseWizard\CourseTemplate\CourseTemplateRepository($DIC->database()));
+        $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
         $data = $data_provider->getCourseTemplatesForManagementTable();
         $table->setData($data);
         $html .= $table->getHTML();
@@ -86,11 +86,11 @@ class ilObjCourseWizardTemplateManagementGUI
         $template_id = (int)$_POST['template_id'];
         $status_code = (int)$_POST['status'];
 
-        $crs_repo = new \CourseWizard\CourseTemplate\CourseTemplateRepository($DIC->database());
+        $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
 
-        $allowed_status = array(CourseTemplateModel::STATUS_CHANGE_REQUESTED,
-                               CourseTemplateModel::STATUS_APPROVED,
-                               CourseTemplateModel::STATUS_DECLINED);
+        $allowed_status = array(CourseTemplate::STATUS_CHANGE_REQUESTED,
+                                CourseTemplate::STATUS_APPROVED,
+                                CourseTemplate::STATUS_DECLINED);
 
         if(!in_array($status_code, $allowed_status)){
             ilUtil::sendFailure("Invalid Status given: " . $status_code, true);

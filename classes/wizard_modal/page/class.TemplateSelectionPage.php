@@ -2,7 +2,7 @@
 
 namespace CourseWizard\Modal\Page;
 
-use CourseWizard\CourseTemplate\Models\CourseTemplateModel;
+use CourseWizard\DB\Models\CourseTemplate;
 use CourseWizard\CustomUI\RadioSelectionViewControlGUI;
 use CourseWizard\CustomUI\TemplateSelectionRadioGroupGUI;
 use CourseWizard\Modal\CourseTemplates\ModalBaseCourseTemplate;
@@ -22,7 +22,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         $this->view_control = $view_control;
     }
 
-    private function buildTemplateSelection(CourseTemplateModel $course_template)
+    private function buildTemplateSelection(CourseTemplate $course_template)
     {
         global $DIC;
         $obj_id = $course_template->getCrsObjId();
@@ -46,7 +46,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         //return new \CourseWizard\CustomUI\TemplateSelectionRadioButtonGUI(new \ILIAS\Data\Factory(),$DIC->refinery(), $title, $description);
     }
 
-    protected function getCourseTemplateAsPanelComponent(CourseTemplateModel $course_template, $async_url)
+    protected function getCourseTemplateAsPanelComponent(CourseTemplate $course_template, $async_url)
     {
         //$course_template->getRefId();
 

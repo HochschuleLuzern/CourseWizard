@@ -1,10 +1,19 @@
 <?php
 
-namespace CourseWizard\CourseTemplate\Models;
+namespace CourseWizard\DB\Models;
 
-class CourseTemplate implements CourseTemplateModel
+class CourseTemplate
 {
     use CourseTemplateTraits;
+
+    const STATUS_DRAFT = 0;
+    const STATUS_PENDING = 1;
+    const STATUS_CHANGE_REQUESTED = 2;
+    const STATUS_DECLINED = 3;
+    const STATUS_APPROVED = 4;
+
+    const TYPE_SINGLE_CLASS_COURSE = 0;
+    const TYPE_MULTI_CLASS_COURSE = 1;
 
     /** @var int */
     protected $template_id;
