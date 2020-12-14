@@ -6,8 +6,8 @@ class PluginConfigKeyValueStore
 {
     const TABLE_NAME = 'rep_robj_xcwi_pl_conf';
 
-    const COL_KEY = 'key';
-    const COL_VALUE = 'value';
+    const COL_KEY = 'conf_key';
+    const COL_VALUE = 'conf_value';
 
     /** @var \ilDBInterface */
     private $db;
