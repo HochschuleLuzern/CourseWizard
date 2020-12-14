@@ -37,8 +37,8 @@ class TemplateContainerConfigurationRepository
         $result = $this->db->query($query);
         if($row = $this->db->fetchAssoc($result)) {
             $model = $this->getObjFromRow($row);
-            $this->data_cache[$obj_id] = $row;
-            return $row;
+            $this->data_cache[$obj_id] = $model;
+            return $model;
         }
 
         return null;
