@@ -200,6 +200,12 @@ class CourseTemplateRepository
         $this->db->manipulate($sql);
     }
 
+    public function deleteTemplateContainer(int $container_id)
+    {
+        $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_CONTAINER_REF_ID . "=" . $this->db->quote($container_id, 'integer');
+        $this->db->manipulate($sql);
+    }
+
     protected function buildModelFromAssocArray(array $row)
     {
         return new CourseTemplate($row['template_id'],

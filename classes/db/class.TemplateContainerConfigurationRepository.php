@@ -6,7 +6,7 @@ use CourseWizard\DB\Models\TemplateContainerConfiguration;
 
 class TemplateContainerConfigurationRepository
 {
-    const TABLE_NAME = 'rep_robj_xcwi_templates';
+    const TABLE_NAME = 'rep_robj_xcwi_con_settings';
 
     const COL_OBJ_ID = 'obj_id';
     const COL_ROOT_LOCATION_REF_ID = 'root_location_ref_id';
@@ -51,6 +51,12 @@ class TemplateContainerConfigurationRepository
         } else {
             $this->updateTemplateContainerConfiguration($conf);
         }
+    }
+
+    public function removeContainerConfiguration($container_obj_id)
+    {
+        $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_OBJ_ID . "=" . $this->db->quote($container_obj_id, 'integer');
+        $this->db->manipulate($sql);
     }
 
     public function createTemplateContainerConfiguration(TemplateContainerConfiguration $conf)

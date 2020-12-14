@@ -4,7 +4,7 @@ namespace CourseWizard\DB;
 
 class WizardFlowRepository
 {
-    const TABLE_NAME = 'rep_robj_xcwi_templates';
+    const TABLE_NAME = 'rep_robj_xcwi_wizard';
 
     const COL_ID = 'id';
     const COL_TARGET_OBJ_ID = 'target_obj_id';
