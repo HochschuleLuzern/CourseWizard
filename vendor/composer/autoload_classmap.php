@@ -36,6 +36,7 @@ return array(
     'CourseWizard\\Modal\\RoundtripWizardModalGUI' => $baseDir . '/classes/wizard_modal/modal/RoundtripWizardModalGUI.php',
     'CourseWizard\\Modal\\WizardModalFactory' => $baseDir . '/classes/wizard_modal/class.WizardModalFactory.php',
     'CourseWizard\\Modal\\WizardModalGUI' => $baseDir . '/classes/wizard_modal/modal/WizardModalGUI.php',
+    'CourseWizard\\role\\RoleTemplateDefinition' => $baseDir . '/classes/role/RoleTemplateDefinition.php',
     'ilCourseWizardApiGUI' => $baseDir . '/classes/class.ilCourseWizardApiGUI.php',
     'ilCourseWizardConfigGUI' => $baseDir . '/classes/class.ilCourseWizardConfigGUI.php',
     'ilCourseWizardGlobalScreenModificationProvider' => $baseDir . '/classes/class.ilCourseWizardGlobalScreenModificationProvider.php',

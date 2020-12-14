@@ -34,14 +34,19 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         );
     }
 
-    private function removeRoleTemplateByTitle(array $role_props)
+    private function removeDefinedRoleTemplates(array $rolt_definition_list)
     {
         global $DIC;
 
-        $obj_id = $this->plugin_config->get($role_props['conf_key']);
-        if($obj_id != NULL) {
-            $rolt = ilObjectFactory::getInstanceByObjId($obj_id, false);
-            $rolt->delete();
+        /** @var \CourseWizard\role\RoleTemplateDefinition $rolt_definition */
+        foreach($rolt_definition_list as $rolt_definition) {
+
+            $obj_id = $this->plugin_config->get($rolt_definition->getConfKey());
+
+            if ($obj_id != null) {
+                $rolt = ilObjectFactory::getInstanceByObjId($obj_id, false);
+                $rolt->delete();
+            }
         }
     }
 
@@ -53,26 +58,24 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     protected function uninstallCustom()
     {
         // TODO: Implement uninstallCustom() method.
-
-        foreach($this->role_template_list as $role) {
-            $this->removeRoleTemplateByTitle($role);
-        }
+        $this->removeDefinedRoleTemplates(\CourseWizard\role\RoleTemplateDefinition::getRoleTemplateDefinitions());
     }
 
     protected function afterInstall()
     {
-        foreach($this->role_template_list as $role) {
-            $obj_role = $this->createRoleTemplate($role['title'], $role['description']);
-            $this->plugin_config->set($role['conf_key'], "{$obj_role->getId()}");
+        /** @var \CourseWizard\role\RoleTemplateDefinition $rolt_definition */
+        foreach(\CourseWizard\role\RoleTemplateDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
+            $obj_role = $this->createRoleTemplate($rolt_definition);
+            $this->plugin_config->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
         }
     }
 
-    private function createRoleTemplate($title, $description) : ilObjRoleTemplate
+    private function createRoleTemplate(\CourseWizard\role\RoleTemplateDefinition $rolt_definition) : ilObjRoleTemplate
     {
         global $DIC;
         $role_template = new ilObjRoleTemplate();
-        $role_template->setTitle($title);
-        $role_template->setDescription($description);
+        $role_template->setTitle($rolt_definition->getTitle());
+        $role_template->setDescription($rolt_definition->getDescription());
         $role_template->create();
 
         $rbac_admin = $DIC->rbac()->admin();
