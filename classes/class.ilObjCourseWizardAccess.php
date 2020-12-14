@@ -15,7 +15,8 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
 
     private function getResponsibleRoleId(int $a_obj_id)
     {
-
+        $conf = $this->config_repo->getContainerConfiguration($a_obj_id);
+        return $conf->getResponsibleRoleId();
     }
 
     public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "")
