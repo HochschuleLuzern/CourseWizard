@@ -26,22 +26,11 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const FORM_ROOT_LOCATION_REF = 'xcwi_root_location_ref';
     public const FORM_ROLE_TITLE = 'xcwi_role_title';
 
-    /*
-        public function __construct($a_id = 0, $a_reference = true)
-        {
-            parent::__construct($a_id, $a_reference);
-        }
-    */
-
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
         global $DIC;
 
-    }
-
-    private function createContainerSettingsObject()
-    {
     }
 
     public function afterSave(ilObject $newObj)
@@ -80,16 +69,6 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         return $form;
     }
-
-    private function prepareActionsDropdownForOwner(\CourseWizard\DB\Models\CourseTemplate $crs_template, ILIAS\UI\Factory $ui_factory) : array
-    {
-        global $DIC;
-
-
-
-    }
-
-
 
     public function getType()
     {
@@ -263,8 +242,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                                          )->withAsyncRenderUrl($link);
 
                     $container_content[] = $propose_modal;
-                    $actions_buttons[] = $f->button()->shy('propose', $propose_modal->getShowSignal());
-                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('btn_propose_crs_template'), $link);
+                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('btn_propose_crs_template'), $propose_modal->getShowSignal());
+                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('show_crs_template'), $link);
                 }
 
                 //$actions = $this->prepareActionsDropdownForOwner($crs_template, $f);

@@ -44,6 +44,21 @@ class TemplateContainerConfigurationRepository
         return null;
     }
 
+    public function getAllConfigs() : array
+    {
+        $query = 'SELECT * FROM ' . self::TABLE_NAME;
+        $result = $this->db->query($query);
+
+        $list = array();
+        while($row = $this->db->fetchAssoc($result)) {
+            $model = $this->getObjFromRow($row);
+            $this->data_cache[$model->getObjId()] = $model;
+            $list[] = $model;
+        }
+
+        return $list;
+    }
+
     public function setContainerConfiguration(TemplateContainerConfiguration $conf)
     {
         if($this->getContainerConfiguration($conf->getObjId()) == null) {

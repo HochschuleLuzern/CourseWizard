@@ -5,7 +5,15 @@ btn_delete_crs_template#:#Delete Course Template
 btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
 btn_close_modal#:#Close Modal
+conf_container_table_title#:#Overview of Available Template Containers Objects
 create_crs_template_draft#:#Create Course Template Draft
+global_available#:#Global Available
 manage_proposals#:#Manage Proposals
+no#:#No
 overview#:#Overview
+quantity_admin_role_members#:#Quantity of Admin Role Members
+quantity_crs_templates#:#Quantity of Crs-Templates
+root_location_of_wizard#:#Root Location of Wizard
 settings#:#Settings
+template_container#:#Template Container
+yes#:#Yes

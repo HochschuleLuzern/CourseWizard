@@ -51,6 +51,8 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseWizard\\Modal\\RoundtripWizardModalGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/modal/RoundtripWizardModalGUI.php',
         'CourseWizard\\Modal\\WizardModalFactory' => __DIR__ . '/../..' . '/classes/wizard_modal/class.WizardModalFactory.php',
         'CourseWizard\\Modal\\WizardModalGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/modal/WizardModalGUI.php',
+        'CourseWizard\\admin\\CourseTemplateContainerTableDataProvider' => __DIR__ . '/../..' . '/classes/admin/class.CourseTemplateContainerTableDataProvider.php',
+        'CourseWizard\\admin\\CourseTemplateContainerTableGUI' => __DIR__ . '/../..' . '/classes/admin/class.CourseTemplateContainerTableGUI.php',
         'CourseWizard\\role\\RoleTemplateDefinition' => __DIR__ . '/../..' . '/classes/role/RoleTemplateDefinition.php',
         'ilCourseWizardApiGUI' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardApiGUI.php',
         'ilCourseWizardConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardConfigGUI.php',

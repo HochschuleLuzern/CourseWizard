@@ -216,4 +216,16 @@ class CourseTemplateRepository
             $row['creator_user_id'],
             $row['template_container_ref_id']);
     }
+
+    public function getNumberOfCrsTemplates(int $container_id) : int
+    {
+        $sql = "SELECT count(*) as cnt FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_CONTAINER_REF_ID . " = " . $this->db->quote($container_id, 'integer');
+        $res = $this->db->query($sql);
+
+        if($row = $this->db->fetchAssoc($res)) {
+            return $row['cnt'];
+        }
+
+        return 0;
+    }
 }
