@@ -91,15 +91,16 @@ class RadioSelectionViewControlGUI
         foreach($this->view_control_subpages as $subpage) {
             $subpage_title = $subpage->getTitle();
             $hidden = $selected_element == $subpage_title ? '' : 'style="display: none;"';
+            $subpage_div_id = uniqid('xcwi');
 
             $content = $subpage->getContent();
             $radios_rendered = $DIC->ui()->renderer()->render($content);
 
-            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_title' class='$xcwi_vc_subpage_div' $hidden>".$radios_rendered."</div>")
-                                                  ->withCustomSignal($subpage_title, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_title');");
+            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_div_id' class='$xcwi_vc_subpage_div' $hidden>".$radios_rendered."</div>")
+                                                  ->withCustomSignal($subpage_div_id, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_div_id');");
             $components[] = $subpage_div;
 
-            $vc_actions[$subpage_title] = $subpage_div->getCustomSignal($subpage_title);
+            $vc_actions[$subpage_title] = $subpage_div->getCustomSignal($subpage_div_id);
         }
 
         $view_control = $this->ui_factory->viewControl()->mode($vc_actions, 'some aria label');

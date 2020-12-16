@@ -15,6 +15,7 @@ return array(
     'CourseWizard\\CustomUI\\TemplateSelectionRadioGroupGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioGroupGUI.php',
     'CourseWizard\\CustomUI\\TemplateSelectionRadioOptionGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioOptionGUI.php',
     'CourseWizard\\DB\\CourseTemplateRepository' => $baseDir . '/classes/db/class.CourseTemplateRepository.php',
+    'CourseWizard\\DB\\CourseWizardSpecialQueries' => $baseDir . '/classes/db/class.CourseWizardSpecialQueries.php',
     'CourseWizard\\DB\\Models\\CourseTemplate' => $baseDir . '/classes/db/models/class.CourseTemplate.php',
     'CourseWizard\\DB\\Models\\CourseTemplateTraits' => $baseDir . '/classes/db/models/CourseTemplateTraits.php',
     'CourseWizard\\DB\\Models\\TemplateContainerConfiguration' => $baseDir . '/classes/db/models/class.TemplateContainerConfiguration.php',

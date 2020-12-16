@@ -64,11 +64,16 @@ class CourseTemplateCollector
         foreach($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
             $table_data[] = array(
                 "title" => \ilObject::_lookupTitle($model->getCrsObjId()),
-                "descriptio" => \ilObject::_lookupDescription($model->getCrsObjId()),
+                "description" => \ilObject::_lookupDescription($model->getCrsObjId()),
                 "date" => "",
                 "status" => $model->getStatusAsString());
         }
 
         return $table_data;
+    }
+
+    public function getCourseTemplatesForWizardTemplateSelection(int $ref_id)
+    {
+
     }
 }

@@ -30,6 +30,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseWizard\\CustomUI\\TemplateSelectionRadioGroupGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioGroupGUI.php',
         'CourseWizard\\CustomUI\\TemplateSelectionRadioOptionGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioOptionGUI.php',
         'CourseWizard\\DB\\CourseTemplateRepository' => __DIR__ . '/../..' . '/classes/db/class.CourseTemplateRepository.php',
+        'CourseWizard\\DB\\CourseWizardSpecialQueries' => __DIR__ . '/../..' . '/classes/db/class.CourseWizardSpecialQueries.php',
         'CourseWizard\\DB\\Models\\CourseTemplate' => __DIR__ . '/../..' . '/classes/db/models/class.CourseTemplate.php',
         'CourseWizard\\DB\\Models\\CourseTemplateTraits' => __DIR__ . '/../..' . '/classes/db/models/CourseTemplateTraits.php',
         'CourseWizard\\DB\\Models\\TemplateContainerConfiguration' => __DIR__ . '/../..' . '/classes/db/models/class.TemplateContainerConfiguration.php',

@@ -97,21 +97,22 @@ class CourseTemplateRepository
         return NULL;
     }
 
-    public function getCourseTemplateByContainerRefWithStatus(array $allowed_status, $container_ref_id) : array
+    public function getCourseTemplateByContainerRefWithStatus(array $allowed_status, int $container_ref_id) : array
     {
         if(count($allowed_status) <= 0) {
             throw new \InvalidArgumentException('No status given for template selection');
         }
 
-        /** @var int $status */
         $statement_binding = "";
-        $or_statement = "";
+        $allowed_status_statement = "";
         foreach($allowed_status as $status) {
-            $or_statement .= $statement_binding . 'status_code = ' . $this->db->quote($status, 'integer');
-            $statement_binding = ' OR ';
+            $allowed_status_statement .= $statement_binding . $this->db->quote($status, 'integer');
+            $statement_binding = ', ';
         }
 
-        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE '.self::COL_TEMPLATE_CONTAINER_REF_ID.' = '.$this->db->quote($container_ref_id, 'integer').' AND ' . $or_statement;
+        $allowed_status_statement = "(status_code IN ($allowed_status_statement))";
+
+        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE '.self::COL_TEMPLATE_CONTAINER_REF_ID.' = '.$this->db->quote($container_ref_id, 'integer').' AND ' . $allowed_status_statement;
         $result = $this->db->query($sql);
 
         $templates = array();
