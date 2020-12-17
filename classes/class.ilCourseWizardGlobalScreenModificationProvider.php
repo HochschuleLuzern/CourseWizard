@@ -8,14 +8,33 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         return $this->context_collection->repository();
     }
 
+    private function isContentViewPage(\Psr\Http\Message\RequestInterface $request)
+    {
+        $full_script_name = isset($request->getServerParams()['SCRIPT_NAME']) ? explode('/', $request->getServerParams()['SCRIPT_NAME']) : array('');
+        $script_name = $full_script_name[count($full_script_name)-1];
+
+        // Check for request on ilias.php
+        if($script_name == 'ilias.php' && isset($request->getQueryParams()['cmd'])) {
+            return $request->getQueryParams()['cmd'] == 'view';
+        }
+
+        // Check for request on goto.php
+        if($script_name == 'goto.php') {
+            return true;
+        }
+    }
+
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
     {
         // TODO: Needs refactoring
         if($screen_context_stack->current()->hasReferenceId()){
 
             $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
+            $request = $this->dic->http()->request();
+            if(ilObject::_lookupType($ref_id, true) == 'crs'
+                && count($this->dic->repositoryTree()->getChilds($ref_id)) <= 0
+                && $this->isContentViewPage($this->dic->http()->request())) {
 
-            if(ilObject::_lookupType($ref_id, true) == 'crs') {
                 $tpl = $this->dic->ui()->mainTemplate();
                 $tpl->addJavaScript($this->plugin->getDirectory() . '/js/modal_functions.js');
                 $tpl->addCss($this->plugin->getDirectory() . '/templates/default/xcwi_modal_styles.css');
