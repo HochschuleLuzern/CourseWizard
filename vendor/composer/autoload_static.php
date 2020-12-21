@@ -22,6 +22,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
 
     public static $classMap = array (
         'CourseWizard\\CourseTemplate\\CourseTemplateCollector' => __DIR__ . '/../..' . '/classes/course_template/class.CourseTemplateCollector.php',
+        'CourseWizard\\CourseTemplate\\CourseTemplateCreator' => __DIR__ . '/../..' . '/classes/course_template/class.CourseTemplateCreator.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableDataProvider' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManagementTableDataProvider.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateObject' => __DIR__ . '/../..' . '/classes/course_template/class.CourseTemplateObject.php',

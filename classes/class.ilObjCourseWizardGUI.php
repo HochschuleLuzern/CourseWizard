@@ -15,6 +15,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const CMD_PROPOSE_TEMPLATE_MODAL = 'propose_template_modal';
     public const CMD_PROPOSE_TEMPLATE_CONFIRM = 'confirm_propose_template';
     public const CMD_EDIT = 'edit';
+    public const CMD_CRS_TEMPLATE_CREATION_SITE = 'crs_template_creation';
+    public const CMD_CREATE_NEW_CRS_TEMPLATE = 'create_crs_template';
 
     public const TAB_OVERVIEW = 'overview';
     public const TAB_MANAGE_PROPOSALS = 'manage_proposals';
@@ -32,6 +34,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         global $DIC;
 
     }
+
 
     public function afterSave(ilObject $newObj)
     {
@@ -120,6 +123,15 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                         $this->proposeCourseTemplate();
                         break;
 
+                    case self::CMD_CRS_TEMPLATE_CREATION_SITE:
+                        $this->tabs->activateTab(self::TAB_OVERVIEW);
+                        $this->showCrsTemplateCreationSite();
+                        break;
+
+                    case self::CMD_CREATE_NEW_CRS_TEMPLATE:
+                        $this->createNewCrsTemplate();
+                        break;
+
                     default:
                         break;
                 }
@@ -186,9 +198,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     protected function showMainPage(){
         global $DIC;
 
-        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->ref_id);
-        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'new_type', 'crs');
-        $link = $this->ctrl->getLinkTargetByClass(ilRepositoryGUI::class, 'create');
+        //$this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->ref_id);
+        //$this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'new_type', 'crs');
+        //$link = $this->ctrl->getLinkTargetByClass(ilRepositoryGUI::class, 'create');
+        $link = $this->ctrl->getLinkTarget($this, self::CMD_CRS_TEMPLATE_CREATION_SITE);
 
         $btn = \ilLinkButton::getInstance();
         $btn->setPrimary(true);
@@ -262,5 +275,52 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $this->tpl->setContent($html);
 
         return;
+    }
+
+    private function initCrsTemplateCreationForm() : ilPropertyFormGUI
+    {
+        $form = new ilPropertyFormGUI();
+        $form->setTitle($this->plugin->txt('create_crs_template_form'));
+
+        $title = new ilTextInputGUI($this->plugin->txt('template_title'), 'title');
+        $form->addItem($title);
+
+        $description = new ilTextInputGUI($this->plugin->txt('template_description'), 'description');
+        $form->addItem($description);
+
+        $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_CREATE_NEW_CRS_TEMPLATE));
+
+        $form->addCommandButton(self::CMD_CREATE_NEW_CRS_TEMPLATE, $this->plugin->txt('create_template'));
+        $form->addCommandButton(self::CMD_SHOW_MAIN, $this->plugin->txt('cancel'));
+        //$title = new ilTextInputGUI($this->plugin->txt('template_title'), '');
+
+        return $form;
+    }
+
+    private function showCrsTemplateCreationSite()
+    {
+        $form = $this->initCrsTemplateCreationForm();
+
+        $this->tpl->setContent($form->getHTML());
+    }
+
+    private function createNewCrsTemplate()
+    {
+        $form = $this->initCrsTemplateCreationForm();
+
+        if($form->checkInput()) {
+            $obj = new ilObjCourse();
+            $obj->setTitle($form->getInput('title'));
+            $obj->setDescription($form->getInput('description'));
+            $obj->create();
+            $obj->createReference();
+            $obj->putInTree($this->ref_id);
+
+            $this->object->addNewCourseTemplate($obj);
+
+            ilUtil::sendSuccess('Template created!');
+            $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
+        }
+
     }
 }

@@ -18,6 +18,16 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $this->request = $DIC->http()->request();
     }
 
+    private function initPluginConfForm() : ilPropertyFormGUI
+    {
+        $form = new ilPropertyFormGUI();
+
+        $content_creator_role = new ilRoleAutoCompleteInputGUI('Role Input', 'role', $this, 'apiGlobalRoles');
+        $form->addItem($content_creator_role);
+
+        return $form;
+    }
+
     public function performCommand($cmd)
     {
         switch($cmd)
@@ -33,6 +43,28 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             case self::CMD_SAVE:
                 $this->saveConfig();
                 break;
+
+            case 'apiGlobalRoles':
+                global $DIC;
+                $db = $DIC->database();
+                $q = $_REQUEST["term"];
+
+                $query = "SELECT o.obj_id id, o.title role FROM object_data o
+                          JOIN rbac_fa fa ON fa.rol_id = o.obj_id
+                          WHERE o.type = 'role' AND fa.parent = 8 AND " . $db->like('o.title', 'text', '%' . $q . '%');
+                $res = $db->query($query);
+                $counter = 0;
+                $result = array();
+                while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
+                    $result[$counter] = new stdClass();
+                    $result[$counter]->value = $row->role;
+                    $result[$counter]->label = $row->role . " (" . $row->id . ")";
+                    ++$counter;
+                }
+
+                include_once './Services/JSON/classes/class.ilJsonUtil.php';
+                echo ilJsonUtil::encode($result);
+                exit;
         }
     }
 
@@ -45,13 +77,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         global $DIC;
         $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
+        $plugin_conf_form = $this->initPluginConfForm();
+
+
         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($db);
         $data_provider = new \CourseWizard\admin\CourseTemplateContainerTableDataProvider($conf_repo, $template_repo, $this->plugin_object);
-
         $table = new CourseTemplateContainerTableGUI($this, '', $this->plugin_object);
-
         $table->setData($data_provider->prepareTableDataWithAllContainers());
-        $this->tpl->setContent($table->getHTML());
+
+        $this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
     }
 
     private function editContainerConfig()

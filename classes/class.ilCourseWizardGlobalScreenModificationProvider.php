@@ -33,6 +33,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
             $request = $this->dic->http()->request();
             if(ilObject::_lookupType($ref_id, true) == 'crs'
                 && count($this->dic->repositoryTree()->getChilds($ref_id)) <= 0
+                && ilObject::_lookupType($this->dic->repositoryTree()->getParentId($ref_id), true) == 'cat'
                 && $this->isContentViewPage($this->dic->http()->request())) {
 
                 $tpl = $this->dic->ui()->mainTemplate();

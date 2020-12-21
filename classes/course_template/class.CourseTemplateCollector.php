@@ -71,9 +71,4 @@ class CourseTemplateCollector
 
         return $table_data;
     }
-
-    public function getCourseTemplatesForWizardTemplateSelection(int $ref_id)
-    {
-
-    }
 }

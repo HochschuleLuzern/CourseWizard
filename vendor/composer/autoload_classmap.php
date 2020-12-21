@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'CourseWizard\\CourseTemplate\\CourseTemplateCollector' => $baseDir . '/classes/course_template/class.CourseTemplateCollector.php',
+    'CourseWizard\\CourseTemplate\\CourseTemplateCreator' => $baseDir . '/classes/course_template/class.CourseTemplateCreator.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableDataProvider' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableDataProvider.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateObject' => $baseDir . '/classes/course_template/class.CourseTemplateObject.php',

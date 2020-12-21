@@ -25,6 +25,21 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->setType(ilCourseWizardPlugin::ID);
     }
 
+    public function addNewCourseTemplate(\ilObjCourse $crs)
+    {
+        global $DIC;
+
+        $this->xcwi_crs_template_repository->createAndAddNewCourseTemplate(
+            $crs->getRefId(),
+            $crs->getId(),
+            \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE,
+            \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
+            $DIC->user()->getId(),
+            $this->ref_id
+        );
+    }
+
+
     public function initContainerConfig(int $root_location_ref, string $role_title, bool $is_global)
     {
         $role = $this->createRole($role_title);
