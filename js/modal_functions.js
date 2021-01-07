@@ -44,8 +44,9 @@ il.CourseWizardModalFunctions = (function (scope) {
 			};
 			executePostRequest(data, pub.config.saveConfigUrl);
 			console.log("PushingTemplateSelection");
+		} else {
+			console.log("No template selected");
 		}
-		console.log("No template selected");
 	};
 
 	pub.pushContentInheritanceSelection = function (e) {
