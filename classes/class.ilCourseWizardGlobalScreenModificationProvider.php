@@ -15,7 +15,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
 
         // Check for request on ilias.php
         if($script_name == 'ilias.php' && isset($request->getQueryParams()['cmd'])) {
-            return $request->getQueryParams()['cmd'] == 'view';
+            return $request->getQueryParams()['cmd'] == 'view' || $request->getQueryParams()['cmd'] == 'render';
         }
 
         // Check for request on goto.php

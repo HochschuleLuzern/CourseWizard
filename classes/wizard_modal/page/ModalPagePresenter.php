@@ -9,4 +9,6 @@ interface ModalPagePresenter
     public function getPageActionButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal) : array;
 
     public function getJsPageActionMethod() : string;
+
+    public function getJSConfigsAsUILegacy($replace_signal) : \ILIAS\UI\Component\Legacy\Legacy;
 }

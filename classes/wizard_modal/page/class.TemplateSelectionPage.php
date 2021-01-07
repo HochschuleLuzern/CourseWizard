@@ -86,7 +86,9 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         $view_control->addNewContent('helloworld', $radio_gui->render());
         $view_control->addNewContent('empty', 'This is empty now');*/
 
-        return $this->view_control->getAsComponentList();
+        $container_div = [$this->ui_factory->legacy("<div id='xcwi_template_selection_div_id'>")];
+        $container_end_div = [$this->ui_factory->legacy('</div>')];
+        return array_merge($container_div, $this->view_control->getAsComponentList(), $container_end_div);
     }
 
     public function getJsPageActionMethod() : string

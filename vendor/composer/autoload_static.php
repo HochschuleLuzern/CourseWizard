@@ -45,6 +45,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseWizard\\Modal\\Page\\BaseModalPagePresenter' => __DIR__ . '/../..' . '/classes/wizard_modal/page/BaseModalPagePresenter.php',
         'CourseWizard\\Modal\\Page\\ContentInheritancePage' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.ContentInheritancePage.php',
         'CourseWizard\\Modal\\Page\\IntroductionPage' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.IntroductionPage.php',
+        'CourseWizard\\Modal\\Page\\JavaScriptPageConfig' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.JavaScriptPageConfig.php',
         'CourseWizard\\Modal\\Page\\ModalPagePresenter' => __DIR__ . '/../..' . '/classes/wizard_modal/page/ModalPagePresenter.php',
         'CourseWizard\\Modal\\Page\\SettingsPage' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.SettingsPage.php',
         'CourseWizard\\Modal\\Page\\StateMachine' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.StateMachine.php',

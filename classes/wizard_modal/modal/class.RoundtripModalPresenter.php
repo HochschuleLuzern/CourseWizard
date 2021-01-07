@@ -39,9 +39,9 @@ class RoundtripModalPresenter implements ModalPresenter
 
     public function getModalAsUIComponent() : \ILIAS\UI\Component\Modal\RoundTrip
     {
-        $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), []);
-
         global $DIC;
+
+        $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), []);
 
         $replace_signal = $DIC->http()->request()->getQueryParams()['replacesignal']
             ? new \ILIAS\UI\Implementation\Component\ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
@@ -51,6 +51,7 @@ class RoundtripModalPresenter implements ModalPresenter
 
         $header = $this->getStepsHeader();
         $content = $this->presenter->getModalPageAsComponentArray($replace_signal);
+        $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal);
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
 

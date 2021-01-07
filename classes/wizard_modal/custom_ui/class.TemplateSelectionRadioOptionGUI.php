@@ -38,7 +38,7 @@ class TemplateSelectionRadioOptionGUI
 
         $component = array(
             $this->ui_factory->legacy("<div class='option crs_tmp_option' style='stack'>
-                <div><input style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id='$unique_id' onclick='il.CourseWizardModalFunctions.switchSelectedTemplate(this)'/></div>
+                <div><input value='{$this->crs_template->getTemplateId()}' style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id='$unique_id' onclick='il.CourseWizardModalFunctions.switchSelectedTemplate(this)'/></div>
                 <div><label for='$unique_id'><span></span>"),
             $item,
             $this->ui_factory->legacy("</label></div></div>"));

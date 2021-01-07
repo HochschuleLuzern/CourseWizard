@@ -30,6 +30,7 @@ return array(
     'CourseWizard\\Modal\\Page\\BaseModalPagePresenter' => $baseDir . '/classes/wizard_modal/page/BaseModalPagePresenter.php',
     'CourseWizard\\Modal\\Page\\ContentInheritancePage' => $baseDir . '/classes/wizard_modal/page/class.ContentInheritancePage.php',
     'CourseWizard\\Modal\\Page\\IntroductionPage' => $baseDir . '/classes/wizard_modal/page/class.IntroductionPage.php',
+    'CourseWizard\\Modal\\Page\\JavaScriptPageConfig' => $baseDir . '/classes/wizard_modal/page/class.JavaScriptPageConfig.php',
     'CourseWizard\\Modal\\Page\\ModalPagePresenter' => $baseDir . '/classes/wizard_modal/page/ModalPagePresenter.php',
     'CourseWizard\\Modal\\Page\\SettingsPage' => $baseDir . '/classes/wizard_modal/page/class.SettingsPage.php',
     'CourseWizard\\Modal\\Page\\StateMachine' => $baseDir . '/classes/wizard_modal/page/class.StateMachine.php',

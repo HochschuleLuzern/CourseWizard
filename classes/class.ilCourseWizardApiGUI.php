@@ -14,6 +14,7 @@ class ilCourseWizardApiGUI
 
     const CMD_ASYNC_MODAL = 'renderAsyncWizardModal';
     const CMD_ASYNC_BASE_MODAL = 'renderAsyncBaseModal';
+    const CMD_ASYNC_SAVE_FORM = 'saveFormData';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -48,7 +49,7 @@ class ilCourseWizardApiGUI
                 switch($cmd)
                 {
                     case self::CMD_ASYNC_BASE_MODAL:
-                        $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                        $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE;//INTRODUCTION_PAGE;
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
@@ -83,6 +84,13 @@ class ilCourseWizardApiGUI
 
                         echo $modal->getRenderedModalFromAsyncCall();
                         exit;
+
+                    case self::CMD_ASYNC_SAVE_FORM:
+                        $post_params = $this->request->getParsedBody();
+                        $replace_signal = new \ILIAS\UI\Implementation\Component\ReplaceSignal($post_params['replaceSignal']);
+                        
+
+                        break;
 
                     default:
                         break;

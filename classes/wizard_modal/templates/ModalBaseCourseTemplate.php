@@ -19,6 +19,11 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
 
     }
 
+    public function getTemplateId() : int
+    {
+        return $this->template_model->getTemplateId();
+    }
+
     public function getRefId() : int
     {
         return $this->template_model->getCrsRefId();
