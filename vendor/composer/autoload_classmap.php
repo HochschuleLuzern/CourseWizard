@@ -26,6 +26,7 @@ return array(
     'CourseWizard\\DB\\WizardFlowRepository' => $baseDir . '/classes/db/class.WizardFlowRepository.php',
     'CourseWizard\\Modal\\CourseTemplates\\ModalBaseCourseTemplate' => $baseDir . '/classes/wizard_modal/templates/ModalBaseCourseTemplate.php',
     'CourseWizard\\Modal\\CourseTemplates\\ModalCourseTemplate' => $baseDir . '/classes/wizard_modal/templates/ModalCourseTemplate.php',
+    'CourseWizard\\Modal\\ModalDataController' => $baseDir . '/classes/wizard_modal/ModalDataController.php',
     'CourseWizard\\Modal\\ModalPresenter' => $baseDir . '/classes/wizard_modal/modal/ModalPresenter.php',
     'CourseWizard\\Modal\\Page\\BaseModalPagePresenter' => $baseDir . '/classes/wizard_modal/page/BaseModalPagePresenter.php',
     'CourseWizard\\Modal\\Page\\ContentInheritancePage' => $baseDir . '/classes/wizard_modal/page/class.ContentInheritancePage.php',

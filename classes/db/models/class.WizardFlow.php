@@ -33,68 +33,24 @@ class WizardFlow
         $this->current_step = $current_step;
     }
 
-    public static function newWizardFlow($crs_ref_id) {
-        return new self(
-            $crs_ref_id,
-            null,
-            null,
-            null,
-            self::STATUS_IN_PROGRESS,
-            self::STEP_INTRODUCTION
-        );
-    }
-
-    public static function wizardFlowWithSelectedTemplate($crs_ref_id, $template_selection) {
-        return new self(
-            $crs_ref_id,
-            $template_selection,
-            null,
-            null,
-            self::STATUS_IN_PROGRESS,
-            self::STEP_CONTENT_INHERITANCE
-        );
-    }
-
-    public static function wizardFlowWithContentInheritance($crs_ref_id, $template_selection, $content_inheritance) {
-        return new self(
-            $crs_ref_id,
-            $template_selection,
-            $content_inheritance,
-            null,
-            self::STATUS_IN_PROGRESS,
-            self::STEP_CONTENT_INHERITANCE
-        );
-    }
-
-    public static function wizardFlowFinished($crs_ref_id, $template_selection, $content_inheritance, $selected_settings) {
-        return new self(
-            $crs_ref_id,
-            $template_selection,
-            $content_inheritance,
-            $selected_settings,
-            self::STATUS_FINISHED,
-            self::STEP_FINISHED_WIZARD
-        );
-    }
-
     public function withSelectedTemplate($selected_template) {
         $clone = clone $this;
         $clone->template_selection = $selected_template;
-        $clone->current_step = self::STEP_CONTENT_INHERITANCE;
+        $clone->current_step = self::STEP_TEMPLATE_SELECTION;
         return $clone;
     }
 
     public function withSelectedInheritance($content_inheritance) {
         $clone = clone $this;
         $clone->content_inheritance = $content_inheritance;
-        $clone->current_step = self::STEP_SELECTED_SETTINGS;
+        $clone->current_step = self::STEP_CONTENT_INHERITANCE;
         return $clone;
     }
 
     public function withSelectedSettings($selected_settings) {
         $clone = clone $this;
         $clone->selected_settings = $selected_settings;
-        $clone->current_step = self::STEP_FINISHED_WIZARD;
+        $clone->current_step = self::STEP_SELECTED_SETTINGS;
         return $clone;
     }
 
@@ -144,5 +100,49 @@ class WizardFlow
     public function getCurrentStep()
     {
         return $this->current_step;
+    }
+
+    public static function newWizardFlow($crs_ref_id) {
+        return new self(
+            $crs_ref_id,
+            null,
+            null,
+            null,
+            self::STATUS_IN_PROGRESS,
+            self::STEP_INTRODUCTION
+        );
+    }
+
+    public static function wizardFlowWithSelectedTemplate($crs_ref_id, $template_selection) {
+        return new self(
+            $crs_ref_id,
+            $template_selection,
+            null,
+            null,
+            self::STATUS_IN_PROGRESS,
+            self::STEP_TEMPLATE_SELECTION
+        );
+    }
+
+    public static function wizardFlowWithContentInheritance($crs_ref_id, $template_selection, $content_inheritance) {
+        return new self(
+            $crs_ref_id,
+            $template_selection,
+            $content_inheritance,
+            null,
+            self::STATUS_IN_PROGRESS,
+            self::STEP_CONTENT_INHERITANCE
+        );
+    }
+
+    public static function wizardFlowFinished($crs_ref_id, $template_selection, $content_inheritance, $selected_settings) {
+        return new self(
+            $crs_ref_id,
+            $template_selection,
+            $content_inheritance,
+            $selected_settings,
+            self::STATUS_FINISHED,
+            self::STEP_FINISHED_WIZARD
+        );
     }
 }

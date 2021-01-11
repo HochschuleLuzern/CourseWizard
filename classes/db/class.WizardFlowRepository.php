@@ -69,12 +69,16 @@ class WizardFlowRepository
         $this->db->insert(self::TABLE_NAME,
             array(
                 self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()),
+                self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus()),
+                self::COL_CURRENT_STEP => array('integer', $wizard_flow->getCurrentStep())
             ));
+
+        return $wizard_flow;
     }
 
     private function queryWizardFlowByCrs($crs_ref_id) : ?WizardFlow
     {
-        $query = "SELECT * FROM {self::TABLE_NAME} WHERE crs_id = " . $this->db->quote($crs_ref_id, 'integer');
+        $query = "SELECT * FROM ". self::TABLE_NAME . " WHERE ". self::COL_TARGET_REF_ID ." = " . $this->db->quote($crs_ref_id, 'integer');
         $result = $this->db->query($query);
         if($row = $this->db->fetchAssoc($result)) {
             $this->cache[$crs_ref_id] = $this->buildWizardFlowFromRow($row);
@@ -116,16 +120,15 @@ class WizardFlowRepository
         switch($wizard_flow->getCurrentStep()) {
             case WizardFlow::STEP_TEMPLATE_SELECTION:
                 $update = array(
-                    self::COL_SELECTED_TEMPLATE => array('integer', $wizard_flow->getTemplateSelection())
+                    self::COL_SELECTED_TEMPLATE => array('integer', $wizard_flow->getTemplateSelection()),
+                    self::COL_CURRENT_STEP => array('integer', $wizard_flow->getCurrentStep())
                 );
         }
 
-        $this->db->insert(
+        $this->db->update(
             self::TABLE_NAME,
-            array(
-                $update,
-                $where
-            )
+            $update,
+            $where
         );
     }
 }

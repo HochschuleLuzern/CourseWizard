@@ -31,7 +31,8 @@ il.CourseWizardModalFunctions = (function (scope) {
 			console.log("Pushing Content Inheritance Selection");
 			data = {
 				post_data: {
-					template_id: checked_id
+					template_id: checked_id,
+					currentPage: pub.config.currentPage
 				},
 				signal_data: {
 					id: pub.config['replace_signal'],

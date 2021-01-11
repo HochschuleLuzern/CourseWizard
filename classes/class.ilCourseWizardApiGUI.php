@@ -30,11 +30,6 @@ class ilCourseWizardApiGUI
 
     }
 
-    private function buildModalPresenter(Modal\Page\StateMachine $state_machine)
-    {
-
-    }
-
     public function executeCommand()
     {
         global $DIC;
@@ -48,13 +43,17 @@ class ilCourseWizardApiGUI
 
                 switch($cmd)
                 {
+                    // Creates full modal (used for the first modal page)
                     case self::CMD_ASYNC_BASE_MODAL:
                         $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE;//INTRODUCTION_PAGE;
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
+                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
-                        $modal_factory = new Modal\WizardModalFactory($target_ref_id, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                            $wizard_flow,
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer
@@ -69,12 +68,17 @@ class ilCourseWizardApiGUI
                         die;
                         break;
 
+                    // Creates new modal page (used for async page replacement in Roundtrip Modal)
                     case self::CMD_ASYNC_MODAL:
                         $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        $modal_factory = new Modal\WizardModalFactory($target_ref_id,new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
+                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+
+                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                            $wizard_flow,
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer
@@ -87,8 +91,10 @@ class ilCourseWizardApiGUI
 
                     case self::CMD_ASYNC_SAVE_FORM:
                         $post_params = $this->request->getParsedBody();
-                        $replace_signal = new \ILIAS\UI\Implementation\Component\ReplaceSignal($post_params['replaceSignal']);
-                        
+                        $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
+                        $modal_data_controller = new Modal\ModalDataController($wizard_repo);
+                        $modal_data_controller->evaluateAndSavePostData($this->request->getQueryParams()['ref_id'], $post_params);
+                        //$this->savePostRequest($post_params, $wizard_repo);
 
                         break;
 
@@ -100,5 +106,10 @@ class ilCourseWizardApiGUI
                 break;
         }
 
+    }
+
+    private function savePostRequest(array $post_params, \CourseWizard\DB\WizardFlowRepository $wizard_repo)
+    {
+        $replace_signal = new \ILIAS\UI\Implementation\Component\ReplaceSignal($post_params['replaceSignal']);
     }
 }

@@ -41,6 +41,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseWizard\\DB\\WizardFlowRepository' => __DIR__ . '/../..' . '/classes/db/class.WizardFlowRepository.php',
         'CourseWizard\\Modal\\CourseTemplates\\ModalBaseCourseTemplate' => __DIR__ . '/../..' . '/classes/wizard_modal/templates/ModalBaseCourseTemplate.php',
         'CourseWizard\\Modal\\CourseTemplates\\ModalCourseTemplate' => __DIR__ . '/../..' . '/classes/wizard_modal/templates/ModalCourseTemplate.php',
+        'CourseWizard\\Modal\\ModalDataController' => __DIR__ . '/../..' . '/classes/wizard_modal/ModalDataController.php',
         'CourseWizard\\Modal\\ModalPresenter' => __DIR__ . '/../..' . '/classes/wizard_modal/modal/ModalPresenter.php',
         'CourseWizard\\Modal\\Page\\BaseModalPagePresenter' => __DIR__ . '/../..' . '/classes/wizard_modal/page/BaseModalPagePresenter.php',
         'CourseWizard\\Modal\\Page\\ContentInheritancePage' => __DIR__ . '/../..' . '/classes/wizard_modal/page/class.ContentInheritancePage.php',

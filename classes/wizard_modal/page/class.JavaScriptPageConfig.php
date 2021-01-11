@@ -4,6 +4,9 @@ namespace CourseWizard\Modal\Page;
 
 class JavaScriptPageConfig
 {
+    public const JS_CURRENT_PAGE = 'currentPage';
+    public const JS_NEXT_PAGE = 'nextPage';
+
     /** @var StateMachine */
     private $state_machine;
 
@@ -14,8 +17,8 @@ class JavaScriptPageConfig
     {
         $this->state_machine = $state_machine;
         $this->config_fields = array(
-            'currentPage' => $state_machine->getPageForCurrentState(),
-            'nextPage' => $state_machine->getPageForNextState()
+            self::JS_CURRENT_PAGE => $state_machine->getPageForCurrentState(),
+            self::JS_NEXT_PAGE => $state_machine->getPageForNextState()
         );
     }
 

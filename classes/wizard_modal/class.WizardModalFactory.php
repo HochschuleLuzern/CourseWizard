@@ -8,6 +8,7 @@ use CourseWizard\DB\Models\CourseTemplate;
 use CourseWizard\CustomUI\RadioSelectionViewControlGUI;
 use CourseWizard\CustomUI\RadioGroupViewControlSubPageGUI;
 use CourseWizard\CustomUI\TemplateSelectionRadioOptionGUI;
+use CourseWizard\DB\Models\WizardFlow;
 use CourseWizard\Modal\CourseTemplates\ModalBaseCourseTemplate;
 use CourseWizard\Modal\Page\ModalPagePresenter;
 use CourseWizard\Modal\Page\StateMachine;
@@ -15,14 +16,21 @@ use ILIAS\UI\Component\Modal\RoundTrip;
 
 class WizardModalFactory
 {
+    /** @var CourseTemplateRepository */
     private $template_repository;
+
+    /** @var WizardFlow */
+    private $wizard_flow;
+
+    /** @var \ilCtrl */
     private $ctrl;
     private $ui_factory;
     private $ui_renderer;
 
-    public function __construct($target_ref_id, CourseTemplateRepository $template_repository, $ctrl, $ui_factory, $ui_renderer)
+    public function __construct(CourseTemplateRepository $template_repository, WizardFlow $wizard_flow, \ilCtrl $ctrl, $ui_factory, $ui_renderer)
     {
         $this->template_repository = $template_repository;
+        $this->wizard_flow = $wizard_flow;
         $this->ctrl = $ctrl;
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
