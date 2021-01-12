@@ -46,7 +46,7 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
 
     public function generatePreviewLink() : string
     {
-        return "";
+        return $link = \ilLink::_getLink($this->getRefId(), 'crs');
     }
 
     public function getPropertiesArray() : array
