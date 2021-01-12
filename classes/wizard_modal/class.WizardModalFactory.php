@@ -81,6 +81,17 @@ class WizardModalFactory
         );
     }
 
+    private function buildContentInheritancePage($state_machine)
+    {
+        $template = $this->template_repository->getCourseTemplateByTemplateId($this->wizard_flow->getTemplateSelection());
+        $template_ref_id = $template->getCrsRefId();
+        return new Page\ContentInheritancePage(
+            $template_ref_id,
+            $state_machine,
+            $this->ui_factory
+        );
+    }
+
     public function buildModalFromStateMachine(StateMachine $state_machine)
     {
         $modal = new RoundtripWizardModalGUI(
@@ -108,10 +119,7 @@ class WizardModalFactory
                 break;
 
             case Page\StateMachine::CONTENT_INHERITANCE_PAGE:
-                $page_presenter = new Page\ContentInheritancePage(
-                    $state_machine,
-                    $this->ui_factory
-                );
+                $page_presenter = $this->buildContentInheritancePage($state_machine);
                 break;
 
             case Page\StateMachine::SPECIFIC_SETTINGS_PAGE:
