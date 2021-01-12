@@ -18,6 +18,11 @@ class ModalDataController
         $this->wizard_flow_repo = $wizard_flow_repo;
     }
 
+    private function handleContentInheritanceStep(WizardFlow $wizard_flow, $post_data)
+    {
+
+    }
+
     private function handleTemplateSelectionStep(WizardFlow $wizard_flow, $post_data)
     {
         if(isset($post_data['template_id']) && $post_data['template_id'] != null) {

@@ -7,6 +7,9 @@ class RoundtripModalPresenter implements ModalPresenter
     /** @var Page\ModalPagePresenter */
     protected $presenter;
 
+    /** @var \ILIAS\UI\Factory */
+    protected $ui_factory;
+
     public function __construct(Page\ModalPagePresenter $presenter, \ILIAS\UI\Factory $ui_factory)
     {
         $this->presenter = $presenter;
@@ -50,7 +53,9 @@ class RoundtripModalPresenter implements ModalPresenter
         //$replace_signal = $modal->getReplaceSignal();
 
         $header = $this->getStepsHeader();
-        $content = $this->presenter->getModalPageAsComponentArray($replace_signal);
+        $content = array_merge([$this->ui_factory->legacy('<div id="coursewizard">')],
+            $this->presenter->getModalPageAsComponentArray());
+        $content[] = $this->ui_factory->legacy('</div>');
         $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal);
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
