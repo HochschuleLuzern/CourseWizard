@@ -4,16 +4,16 @@ namespace CourseWizard\DB\Models;
 
 class WizardFlow
 {
-    public const STATUS_IN_PROGRESS = 1;
-    public const STATUS_POSTPONED = 2;
-    public const STATUS_QUIT = 3;
-    public const STATUS_IMPORTING = 4;
-    public const STATUS_FINISHED = 5;
+    public const STATUS_IN_PROGRESS = 1; // First status till wizard is either postponed, quited or importing
+    public const STATUS_POSTPONED = 2;   // When modal is closed (if the user clicks the "Close"-Button, the "X"-Button or somewhere near the modal)
+    public const STATUS_IMPORTING = 3;   // Status while the wizard is importing the content from a course template
+    public const STATUS_QUIT = 4;        // Status if user chooses to arrange to course by herself / himself (Final state)
+    public const STATUS_FINISHED = 5;    // Status if the wizard has finished importing a course template (Final State)
 
     public const STEP_INTRODUCTION = 1;
     public const STEP_TEMPLATE_SELECTION = 2;
     public const STEP_CONTENT_INHERITANCE = 3;
-    public const STEP_SELECTED_SETTINGS = 4;
+    public const STEP_SPECIFIC_SETTINGS = 4;
     public const STEP_FINISHED_WIZARD = 5;
 
     private $crs_ref_id;
@@ -50,7 +50,7 @@ class WizardFlow
     public function withSelectedSettings($selected_settings) {
         $clone = clone $this;
         $clone->selected_settings = $selected_settings;
-        $clone->current_step = self::STEP_SELECTED_SETTINGS;
+        $clone->current_step = self::STEP_SPECIFIC_SETTINGS;
         return $clone;
     }
 

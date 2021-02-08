@@ -27,10 +27,9 @@ class WizardModalFactory
     private $ui_factory;
     private $ui_renderer;
 
-    public function __construct(CourseTemplateRepository $template_repository, WizardFlow $wizard_flow, \ilCtrl $ctrl, $ui_factory, $ui_renderer)
+    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $ui_factory, $ui_renderer)
     {
         $this->template_repository = $template_repository;
-        $this->wizard_flow = $wizard_flow;
         $this->ctrl = $ctrl;
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
@@ -81,9 +80,9 @@ class WizardModalFactory
         );
     }
 
-    private function buildContentInheritancePage($state_machine)
+    private function buildContentInheritancePage($state_machine, $template_id)
     {
-        $template = $this->template_repository->getCourseTemplateByTemplateId($this->wizard_flow->getTemplateSelection());
+        $template = $this->template_repository->getCourseTemplateByTemplateId($template_id);
         $template_ref_id = $template->getCrsRefId();
         return new Page\ContentInheritancePage(
             $template_ref_id,
@@ -105,7 +104,7 @@ class WizardModalFactory
         return $modal;
     }
 
-    private function buildModalPresenter($state_machine) : ModalPagePresenter
+    private function buildModalPresenter(StateMachine $state_machine) : ModalPagePresenter
     {
         switch($state_machine->getPageForCurrentState()){
             case Page\StateMachine::INTRODUCTION_PAGE:
@@ -119,7 +118,11 @@ class WizardModalFactory
                 break;
 
             case Page\StateMachine::CONTENT_INHERITANCE_PAGE:
-                $page_presenter = $this->buildContentInheritancePage($state_machine);
+                if(isset($_GET['template_id'])) {
+                    $page_presenter = $this->buildContentInheritancePage($state_machine, $_GET['template_id']);
+                } else {
+                    throw new \InvalidArgumentException('Missing the argument template_id which is needed for the content inheritance page');
+                }
                 break;
 
             case Page\StateMachine::SPECIFIC_SETTINGS_PAGE:

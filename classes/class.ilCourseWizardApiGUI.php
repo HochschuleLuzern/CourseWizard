@@ -15,6 +15,9 @@ class ilCourseWizardApiGUI
     const CMD_ASYNC_MODAL = 'renderAsyncWizardModal';
     const CMD_ASYNC_BASE_MODAL = 'renderAsyncBaseModal';
     const CMD_ASYNC_SAVE_FORM = 'saveFormData';
+    const CMD_EXECUTE_CRS_IMPORT = 'executeCrsImport';
+    const CMD_POSTPONE_WIZARD = 'postponeWizard';
+    const CMD_QUIT_WIZARD = 'quitWizard';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -53,15 +56,12 @@ class ilCourseWizardApiGUI
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
                         $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
-                            $wizard_flow,
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer
                         );
 
                         $modal = $modal_factory->buildModalFromStateMachine($state_machine);
-
-
 
                         $output = $modal->getRenderedModal(true);
                         echo $output;
@@ -78,7 +78,6 @@ class ilCourseWizardApiGUI
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
                         $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
-                            $wizard_flow,
                             $this->ctrl,
                             $this->ui_factory,
                             $this->ui_renderer
@@ -89,6 +88,9 @@ class ilCourseWizardApiGUI
                         echo $modal->getRenderedModalFromAsyncCall();
                         exit;
 
+                        /*
+                         *
+                         * TODO: DELETE THIS!
                     case self::CMD_ASYNC_SAVE_FORM:
                         $post_params = $this->request->getParsedBody();
                         $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
@@ -97,6 +99,23 @@ class ilCourseWizardApiGUI
                         //$this->savePostRequest($post_params, $wizard_repo);
 
                         break;
+
+*/
+                    case self::CMD_EXECUTE_CRS_IMPORT:
+                        $obj_str = $_POST['obj'];
+                        $obj = json_decode($obj_str, true);
+                        $template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
+
+                        $factory = new CourseImportObjectFactory($obj, $template_repo);
+                        $course_import_data = $factory->createCourseImportDataObject();
+                        $controller = new CourseImportController();
+                        $controller->executeImport($course_import_data);
+
+                        break;
+                    case self::CMD_POSTPONE_WIZARD:
+                    case self::CMD_QUIT_WIZARD:
+                        break;
+
 
                     default:
                         break;

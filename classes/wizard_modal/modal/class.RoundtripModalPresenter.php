@@ -45,21 +45,21 @@ class RoundtripModalPresenter implements ModalPresenter
         global $DIC;
 
         $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), []);
-
+        $modal->getCloseSignal();
         $replace_signal = $DIC->http()->request()->getQueryParams()['replacesignal']
             ? new \ILIAS\UI\Implementation\Component\ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
             : $modal->getReplaceSignal();
 
-        //$replace_signal = $modal->getReplaceSignal();
+        $close_signal = $modal->getCloseSignal();
 
         $header = $this->getStepsHeader();
         $content = array_merge([$this->ui_factory->legacy('<div id="coursewizard">')],
             $this->presenter->getModalPageAsComponentArray());
         $content[] = $this->ui_factory->legacy('</div>');
-        $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal);
+        $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal, $close_signal);
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
-
+        $action_buttons[] = $this->ui_factory->button()->standard("Close-Signal-Trigger", $modal->getCloseSignal());
         $pl = new \ilCourseWizardPlugin();
         $modal = $modal->withContent(array_merge($header, $content))->withActionButtons($action_buttons)->withCancelButtonLabel($pl->txt('btn_close_modal'));
 

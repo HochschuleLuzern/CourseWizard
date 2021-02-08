@@ -4,8 +4,13 @@ namespace CourseWizard\Modal\Page;
 
 class JavaScriptPageConfig
 {
+    public const JS_PREVIOUS_PAGE = 'previousPage';
+    public const JS_PREVIOUS_PAGE_URL = 'previousPageUrl';
     public const JS_CURRENT_PAGE = 'currentPage';
+    public const JS_CURRENT_PAGE_URL = 'currentPageUrl';
     public const JS_NEXT_PAGE = 'nextPage';
+    public const JS_NEXT_PAGE_URL = 'nextPageUrl';
+
 
     /** @var StateMachine */
     private $state_machine;
@@ -17,6 +22,7 @@ class JavaScriptPageConfig
     {
         $this->state_machine = $state_machine;
         $this->config_fields = array(
+            self::JS_PREVIOUS_PAGE => $state_machine->getPageForPreviousState(),
             self::JS_CURRENT_PAGE => $state_machine->getPageForCurrentState(),
             self::JS_NEXT_PAGE => $state_machine->getPageForNextState()
         );
@@ -27,21 +33,15 @@ class JavaScriptPageConfig
         $this->config_fields[$key] = $value;
     }
 
-    public function setSaveConfigsURL(string $url)
+    public function setPageSwitchURL(string $previousPage, string $currentPage, string $nextPage)
     {
-        $this->config_fields['saveConfigUrl'] = $url;
+        $this->config_fields[self::JS_PREVIOUS_PAGE_URL] = $previousPage;
+        $this->config_fields[self::JS_CURRENT_PAGE_URL] = $currentPage;
+        $this->config_fields[self::JS_NEXT_PAGE_URL] = $nextPage;
     }
 
     public function getAsJSONString() : string
     {
-        $json = "{";
-        $comma_prefix = "";
-        foreach($this->config_fields as $key => $value) {
-            $json .= "$comma_prefix $key: \"$value\"";
-            $comma_prefix = ',';
-        }
-        $json .= "}";
-
-        return $json;
+        return json_encode($this->config_fields);
     }
 }

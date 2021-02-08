@@ -58,49 +58,38 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         $glyph_factory = $this->ui_factory->symbol()->glyph();
         $pl = new \ilCourseWizardPlugin();
 
-        $buttons[] = $this->createButtonForPageReplacement($this->ui_factory->button(),
-            $replace_signal,
-            'RELOAD',
-            $this->modal_render_base_url,
-            $this->state_machine->getPageForCurrentState(),
-            true);
-
         // TODO: Implement getPageActionButtons() method.
         $previous_page_name = $this->state_machine->getPageForPreviousState();
         if($previous_page_name != '') {
-            $buttons[] = $this->createButtonForPageReplacement($this->ui_factory->button(),
+            $js_code = $this->getJsPreviousPageMethod();
+            $buttons[] = /*$this->createButtonForPageReplacement($this->ui_factory->button(),
                 $replace_signal,
                 $pl->txt('btn_back'),
                 $this->modal_render_base_url,
-                $previous_page_name);
+                $previous_page_name)*/
+                $this->ui_factory->button()->standard($pl->txt('btn_back'), '#')->withOnLoadCode(
+                function($id) use ($js_code, $replace_signal) {
+                    return '$('.$id.').click('.$js_code.');';
+                });;
         }
 
         $next_page_name = $this->state_machine->getPageForNextState();
         if($next_page_name != '') {
-            $js_code = $this->getJsPageActionMethod();
+            $js_code = $this->getJsNextPageMethod();
             $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
             $buttons[] = $this->ui_factory->button()->primary($pl->txt('btn_continue'), '#')->withOnLoadCode(
                 function($id) use ($js_code, $replace_signal) {
                     return '$('.$id.').click('.$js_code.');';
                 });
+        } else {
 
-            $buttons[] = $this->createButtonForPageReplacement(
-                $this->ui_factory->button(),
-                $replace_signal,
-                $pl->txt('btn_continue') . '_no_js',
-                $this->modal_render_base_url,
-                $next_page_name,
-                true
-            )->withOnLoadCode(function($id) use ($js_code) {
+            $js_code = $this->getJsNextPageMethod();
+            $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
+            $buttons[] = $this->ui_factory->button()->primary($pl->txt('btn_execute_import'), '#')->withOnLoadCode(
+                function($id) use ($js_code, $replace_signal) {
                     return '$('.$id.').click('.$js_code.');';
                 });
-        } else {
-            $buttons[] = $this->createButtonForPageReplacement($this->ui_factory->button(),
-                $replace_signal,
-                $pl->txt('btn_execute_import'),
-                $this->modal_render_base_url,
-                $next_page_name,
-                true);
+
         }
 
         $buttons[] = $this->ui_factory->button()->standard("Kurs ohne Hilfe einrichten", '#');
@@ -108,19 +97,34 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         return $buttons;
     }
 
-    public function getJsPageActionMethod() : string {
+    public function getJsNextPageMethod() : string {
         return "";
     }
 
-    public function getJSConfigsAsUILegacy($replace_signal) : Legacy {
+    public function getJsPreviousPageMethod() : string {
+        return self::JS_NAMESPACE . '.loadPreviousPage';
+    }
+
+    protected function getNextPageUrl() : string {
+
+    }
+
+    public function getJSConfigsAsUILegacy($replace_signal, $close_signal) : Legacy {
         $save_page_url = $this->save_form_data_base_url . "&page=" . $this->state_machine->getPageForCurrentState();
-        $this->js_creator->setSaveConfigsURL($save_page_url);
+
+        $base_page_replace_url = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=";
+        $this->js_creator->setPageSwitchURL($base_page_replace_url . $this->state_machine->getPageForPreviousState(),
+            $base_page_replace_url . $this->state_machine->getPageForCurrentState(),
+            $base_page_replace_url . $this->state_machine->getPageForNextState());
 
         $replace_url = $this->modal_render_base_url . "&page={$this->state_machine->getPageForNextState()}&replacesignal={$replace_signal->getId()}";
         $this->js_creator->addCustomConfigElement('replaceSignal', $replace_signal->getId());
-        $this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
+        //$this->js_creator->addCustomConfigElement('closeSignal', $close_signal->getId());
+        //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
+        $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
 
-        return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
+        //return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
+        return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
     }
 
     abstract public function getModalPageAsComponentArray() : array;

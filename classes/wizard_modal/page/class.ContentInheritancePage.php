@@ -26,14 +26,14 @@ class ContentInheritancePage extends BaseModalPagePresenter
         $ui_components = array();
         $ui_components[] = $this->ui_factory->legacy('Hier kann der User auswählen, was aus dem alten Kurs kopiert / verknüpft werden soll.<br><br>');
 
-        $table = new \ilObjectCopySelectionTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
+        $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
         $table->parseSource($this->template_id);
         $ui_components[] = $this->ui_factory->legacy($table->getHTML());
 
         return $ui_components;
     }
 
-    public function getJsPageActionMethod() : string
+    public function getJsNextPageMethod() : string
     {
         return self::JS_POST_SELECTION_METHOD;
     }

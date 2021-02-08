@@ -6,11 +6,16 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'ContentInheritanceData' => $baseDir . '/classes/course_import/ContentInheritanceData.php',
+    'CourseImportController' => $baseDir . '/classes/course_import/CourseImportController.php',
+    'CourseImportData' => $baseDir . '/classes/course_import/CourseImportData.php',
+    'CourseImportObjectFactory' => $baseDir . '/classes/course_import/CourseImportObjectFactory.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateCollector' => $baseDir . '/classes/course_template/class.CourseTemplateCollector.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateCreator' => $baseDir . '/classes/course_template/class.CourseTemplateCreator.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableDataProvider' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableDataProvider.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateObject' => $baseDir . '/classes/course_template/class.CourseTemplateObject.php',
+    'CourseWizard\\CustomUI\\ContentInheritanceTableGUI' => $baseDir . '/classes/wizard_modal/custom_ui/ContentInheritanceTableGUI.php',
     'CourseWizard\\CustomUI\\RadioGroupViewControlSubPageGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.RadioGroupViewControlSubPageGUI.php',
     'CourseWizard\\CustomUI\\RadioSelectionViewControlGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.RadioSelectionViewControlGUI.php',
     'CourseWizard\\CustomUI\\TemplateSelectionRadioGroupGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioGroupGUI.php',

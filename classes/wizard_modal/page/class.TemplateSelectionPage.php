@@ -35,7 +35,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         return array_merge($container_div, $container_content, $container_end_div);
     }
 
-    public function getJsPageActionMethod() : string
+    public function getJsNextPageMethod() : string
     {
         return self::JS_POST_SELECTION_METHOD;
     }

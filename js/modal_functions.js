@@ -1,84 +1,122 @@
 il.CourseWizardModalFunctions = (function (scope) {
 
-	var pub = {};
+	let pub = {};
+	let priv = {};
 
-	pub.config = {
+	let storageEngine = localStorage;
+	let currentWizardObj = null;
+
+	priv.config = {
 		saveConfigUrl: '',
 		currentPage: '',
 		nextPage: '',
 		replaceSignal: ''
 	}
 
-	/*
-	if(scope.CourseWizardModalFunctions != NULL)
-	{
-		pub.config = il.CourseWizardModalFunctions.config;
-	}*/
-
 	let executePostRequest = function(data, url) {
 		$.post(url, data.post_data).done(function(response)
 		{
-			console.log("Data Loaded: " + toString(this.data) + "replace: " + pub.config['replaceSignal']);
-			$(document).trigger(pub.config['replaceSignal'], data.signal_data)
+			$(document).trigger(priv.config['replaceSignal'], data.signal_data)
 		});
-		console.log("ExecutingPostRequest");
 	};
 
+	priv.triggerSignal = function(signal_id, event, triggerer, options) {
+		$(document).trigger(signal_id, {
+			id: signal_id,
+			event: 'click',
+			triggerer: triggerer,
+			options: options
+		});
+	}
+
 	pub.pushTemplateSelection = function (e) {
-		let data;
 		let checked_id = $('#xcwi_template_selection_div_id').find('input:checked').val();
+
 		if(checked_id != null) {
-			console.log("Pushing Content Inheritance Selection");
-			data = {
-				post_data: {
-					template_id: checked_id,
-					currentPage: pub.config.currentPage
-				},
-				signal_data: {
-					id: pub.config['replace_signal'],
-					event: 'click',
-					trigerrer: $(e),
-					options: {
-						url: pub.config['nextPageUrl']
-					}
-				}
-			};
-			executePostRequest(data, pub.config.saveConfigUrl);
-			console.log("PushingTemplateSelection");
+			let nextPageUrl = priv.config['nextPageUrl'] + '&template_id=' + checked_id;
+			currentWizardObj['templateId'] = checked_id;
+			priv.storeCurrentWizardObj()
+
+			priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+
 		} else {
-			console.log("No template selected");
 		}
 	};
 
 	pub.pushContentInheritanceSelection = function (e) {
-		let data;
-		let radio_values = {};
-		let checked_id = $("#coursewizard").find('input[type=radio]:checked').each(function () {
-			let radio_btn = $(this);
-			radio_values[radio_btn.attr("id")] = radio_btn.attr("value");
-			console.log(radio_btn.attr("id"), radio_btn.attr("value"));
+		currentWizardObj.contentInheritance= {};
+		 $("#coursewizard").find('form input:checked').each(function(key, value) {
+			currentWizardObj.contentInheritance[value.name] = {
+				id: value.id,
+				value: value.value
+			};
+		 });
+		priv.storeCurrentWizardObj();
+		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: priv.config['nextPageUrl']});
+	};
+
+	pub.loadPreviousPage = function(e) {
+
+		let previousPageUrl = priv.config['previousPageUrl']
+		if(currentWizardObj['templateId']) {
+			previousPageUrl += '&template_id=' + currentWizardObj['templateId'];
+		}
+		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: previousPageUrl});
+	}
+
+	pub.executeImport = function(e) {
+		currentWizardObj["specificSettings"] = 'hello world';
+		priv.storeCurrentWizardObj();
+		let data = {obj: JSON.stringify(currentWizardObj)};
+
+		$.post(priv.config['executeImportUrl'], data).done(function(response)
+		{
+			console.log("Course imported!");
+
+			console.log("Deleting obj with target ref: " + currentWizardObj.targetRefId);
+			storageEngine.removeItem(currentWizardObj.targetRefId);
+			location.reload();
 		});
+	}
 
-		data = {
-			post_data: {
-				radio_values: radio_values,
-				currentPage: pub.config.currentPage
-			},
-			signal_data: {
-				id: pub.config['replace_signal'],
-				event: 'click',
-				trigerrer: $(e),
-				options: {
-					url: pub.config['nextPageUrl']
-				}
-			}
-		};
-		executePostRequest(data, pub.config.saveConfigUrl);
-	};
+	priv.loadCurrentWizardObj = function (ref_id) {
+		let obj = storageEngine.getItem(ref_id);
+		if(obj === null) {
+			currentWizardObj = {'targetRefId': ref_id};
+			priv.storeCurrentWizardObj();
+		} else {
+			currentWizardObj = JSON.parse(obj);
+		}
+	}
 
-	pub.getWizardModal = function () {
+	priv.storeCurrentWizardObj = function() {
+		let json_obj = JSON.stringify(currentWizardObj);
+		storageEngine.setItem(currentWizardObj.targetRefId, json_obj);
+	}
 
-	};
+	pub.printCurrentObj = function() {
+		console.log(currentWizardObj);
+	}
+
+	pub.printCurrentConf = function() {
+		console.log(priv.config);
+	}
+
+	priv.closeModalTriggered = function(event, signalData) {
+		console.log('Close Modal triggered');
+	}
+
+	pub.initNewModalPage = function (config) {
+		priv.config = config;
+
+		/*
+		closeSignal = config['closeSignal'];
+		$(document).on(closeSignal, priv.closeModalTriggered);*/
+
+		if(currentWizardObj === null || config.targetRefId != currentWizardObj.targetRefId) {
+			priv.loadCurrentWizardObj(config.targetRefId);
+		}
+	}
 
 	return pub;
 

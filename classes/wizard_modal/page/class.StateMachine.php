@@ -8,7 +8,7 @@ class StateMachine
     const TEMPLATE_SELECTION_PAGE = "template_selection";
     const CONTENT_INHERITANCE_PAGE = 'content_inheritance';
     const SPECIFIC_SETTINGS_PAGE = "specific_settings";
-    const POSTPONE_PAGE = "";
+    const POSTPONE_PAGE = "postpone_page";
 
     /** @var ilCtrl */
     protected $ctrl;

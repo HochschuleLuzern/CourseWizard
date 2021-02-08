@@ -20,7 +20,8 @@ class ModalDataController
 
     private function handleContentInheritanceStep(WizardFlow $wizard_flow, $post_data)
     {
-
+        $values = $post_data['radio_values'];
+        parse_str($values, $output);
     }
 
     private function handleTemplateSelectionStep(WizardFlow $wizard_flow, $post_data)
@@ -45,7 +46,7 @@ class ModalDataController
                 $this->handleContentInheritanceStep($wizard_flow, $post_data);
                 break;
 
-            case WizardFlow::STEP_SELECTED_SETTINGS:
+            case WizardFlow::STEP_SPECIFIC_SETTINGS:
             case WizardFlow::STEP_FINISHED_WIZARD:
                 $this->handleSelectedSettingsStep($wizard_flow, $post_data);
                 break;
@@ -71,7 +72,7 @@ class ModalDataController
                 return WizardFlow::STEP_CONTENT_INHERITANCE;
 
             case StateMachine::SPECIFIC_SETTINGS_PAGE:
-                return WizardFlow::STEP_SELECTED_SETTINGS;
+                return WizardFlow::STEP_SPECIFIC_SETTINGS;
 
             default:
                 throw new \InvalidArgumentException("Current page step {$$posted_step} does not exist");

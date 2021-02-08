@@ -48,7 +48,7 @@ class WizardFlowRepository
                     $row[self::COL_SELECTED_TEMPLATE],
                     null
                 );
-            case WizardFlow::STEP_SELECTED_SETTINGS:
+            case WizardFlow::STEP_SPECIFIC_SETTINGS:
             case WizardFlow::STEP_FINISHED_WIZARD:
 
             return WizardFlow::wizardFlowFinished(
