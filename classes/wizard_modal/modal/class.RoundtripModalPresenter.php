@@ -59,7 +59,7 @@ class RoundtripModalPresenter implements ModalPresenter
         $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal, $close_signal);
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
-        $action_buttons[] = $this->ui_factory->button()->standard("Close-Signal-Trigger", $modal->getCloseSignal());
+
         $pl = new \ilCourseWizardPlugin();
         $modal = $modal->withContent(array_merge($header, $content))->withActionButtons($action_buttons)->withCancelButtonLabel($pl->txt('btn_close_modal'));
 

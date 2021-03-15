@@ -97,6 +97,7 @@ class ilObjCourseWizardTemplateManagementGUI
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         } else {
             $model = $crs_repo->getCourseTemplateByTemplateId($template_id);
+
             $crs_repo->updateTemplateStatus($model, $status_code);
 
             ilUtil::sendSuccess('Status changed to: ' . $status_code, true);

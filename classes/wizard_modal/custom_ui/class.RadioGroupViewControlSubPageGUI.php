@@ -2,7 +2,7 @@
 
 namespace CourseWizard\CustomUI;
 
-class RadioGroupViewControlSubPageGUI
+class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
 {
     protected $subpage_title;
 

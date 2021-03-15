@@ -8,7 +8,7 @@ class StateMachine
     const TEMPLATE_SELECTION_PAGE = "template_selection";
     const CONTENT_INHERITANCE_PAGE = 'content_inheritance';
     const SPECIFIC_SETTINGS_PAGE = "specific_settings";
-    const POSTPONE_PAGE = "postpone_page";
+    const QUIT_WIZARD_PAGE = "quit_wizard_page";
 
     /** @var ilCtrl */
     protected $ctrl;
@@ -46,6 +46,10 @@ class StateMachine
                 $this->setPreviousAndNextPage(self::CONTENT_INHERITANCE_PAGE, '');
                 break;
 
+            case self::QUIT_WIZARD_PAGE:
+                $this->setPreviousAndNextPage($_GET['previousPage'], '');
+                break;
+
             default:
                 throw new InvalidArgumentException('Invalid state for course wizard modal given');
         }
@@ -70,5 +74,10 @@ class StateMachine
     public function getPageForNextState() : string
     {
         return $this->next_page;
+    }
+
+    public function getPageForQuittingWizard() : string
+    {
+        return self::QUIT_WIZARD_PAGE;
     }
 }

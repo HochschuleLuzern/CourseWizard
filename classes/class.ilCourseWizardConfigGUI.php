@@ -8,6 +8,19 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     const CMD_SAVE = 'save';
     const CMD_EDIT_CONTAINER_CONF = 'edit_container_conf';
     const CMD_SAVE_CONTAINER_CONF = 'save_container_conf';
+    const FORM_GLOBAL_ROLE = 'global_role';
+
+    /** @var ilTemplate */
+    private $tpl;
+
+    /** @var ilCtrl */
+    private $ctrl;
+
+    /** @var \Psr\Http\Message\RequestInterface|\Psr\Http\Message\ServerRequestInterface */
+    private $request;
+
+    /** @var ilLanguage */
+    private $lng;
 
     public function __construct()
     {
@@ -16,14 +29,17 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $this->tpl = $DIC->ui()->mainTemplate();
         $this->ctrl = $DIC->ctrl();
         $this->request = $DIC->http()->request();
+        $this->lng = $DIC->language();
     }
 
     private function initPluginConfForm() : ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
 
-        $content_creator_role = new ilRoleAutoCompleteInputGUI('Role Input', 'role', $this, 'apiGlobalRoles');
+        $content_creator_role = new ilRoleAutoCompleteInputGUI('Role Input', self::FORM_GLOBAL_ROLE, $this, 'apiGlobalRoles');
         $form->addItem($content_creator_role);
+
+        $form->addCommandButton(self::CMD_SAVE, $this->lng->txt('save'));
 
         return $form;
     }
@@ -70,6 +86,11 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
     private function saveConfig()
     {
+        $form = $this->initPluginConfForm();
+
+        if($form->checkInput()) {
+            $form->getInput(self::FORM_GLOBAL_ROLE);
+        }
     }
 
     private function showConfigForm()
@@ -78,7 +99,6 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
         $plugin_conf_form = $this->initPluginConfForm();
-
 
         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($db);
         $data_provider = new \CourseWizard\admin\CourseTemplateContainerTableDataProvider($conf_repo, $template_repo, $this->plugin_object);
@@ -92,16 +112,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     {
         global $DIC;
 
-
-        $container_id = (int)($this->request->getQueryParams()['container_id']);
-        if($container_id <= 0) {
+        $container_id = (int) ($this->request->getQueryParams()['container_id']);
+        if ($container_id <= 0) {
             ilUtil::sendFailure("Container ID of $container_id does not exist");
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
 
-        $db = $DIC->database();
+        $db        = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
-        $conf = $conf_repo->getContainerConfiguration($container_id);
+        $conf      = $conf_repo->getContainerConfiguration($container_id);
 
         $form = new ilPropertyFormGUI();
         $form->setTitle(ilObject::_lookupTitle($conf->getObjId()));
@@ -115,14 +134,6 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $form->addItem($role_users);
 
         $this->tpl->setContent($form->getHTML());
-    }
-
-    private function getConfigEditForm() : ilPropertyFormGUI
-    {
-        $form = new ilPropertyFormGUI();
-
-
-        return $form;
     }
 
 }

@@ -15,15 +15,21 @@ class WizardFlowRepository
     const COL_SELECTED_TEMPLATE = 'selected_template';
     const COL_WIZARD_STATUS = 'wizard_status';
     const COL_CURRENT_STEP = 'current_step';
+    const COL_FIRST_OPEN_TS = 'first_open_ts';
+    const COL_FINISHED_IMPORT_TS = 'finished_import_ts';
 
     /** @var \ilDBInterface */
     protected $db;
 
+    /** @var \ilObjUser */
+    protected $executing_user;
+
     private $cache;
 
-    public function __construct(\ilDBInterface $db)
+    public function __construct(\ilDBInterface $db, \ilObjUser $executing_user)
     {
         $this->db = $db;
+        $this->executing_user = $executing_user;
 
         if(!$db->sequenceExists(self::TABLE_NAME)) {
             $db->createSequence(self::TABLE_NAME);
@@ -34,37 +40,44 @@ class WizardFlowRepository
 
     private function buildWizardFlowFromRow($row) : WizardFlow
     {
-        switch($row[self::COL_CURRENT_STEP]) {
-            case WizardFlow::STEP_INTRODUCTION:
-                return WizardFlow::newWizardFlow($row[self::COL_TARGET_REF_ID]);
-            case WizardFlow::STEP_TEMPLATE_SELECTION:
-                return WizardFlow::wizardFlowWithSelectedTemplate(
+        switch($row[self::COL_WIZARD_STATUS]) {
+            case WizardFlow::STATUS_IN_PROGRESS:
+            case WizardFlow::STATUS_POSTPONED:
+                return WizardFlow::unfinishedWizardFlow(
                     $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_SELECTED_TEMPLATE]
-                );
-            case WizardFlow::STEP_CONTENT_INHERITANCE:
+                    $row[self::COL_EXECUTING_USER],
+                    $row[self::COL_FIRST_OPEN_TS],
+                    $row[self::COL_WIZARD_STATUS]);
+                break;
+
+            case WizardFlow::STATUS_IMPORTING:
                 return WizardFlow::wizardFlowWithContentInheritance(
                     $row[self::COL_TARGET_REF_ID],
                     $row[self::COL_SELECTED_TEMPLATE],
                     null
                 );
-            case WizardFlow::STEP_SPECIFIC_SETTINGS:
-            case WizardFlow::STEP_FINISHED_WIZARD:
-
-            return WizardFlow::wizardFlowFinished(
+            case WizardFlow::STATUS_QUIT:
+                return WizardFlow::quitedWizardFlow(
                     $row[self::COL_TARGET_REF_ID],
+                    $row[self::COL_EXECUTING_USER],
+                    $row[self::COL_FIRST_OPEN_TS],
+                    $row[self::COL_FINISHED_IMPORT_TS]);
+
+            case WizardFlow::STATUS_FINISHED:
+                return WIzardFLow::finishedWizardFlow($row[self::COL_TARGET_REF_ID],
+                    $row[self::COL_EXECUTING_USER],
+                    $row[self::COL_FIRST_OPEN_TS],
                     $row[self::COL_SELECTED_TEMPLATE],
-                    null,
-                    null
-                );
+                    $row[self::COL_FINISHED_IMPORT_TS]);
+
             default:
                 throw new \InvalidArgumentException("Wizard step with nr {$row[self::COL_CURRENT_STEP]} does not exist");
         }
     }
 
-    public function createNewWizardFlow($crs_ref_id) : WizardFlow
+    public function createNewWizardFlow($crs_ref_id, $executing_user) : WizardFlow
     {
-        $wizard_flow = WizardFlow::newWizardFlow($crs_ref_id);
+        $wizard_flow = WizardFlow::newlyCreatedWizardFlow($crs_ref_id, $executing_user);
 
         $this->db->insert(self::TABLE_NAME,
             array(
@@ -108,22 +121,19 @@ class WizardFlowRepository
                 return $this->queryWizardFlowByCrs($crs_ref_id);
             }
         } else {
-            return $this->createNewWizardFlow($crs_ref_id);
+            return $this->createNewWizardFlow($crs_ref_id, $this->executing_user);
         }
     }
     
-    public function updateWizardFlow(WizardFlow $wizard_flow) {
+    public function updateWizardFlowStatus(WizardFlow $wizard_flow) {
 
         $update = array();
         $where = array(self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()));
 
-        switch($wizard_flow->getCurrentStep()) {
-            case WizardFlow::STEP_TEMPLATE_SELECTION:
-                $update = array(
-                    self::COL_SELECTED_TEMPLATE => array('integer', $wizard_flow->getTemplateSelection()),
-                    self::COL_CURRENT_STEP => array('integer', $wizard_flow->getCurrentStep())
-                );
-        }
+        $update = array(
+            self::COL_SELECTED_TEMPLATE => array('integer', $wizard_flow->getTemplateSelection()),
+            self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus())
+        );
 
         $this->db->update(
             self::TABLE_NAME,

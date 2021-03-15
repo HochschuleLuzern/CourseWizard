@@ -29,7 +29,7 @@ class ModalDataController
         if(isset($post_data['template_id']) && $post_data['template_id'] != null) {
             $template_id = $post_data['template_id'];
             $updated_wizard_flow = $wizard_flow->withSelectedTemplate($template_id);
-            $this->wizard_flow_repo->updateWizardFlow($updated_wizard_flow);
+            $this->wizard_flow_repo->updateWizardFlowStatus($updated_wizard_flow);
         }
     }
 

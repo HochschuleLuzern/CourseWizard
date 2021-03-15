@@ -85,4 +85,19 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         return $role_template;
 
     }
+
+    /**
+     * @return string[]
+     */
+    public function getParentTypes()
+    {
+        $par_types = array("cat");
+        return $par_types;
+    }
+
+    public function allowCopy()
+    {
+        return false;
+    }
+
 }

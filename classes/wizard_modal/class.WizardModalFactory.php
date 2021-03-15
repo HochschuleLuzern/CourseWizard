@@ -24,13 +24,17 @@ class WizardModalFactory
 
     /** @var \ilCtrl */
     private $ctrl;
+
+    private $request;
+
     private $ui_factory;
     private $ui_renderer;
 
-    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $ui_factory, $ui_renderer)
+    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $request, $ui_factory, $ui_renderer)
     {
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
+        $this->request = $request;
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
     }
@@ -127,6 +131,13 @@ class WizardModalFactory
 
             case Page\StateMachine::SPECIFIC_SETTINGS_PAGE:
                 $page_presenter = new Page\SettingsPage(
+                    $state_machine,
+                    $this->ui_factory
+                );
+                break;
+
+            case Page\StateMachine::QUIT_WIZARD_PAGE:
+                $page_presenter = new Page\QuitWizardPage(
                     $state_machine,
                     $this->ui_factory
                 );

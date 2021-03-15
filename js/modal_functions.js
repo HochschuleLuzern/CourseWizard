@@ -2,6 +2,7 @@ il.CourseWizardModalFunctions = (function (scope) {
 
 	let pub = {};
 	let priv = {};
+	priv.isInitialized = false;
 
 	let storageEngine = localStorage;
 	let currentWizardObj = null;
@@ -109,13 +110,19 @@ il.CourseWizardModalFunctions = (function (scope) {
 	pub.initNewModalPage = function (config) {
 		priv.config = config;
 
-		/*
-		closeSignal = config['closeSignal'];
-		$(document).on(closeSignal, priv.closeModalTriggered);*/
-
-		if(currentWizardObj === null || config.targetRefId != currentWizardObj.targetRefId) {
+		if(currentWizardObj === null || config.targetRefId !== currentWizardObj.targetRefId) {
 			priv.loadCurrentWizardObj(config.targetRefId);
 		}
+
+		if(!priv.isInitialized) {
+			$("#coursewizard").parents('.modal.il-modal-roundtrip').on("hide.bs.modal", function(){
+				$.ajax(priv.config['dismissModalUrl']).done(function() {
+					location.reload();
+				});
+			});
+		}
+
+		priv.isInitialized = true;
 	}
 
 	return pub;

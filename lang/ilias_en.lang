@@ -5,6 +5,7 @@ btn_delete_crs_template#:#Delete Course Template
 btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
 btn_close_modal#:#Close Modal
+btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 conf_container_table_title#:#Overview of Available Template Containers Objects
 create_crs_template_draft#:#Create Course Template Draft
 global_available#:#Global Available

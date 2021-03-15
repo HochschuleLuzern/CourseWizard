@@ -24,7 +24,7 @@ class TemplateSelectionRadioOptionGUI
         $f = $DIC->ui()->factory();
         $obj_id = $this->crs_template->getObjId();
         $image_path = \ilObject::_getIcon($obj_id);
-        $btn_preview = $this->ui_factory->button()->shy("Preview", $this->crs_template->generatePreviewLink());
+        $btn_preview = $this->ui_factory->link()->standard("Preview", $this->crs_template->generatePreviewLink())->withOpenInNewViewport(true);
         $dropdown = $this->ui_factory->dropdown()->standard([$btn_preview]);
 
         $icon = $this->ui_factory->symbol()->icon()->custom($image_path, 'Thumbnail', 'large');

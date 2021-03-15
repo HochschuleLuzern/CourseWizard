@@ -16,8 +16,9 @@ class ilCourseWizardApiGUI
     const CMD_ASYNC_BASE_MODAL = 'renderAsyncBaseModal';
     const CMD_ASYNC_SAVE_FORM = 'saveFormData';
     const CMD_EXECUTE_CRS_IMPORT = 'executeCrsImport';
+    const CMD_DISMISS_WIZARD = 'dismissWizard';
     const CMD_POSTPONE_WIZARD = 'postponeWizard';
-    const CMD_QUIT_WIZARD = 'quitWizard';
+    const CMD_PROCEED_POSTPONED_WIZARD = 'proceedPostponedWizard';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -52,11 +53,12 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
                         $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
                             $this->ctrl,
+                            $this->request,
                             $this->ui_factory,
                             $this->ui_renderer
                         );
@@ -74,11 +76,12 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
                         $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
                             $this->ctrl,
+                            $this->request,
                             $this->ui_factory,
                             $this->ui_renderer
                         );
@@ -88,19 +91,6 @@ class ilCourseWizardApiGUI
                         echo $modal->getRenderedModalFromAsyncCall();
                         exit;
 
-                        /*
-                         *
-                         * TODO: DELETE THIS!
-                    case self::CMD_ASYNC_SAVE_FORM:
-                        $post_params = $this->request->getParsedBody();
-                        $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database());
-                        $modal_data_controller = new Modal\ModalDataController($wizard_repo);
-                        $modal_data_controller->evaluateAndSavePostData($this->request->getQueryParams()['ref_id'], $post_params);
-                        //$this->savePostRequest($post_params, $wizard_repo);
-
-                        break;
-
-*/
                     case self::CMD_EXECUTE_CRS_IMPORT:
                         $obj_str = $_POST['obj'];
                         $obj = json_decode($obj_str, true);
@@ -112,8 +102,45 @@ class ilCourseWizardApiGUI
                         $controller->executeImport($course_import_data);
 
                         break;
+
                     case self::CMD_POSTPONE_WIZARD:
-                    case self::CMD_QUIT_WIZARD:
+                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                            $wizard_flow = $wizard_flow->withPostponedStatus();
+                            $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                            $this->ctrl->setParameter($this, 'ref_id', $target_ref_id);
+                            $link = $this->ctrl->getLinkTarget($this, self::CMD_PROCEED_POSTPONED_WIZARD, '');
+                            $btn = $this->ui_factory->link()->standard("Reactivate Modal (Link btn)", $link);
+                            $btn_str = $this->ui_renderer->render($btn);
+                            ilUtil::sendInfo("Modal Postponed. Click here to reactivate it: $btn_str", true);
+
+                        }
+
+
+                        break;
+
+                    case self::CMD_DISMISS_WIZARD:
+                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                            $wizard_flow = $wizard_flow->withQuitedStatus();
+                            $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+                        }
+                        break;
+
+                    case self::CMD_PROCEED_POSTPONED_WIZARD:
+                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+                            $wizard_flow = $wizard_flow->withInProgressStatus();
+                            $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+                            $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
+                        }
                         break;
 
 
@@ -125,10 +152,5 @@ class ilCourseWizardApiGUI
                 break;
         }
 
-    }
-
-    private function savePostRequest(array $post_params, \CourseWizard\DB\WizardFlowRepository $wizard_repo)
-    {
-        $replace_signal = new \ILIAS\UI\Implementation\Component\ReplaceSignal($post_params['replaceSignal']);
     }
 }

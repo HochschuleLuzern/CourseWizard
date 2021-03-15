@@ -316,6 +316,13 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $obj->createReference();
             $obj->putInTree($this->ref_id);
 
+            $role = ilObjRole::createDefaultRole(
+                'Course Template Editor',
+                "Admin role for Template Container" . $obj->getRefId(),
+                'crs_admin', // Admin role template from ilObjCourse,
+                $obj->getRefId()
+            );
+
             $this->object->addNewCourseTemplate($obj);
 
             ilUtil::sendSuccess('Template created!');
