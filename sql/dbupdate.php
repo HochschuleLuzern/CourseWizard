@@ -38,8 +38,7 @@ if(!$ilDB->tableExists($current_table))
             'default'=> 0
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_CREATE_DATE => array(
-            'type' => 'integer',
-            'length' => 'timestamp',
+            'type' => 'timestamp',
             'notnull' => false
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_TEMPLATE_CONTAINER_REF_ID => array(
@@ -52,8 +51,12 @@ if(!$ilDB->tableExists($current_table))
 
     $ilDB->createTable($current_table, $fields);
     $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\CourseTemplateRepository::COL_TEMPLATE_ID));
+
 }
 
+if(!$ilDB->sequenceExists($current_table)) {
+    $ilDB->createSequence($current_table);
+}
 
 ?>
 <#2>

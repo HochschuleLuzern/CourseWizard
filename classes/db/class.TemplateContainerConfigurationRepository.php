@@ -6,7 +6,8 @@ use CourseWizard\DB\Models\TemplateContainerConfiguration;
 
 class TemplateContainerConfigurationRepository
 {
-    const TABLE_NAME = 'rep_robj_xcwi_con_settings';
+    // The table name 'rep_robj_xcwi_container_configuration' would be too long (max 22 chars allowed)
+    const TABLE_NAME = 'rep_robj_xcwi_cont_cnf';
 
     const COL_OBJ_ID = 'obj_id';
     const COL_ROOT_LOCATION_REF_ID = 'root_location_ref_id';

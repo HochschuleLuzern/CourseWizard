@@ -9,6 +9,8 @@ class PluginConfigKeyValueStore
     const COL_KEY = 'conf_key';
     const COL_VALUE = 'conf_value';
 
+    const KEY_PLUGIN_ARRANGED = 'plugin_arranged';
+
     /** @var \ilDBInterface */
     private $db;
 

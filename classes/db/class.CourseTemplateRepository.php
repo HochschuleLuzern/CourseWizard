@@ -6,7 +6,8 @@ use CourseWizard\DB\Models\CourseTemplate;
 
 class CourseTemplateRepository
 {
-    const TABLE_NAME = 'rep_robj_xcwi_templates';
+    // This table is called 'template' instead of 'templates', because 'templates would be 1 letter too much
+    const TABLE_NAME = 'rep_robj_xcwi_template';
 
     const COL_TEMPLATE_ID = 'template_id';
     const COL_CRS_REF_ID = 'crs_ref_id';
