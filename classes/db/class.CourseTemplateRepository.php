@@ -14,6 +14,7 @@ class CourseTemplateRepository
     const COL_TEMPLATE_TYPE = 'template_type';
     const COL_STATUS_CODE = 'status_code';
     const COL_CREATOR_USER_ID = 'creator_user_id';
+    const COL_CREATE_DATE = 'create_date';
     const COL_TEMPLATE_CONTAINER_REF_ID = 'template_container_ref_id';
 
     /** @var \ilDBInterface */

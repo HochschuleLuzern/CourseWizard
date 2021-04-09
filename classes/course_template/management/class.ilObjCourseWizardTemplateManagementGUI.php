@@ -29,13 +29,20 @@ class ilObjCourseWizardTemplateManagementGUI
     /** @var ilCourseWizardPlugin */
     protected $plugin;
 
-    public function __construct(ilObjCourseWizardGUI $parent_gui, CourseTemplateCollector $collector, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
+    /** @var ilLanguage */
+    protected $lng;
+
+    public function __construct(\CourseWizard\CourseTemplate\management\CourseTemplateManager $crs_tempalte_controller, ilObjCourseWizardGUI $parent_gui, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
     {
-        $this->parent_gui       = $parent_gui;
+        global $DIC;
+
+        $this->template_management = $crs_tempalte_controller;
+        $this->parent_gui = $parent_gui;
         $this->container_ref_id = $this->parent_gui->object->getRefId();
-        $this->plugin           = $plugin;
-        $this->template_collector = $collector;
-        $this->tpl              = $tpl;
+        $this->plugin = $plugin;
+        //$this->template_collector = $collector;
+        $this->tpl = $tpl;
+        $this->lng = $DIC->language();
     }
 
     public function executeCommand()

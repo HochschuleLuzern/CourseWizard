@@ -10,14 +10,24 @@ class ilObjCourseWizard extends ilObjectPlugin
     private $xcwi_conf_repository;
 
     /** @var \CourseWizard\DB\CourseTemplateRepository */
-    private $xcwi_crs_template_repository;
+    private $crs_template_repo;
 
     /** @var \CourseWizard\DB\Models\TemplateContainerConfiguration|null */
     private $xcwi_config;
 
+    /** @var \CourseWizard\CourseTemplate\CourseTemplateCollector */
+    private $crs_template_collector;
+
+    /** @var \CourseWizard\CourseTemplate\management\CourseTemplateManager */
+    private $crs_template_manager;
+
     public function __construct($a_ref_id = 0)
     {
         parent::__construct($a_ref_id);
+
+        $this->crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($this->db);
+        $this->crs_template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this, $this->crs_template_repo, $this->tree);
+        $this->crs_template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this->crs_template_repo);
     }
 
     protected function initType()
@@ -25,18 +35,24 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->setType(ilCourseWizardPlugin::ID);
     }
 
-    public function addNewCourseTemplate(\ilObjCourse $crs)
+    public function createNewCourseTemplate($title, $description)
     {
         global $DIC;
 
-        $this->xcwi_crs_template_repository->createAndAddNewCourseTemplate(
-            $crs->getRefId(),
-            $crs->getId(),
-            \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE,
-            \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
-            $DIC->user()->getId(),
-            $this->ref_id
-        );
+        $obj = new ilObjCourse();
+        $obj->setTitle($title);
+        $obj->setDescription($description);
+        $obj->create();
+        $obj->createReference();
+        $obj->putInTree($this->ref_id);
+
+        $this->crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj);
+
+
+
+        //$this->object->addNewCourseTemplate($obj);
+
+
     }
 
 
@@ -88,7 +104,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $role = ilObjRole::createDefaultRole(
             $role_title,
             "Admin role for Template Container" . $this->getId(),
-            \CourseWizard\role\RoleTemplateDefinition::ROLE_TPL_TITLE_CONTAINER_ADMIN,
+            \CourseWizard\role\RoleTemplatesDefinition::ROLE_TPL_TITLE_CONTAINER_ADMIN,
             $this->getRefId()
         );
 

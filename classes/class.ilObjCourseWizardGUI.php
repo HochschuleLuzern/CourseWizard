@@ -97,6 +97,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
             case strtolower(ilObjCourseWizardTemplateManagementGUI::class):
                 $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
+                $template_manager = new CourseTemplateManagement($crs_repo, $this->object, $this->tree);
                 $template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
                 $gui = new ilObjCourseWizardTemplateManagementGUI($this, $template_collector, $this->plugin, $this->tpl);
 
@@ -167,7 +168,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $title = \ilObject::_lookupTitle($template->getCrsObjId());
         $description = \ilObject::_lookupDescription($template->getCrsObjId());
         $image_path = ilObject::_getIcon($template->getCrsObjId());
-        $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');// icon()->custom($image_path, 'Thumbnail', 'large');
+        $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_PROPOSE_TEMPLATE_CONFIRM);
 
@@ -214,7 +215,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
         $collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
-        $collector->checkAndAddNewlyCreatedCourses();
+        //$collector->checkAndAddNewlyCreatedCourses();
 
         $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId(), $this->user->getId());
         $container_content = array();
@@ -285,14 +286,13 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $title = new ilTextInputGUI($this->plugin->txt('template_title'), 'title');
         $form->addItem($title);
 
-        $description = new ilTextInputGUI($this->plugin->txt('template_description'), 'description');
+        $description = new ilTextAreaInputGUI($this->plugin->txt('template_description'), 'description');
         $form->addItem($description);
 
         $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_CREATE_NEW_CRS_TEMPLATE));
 
         $form->addCommandButton(self::CMD_CREATE_NEW_CRS_TEMPLATE, $this->plugin->txt('create_template'));
         $form->addCommandButton(self::CMD_SHOW_MAIN, $this->plugin->txt('cancel'));
-        //$title = new ilTextInputGUI($this->plugin->txt('template_title'), '');
 
         return $form;
     }
@@ -306,24 +306,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
     private function createNewCrsTemplate()
     {
+        global $DIC;
+
         $form = $this->initCrsTemplateCreationForm();
 
         if($form->checkInput()) {
-            $obj = new ilObjCourse();
-            $obj->setTitle($form->getInput('title'));
-            $obj->setDescription($form->getInput('description'));
-            $obj->create();
-            $obj->createReference();
-            $obj->putInTree($this->ref_id);
 
-            $role = ilObjRole::createDefaultRole(
-                'Course Template Editor',
-                "Admin role for Template Container" . $obj->getRefId(),
-                'crs_admin', // Admin role template from ilObjCourse,
-                $obj->getRefId()
-            );
 
-            $this->object->addNewCourseTemplate($obj);
+            $title = $form->getInput('title');
+            $description = $form->getInput('description');
+
+            $this->object->createNewCourseTemplate();
 
             ilUtil::sendSuccess('Template created!');
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);

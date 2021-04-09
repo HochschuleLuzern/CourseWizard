@@ -38,7 +38,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     {
         global $DIC;
 
-        /** @var \CourseWizard\role\RoleTemplateDefinition $rolt_definition */
+        /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
         foreach($rolt_definition_list as $rolt_definition) {
 
             $obj_id = $this->plugin_config->get($rolt_definition->getConfKey());
@@ -58,19 +58,19 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     protected function uninstallCustom()
     {
         // TODO: Implement uninstallCustom() method.
-        $this->removeDefinedRoleTemplates(\CourseWizard\role\RoleTemplateDefinition::getRoleTemplateDefinitions());
+        $this->removeDefinedRoleTemplates(\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions());
     }
 
     protected function afterInstall()
     {
-        /** @var \CourseWizard\role\RoleTemplateDefinition $rolt_definition */
-        foreach(\CourseWizard\role\RoleTemplateDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
+        /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
+        foreach(\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
             $obj_role = $this->createRoleTemplate($rolt_definition);
             $this->plugin_config->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
         }
     }
 
-    private function createRoleTemplate(\CourseWizard\role\RoleTemplateDefinition $rolt_definition) : ilObjRoleTemplate
+    private function createRoleTemplate(\CourseWizard\role\RoleTemplatesDefinition $rolt_definition) : ilObjRoleTemplate
     {
         global $DIC;
         $role_template = new ilObjRoleTemplate();

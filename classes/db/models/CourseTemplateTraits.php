@@ -43,15 +43,15 @@ trait CourseTemplateTraits
         switch($code)
         {
             case CourseTemplate::TYPE_SINGLE_CLASS_COURSE:
-                return "Ausstehend";
+                return $lng->txt("crs_template_single_class");// "Ausstehend";
                 break;
 
             case CourseTemplate::TYPE_MULTI_CLASS_COURSE:
-                return "Änderung nötig";
+                return $lng->txt("crs_template_multi_class");
                 break;
 
             default:
-                throw new \InvalidArgumentException("Unknown template type code for course semplate provided: " . $code);
+                throw new \InvalidArgumentException("Unknown template type code for course template provided: " . $code);
         }
     }
 }
