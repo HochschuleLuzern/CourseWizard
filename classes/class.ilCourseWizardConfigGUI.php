@@ -35,9 +35,14 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     private function initPluginConfForm() : ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
+        $form->setFormAction($this->ctrl->getFormAction($this));
 
         $content_creator_role = new ilRoleAutoCompleteInputGUI('Role Input', self::FORM_GLOBAL_ROLE, $this, 'apiGlobalRoles');
         $form->addItem($content_creator_role);
+
+        $selected_role = new ilNonEditableValueGUI('Title', 'non_postable');
+        $selected_role->setValue('Title of current selected role: ');
+        $form->addItem($selected_role);
 
         $form->addCommandButton(self::CMD_SAVE, $this->lng->txt('save'));
 
@@ -86,10 +91,13 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
     private function saveConfig()
     {
+        global $DIC;
+
         $form = $this->initPluginConfForm();
 
         if($form->checkInput()) {
-            $form->getInput(self::FORM_GLOBAL_ROLE);
+            $global_role_name = $form->getInput(self::FORM_GLOBAL_ROLE);
+            //$DIC->rbac()->review()
         }
     }
 
