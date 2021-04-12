@@ -43,6 +43,7 @@ class CourseTemplateRepository
             self::COL_TEMPLATE_TYPE => array('integer', $model->getTemplateTypeAsCode()),
             self::COL_STATUS_CODE => array('integer', $model->getStatusAsCode()),
             self::COL_CREATOR_USER_ID => array('integer', $model->getCreatorUserId()),
+            self::COL_CREATE_DATE => array('timestamp', $this->db->now()),
             self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId())
         ));
 

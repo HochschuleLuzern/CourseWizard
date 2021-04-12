@@ -7,12 +7,19 @@ use CourseWizard\DB\Models\CourseTemplate;
 
 class CourseTemplateManager
 {
-    public function __construct(CourseTemplateRepository $crs_template_repo)
+    /** @var \ilObjCourseWizard */
+    private $container_obj;
+
+    /** @var CourseTemplateRepository */
+    private $crs_template_repo;
+
+    public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_template_repo)
     {
+        $this->container_obj = $container_obj;
         $this->crs_template_repo = $crs_template_repo;
     }
 
-    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj)
+    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
     {
         global $DIC;
 
@@ -23,13 +30,13 @@ class CourseTemplateManager
             $crs_obj->getRefId()
         );
 
-        $this->xcwi_crs_template_repository->createAndAddNewCourseTemplate(
+        $this->crs_template_repo->createAndAddNewCourseTemplate(
             $crs_obj->getRefId(),
             $crs_obj->getId(),
-            \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE,
+            $template_type,
             \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
             $DIC->user()->getId(),
-            $this->ref_id
+            $this->container_obj->getRefId()
             //, editor_role_id as a new value?
         );
     }

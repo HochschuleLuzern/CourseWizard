@@ -46,6 +46,20 @@ class CourseTemplate
         $this->template_container_ref_id = $template_container_ref_id;
     }
 
+    public static function getCourseTemplateTypes() : array
+    {
+        return array(
+            array(
+                'type_title' => 'single_group',
+                'type_code'  => self::TYPE_SINGLE_CLASS_COURSE
+            ),
+            array(
+                'type_title' => 'multi_group',
+                'type_code'  => self::TYPE_MULTI_CLASS_COURSE
+            )
+        );
+    }
+
     public function getTemplateId() : int
     {
         return $this->template_id;

@@ -27,7 +27,7 @@ class ilObjCourseWizard extends ilObjectPlugin
 
         $this->crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($this->db);
         $this->crs_template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this, $this->crs_template_repo, $this->tree);
-        $this->crs_template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this->crs_template_repo);
+        $this->crs_template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this, $this->crs_template_repo);
     }
 
     protected function initType()
@@ -35,7 +35,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->setType(ilCourseWizardPlugin::ID);
     }
 
-    public function createNewCourseTemplate($title, $description)
+    public function createNewCourseTemplate(string $title, string $description, int $type)
     {
         global $DIC;
 

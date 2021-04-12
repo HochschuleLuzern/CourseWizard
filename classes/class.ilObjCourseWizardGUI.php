@@ -28,6 +28,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const FORM_ROOT_LOCATION_REF = 'xcwi_root_location_ref';
     public const FORM_ROLE_TITLE = 'xcwi_role_title';
 
+    public const FORM_CRS_TEMPLATE_TITLE = 'xcwi_template_title';
+    public const FORM_CRS_TEMPLATE_DESCRIPTION = 'xcwi_template_description';
+    public const FORM_CRS_TEMPLATE_TYPE = 'xcwi_template_type';
+
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
@@ -288,11 +292,23 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $form = new ilPropertyFormGUI();
         $form->setTitle($this->plugin->txt('create_crs_template_form'));
 
-        $title = new ilTextInputGUI($this->plugin->txt('template_title'), 'title');
+        $title = new ilTextInputGUI($this->plugin->txt('template_title'), self::FORM_CRS_TEMPLATE_TITLE);
+        $title->setRequired(true);
         $form->addItem($title);
 
-        $description = new ilTextAreaInputGUI($this->plugin->txt('template_description'), 'description');
+        $description = new ilTextAreaInputGUI($this->plugin->txt('template_description'), self::FORM_CRS_TEMPLATE_DESCRIPTION);
         $form->addItem($description);
+
+        $radio_crs_template_type = new ilRadioGroupInputGUI($this->plugin->txt('form_crs_template_type'), self::FORM_CRS_TEMPLATE_TYPE);
+        $radio_crs_template_type->setInfo($this->plugin->txt('form_crs_template_type_info'));
+        $radio_crs_template_type->setRequired(true);
+        foreach(\CourseWizard\DB\Models\CourseTemplate::getCourseTemplateTypes() as $crs_template_type) {
+            $option_title = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title']);
+            $option_value = $crs_template_type['type_code'];
+            $option_info = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title'] . '_info');
+            $radio_crs_template_type->addOption(new ilRadioOption($option_title, $option_value, $option_info));
+        }
+        $form->addItem($radio_crs_template_type);
 
         $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_CREATE_NEW_CRS_TEMPLATE));
 
@@ -318,10 +334,11 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         if($form->checkInput()) {
 
 
-            $title = $form->getInput('title');
-            $description = $form->getInput('description');
+            $title = $form->getInput(self::FORM_CRS_TEMPLATE_TITLE);
+            $description = $form->getInput(self::FORM_CRS_TEMPLATE_DESCRIPTION);
+            $template_type = (int)$form->getInput(self::FORM_CRS_TEMPLATE_TYPE);
 
-            $this->object->createNewCourseTemplate();
+            $this->object->createNewCourseTemplate($title, $description, $template_type);
 
             ilUtil::sendSuccess('Template created!');
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
