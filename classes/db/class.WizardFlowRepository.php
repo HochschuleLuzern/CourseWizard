@@ -12,7 +12,7 @@ class WizardFlowRepository
     //const COL_ID = 'id';
     const COL_TARGET_REF_ID = 'target_ref_id';
     const COL_EXECUTING_USER = 'executing_user';
-    const COL_SELECTED_TEMPLATE = 'selected_template';
+    const COL_SELECTED_TEMPLATE = 'selected_template_ref_id';
     const COL_WIZARD_STATUS = 'wizard_status';
     const COL_CURRENT_STEP = 'current_step';
     const COL_FIRST_OPEN_TS = 'first_open_ts';
@@ -82,8 +82,7 @@ class WizardFlowRepository
         $this->db->insert(self::TABLE_NAME,
             array(
                 self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()),
-                self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus()),
-                self::COL_CURRENT_STEP => array('integer', $wizard_flow->getCurrentStep())
+                self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus())
             ));
 
         return $wizard_flow;
