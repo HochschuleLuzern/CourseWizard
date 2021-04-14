@@ -106,9 +106,9 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
             case strtolower(ilObjCourseWizardTemplateManagementGUI::class):
                 $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
-                $template_manager = new CourseTemplateManagement($crs_repo, $this->object, $this->tree);
+                $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this->object, $crs_repo);
                 $template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
-                $gui = new ilObjCourseWizardTemplateManagementGUI($this, $template_collector, $this->plugin, $this->tpl);
+                $gui = new ilObjCourseWizardTemplateManagementGUI($template_manager, $this, $this->plugin, $this->tpl);
 
                 $this->ctrl->forwardCommand($gui);
 
@@ -283,8 +283,6 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $html = $r->render($container_content);
         $this->tpl->setContent($html);
-
-        return;
     }
 
     private function initCrsTemplateCreationForm() : ilPropertyFormGUI
