@@ -97,6 +97,18 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         return self::CMD_SHOW_MAIN;
     }
 
+    /**
+     * This method overwrites the the addLocatorItems of ilObjectPluginGUI. It is empty,
+     * like in its "grandparent"-classes (ilObjectGUI and ilObject2GUI). The overwriting
+     * of this method is only needed together with the breadcrumbs-patch.
+     *
+     * The effect (together with the breadcrumbs-patch) is, that the xcwi-container is not
+     * listed twice in the breadcrumbs when the object is opened
+     */
+    public function addLocatorItems()
+    {
+    }
+
     function performCommand($cmd)
     {
         global $DIC;
