@@ -113,6 +113,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
         global $DIC;
 
+        if(strtolower($_GET['baseClass']) == 'ilrepositorygui') {
+            $this->ctrl->redirectByClass(['ilObjPluginDispatchGUI', self::class], $cmd);
+        }
+
         $next_class = $this->ctrl->getNextClass();
         switch($next_class) {
 
