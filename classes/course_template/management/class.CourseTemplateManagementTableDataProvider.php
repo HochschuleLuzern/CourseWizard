@@ -24,7 +24,7 @@ class CourseTemplateManagementTableDataProvider
         $this->plugin = new \ilCourseWizardPlugin();
     }
 
-    private function createRenderedDropdownAndModal($template_id)
+    private function createRenderedDropdownAndModal($template_id, $template_ref_id)
     {
         // TODO: Add language
         global $DIC;
@@ -33,9 +33,9 @@ class CourseTemplateManagementTableDataProvider
         $this->ctrl = $DIC->ctrl();
 
         // View Button
-        $link = \ilLink::_getLink($template_id);
-        $btn_view = $f->button()->shy($this->plugin->txt('view_course'), $link);
-
+        $link = \ilLink::_getLink($template_ref_id);
+        //$btn_view = $f->button()->shy($this->plugin->txt('view_course_template'), $link);
+        $btn_view = $f->link()->standard($this->plugin->txt('view_course_template'), $link)->withOpenInNewViewport(true);
         // Change Status Button
         //$this->ctrl->setParameterByClass('ilObjCourseWizardTemplateManagementGUI', 'template_id', $template_id);
         $form = new \ilPropertyFormGUI();
@@ -43,9 +43,9 @@ class CourseTemplateManagementTableDataProvider
         $form->setId(uniqid('form'));
         $item = new \ilSelectInputGUI('Status', 'status');
         $item->setOptions(array(
-            CourseTemplate::STATUS_CHANGE_REQUESTED => $this->plugin->txt('change_requested'),
-            CourseTemplate::STATUS_APPROVED         => $this->plugin->txt('approved'),
-            CourseTemplate::STATUS_DECLINED         => $this->plugin->txt('declined')
+            CourseTemplate::STATUS_CHANGE_REQUESTED => $this->plugin->txt('status_change_requested'),
+            CourseTemplate::STATUS_APPROVED         => $this->plugin->txt('status_approved'),
+            CourseTemplate::STATUS_DECLINED         => $this->plugin->txt('status_declined')
         ));
         $form->addItem($item);
 
@@ -69,7 +69,7 @@ class CourseTemplateManagementTableDataProvider
             'declined' => $this->plugin->txt('declined')
         ));
 
-        $change_status_modal = $f->modal()->roundtrip($this->plugin->txt('change_status'), [$f->legacy($form->getHTML()), $select_input])->withActionButtons([$submit]);
+        $change_status_modal = $f->modal()->roundtrip($this->plugin->txt('change_status'), [$f->legacy($form->getHTML())])->withActionButtons([$submit]);
         $btn_change_status_modal = $f->button()->shy($this->plugin->txt('change_status'), $change_status_modal->getShowSignal());
 
         //$this->ctrl->setParameter($this->parent_obj, \ilObjCourseWizardTemplateManagementGUI::GET_PARAMETER_DEPARTMENT_ID, $template_id);
@@ -93,16 +93,16 @@ class CourseTemplateManagementTableDataProvider
         /** @var CourseTemplate $model */
         foreach($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
 
-            $dropdown_and_modal = $this->createRenderedDropdownAndModal($model->getTemplateId());
+            $dropdown_and_modal = $this->createRenderedDropdownAndModal($model->getTemplateId(), $model->getCrsRefId());
             $dropdown = $dropdown_and_modal['dropdown'];
             $modal = $dropdown_and_modal['modal'];
 
             $table_data[] = array(
- //               'ref_id' => $model->getCrsRefId(),
+                //               'ref_id' => $model->getCrsRefId(),
                 CourseTemplateManagementTableGUI::COL_TEMPLATE_TITLE => \ilObject::_lookupTitle($model->getCrsObjId()),
                 CourseTemplateManagementTableGUI::COL_TEMPLATE_DESCRIPTION => \ilObject::_lookupDescription($model->getCrsObjId()),
-                CourseTemplateManagementTableGUI::COL_PROPOSAL_DATE => "?",
-                CourseTemplateManagementTableGUI::COL_STATUS => $model->getStatusAsString(),
+                CourseTemplateManagementTableGUI::COL_PROPOSAL_DATE => 'not registered yet',
+                CourseTemplateManagementTableGUI::COL_STATUS => $this->plugin->txt($model->getStatusAsLanguageVariable()),
                 CourseTemplateManagementTableGUI::COL_ACTION_DROPDOWN => $dropdown,
                 'modal' => $modal
             );
