@@ -90,27 +90,11 @@ class CourseTemplate
     }
 
     /**
-     * @return string
-     */
-    public function getTemplateTypeAsString() : string
-    {
-        return $this->convertTemplateTypeToString($this->getTemplateTypeAsCode());
-    }
-
-    /**
      * @return int
      */
     public function getStatusAsCode() : int
     {
         return $this->status;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatusAsString() : string
-    {
-        return $this->convertStatusCodeToString($this->getStatusAsCode());
     }
 
     /**

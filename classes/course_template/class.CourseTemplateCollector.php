@@ -66,7 +66,7 @@ class CourseTemplateCollector
                 "title" => \ilObject::_lookupTitle($model->getCrsObjId()),
                 "description" => \ilObject::_lookupDescription($model->getCrsObjId()),
                 "date" => "",
-                "status" => $model->getStatusAsString());
+                "status" => $model->getStatusAsLanguageVariable());
         }
 
         return $table_data;

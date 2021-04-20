@@ -260,7 +260,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                                ->withDescription($description)
                                ->withProperties([
                                    $this->plugin->txt('author') => \ilObjUser::_lookupFullname($crs_template->getCreatorUserId()),
-                                   $this->plugin->txt('status') => $crs_template->getStatusAsString()
+                                   $this->plugin->txt('status') => $this->plugin->txt($crs_template->getStatusAsLanguageVariable())
                                ])
                                ->withLeadIcon($icon);
 
@@ -282,7 +282,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
                     $container_content[] = $propose_modal;
                     $actions_buttons[] = $f->button()->shy($this->plugin->txt('btn_propose_crs_template'), $propose_modal->getShowSignal());
-                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('show_crs_template'), $link);
+                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('view_course_template'), $link);
                 }
 
                 //$actions = $this->prepareActionsDropdownForOwner($crs_template, $f);

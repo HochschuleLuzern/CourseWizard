@@ -4,50 +4,40 @@ namespace CourseWizard\DB\Models;
 
 trait CourseTemplateTraits
 {
-    public function convertStatusCodeToString($code) : string
+    public function getStatusAsLanguageVariable() : string
     {
-        global $DIC;
-
-        $lng = $DIC->language();
-
-        // TODO: Add language
-        switch($code)
+        switch($this->getStatusAsCode())
         {
             case CourseTemplate::STATUS_DRAFT:
-                return $lng->txt('status_draft');
+                return 'status_draft';
 
             case CourseTemplate::STATUS_PENDING:
-                return $lng->txt('status_pending');
+                return 'status_pending';
 
             case CourseTemplate::STATUS_CHANGE_REQUESTED:
-                return $lng->txt('status_change_requested');
+                return 'status_change_requested';
 
             case CourseTemplate::STATUS_DECLINED:
-                return $lng->txt('status_declined');
+                return 'status_declined';
 
             case CourseTemplate::STATUS_APPROVED:
-                return $lng->txt('status_approved');
+                return 'status_approved';
 
             default:
                 throw new \InvalidArgumentException("Unknown status code for course template provided: " . $code);
         }
     }
 
-    public function convertTemplateTypeToString($code) : string
+    public function getTemplateTypeAsLanguageVariable() : string
     {
-        global $DIC;
-
-        $lng = $DIC->language();
-
-        // TODO: Add language
-        switch($code)
+        switch($this->getTemplateTypeAsCode())
         {
             case CourseTemplate::TYPE_SINGLE_CLASS_COURSE:
-                return $lng->txt("crs_template_single_class");// "Ausstehend";
+                return "crs_template_single_class";// "Ausstehend";
                 break;
 
             case CourseTemplate::TYPE_MULTI_CLASS_COURSE:
-                return $lng->txt("crs_template_multi_class");
+                return "crs_template_multi_class";
                 break;
 
             default:

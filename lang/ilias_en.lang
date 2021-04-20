@@ -7,14 +7,47 @@ btn_propose_crs_template#:#Propose Course Template
 btn_close_modal#:#Close Modal
 btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 conf_container_table_title#:#Overview of Available Template Containers Objects
+cancel#:#cancel
+change_status#:#Change Status
 create_crs_template_draft#:#Create Course Template Draft
+create_crs_template_form#:#Create new Course Template
+create_template#:#Create Template
+
+form_crs_template_type#:#Template Type
+form_crs_template_type_info#:#Select for which type of courses you want to create the template. The selection can't be changed later!
+form_crs_template_type_multi_group#:#Multiple Classes
+form_crs_template_type_multi_group_info#:#"Multiple Classes" means, that the courses which will use this template have multiple classes and therefore multiple groups in it. If you select this option, the course template will be created with a group. This group serves as the template for the groups in a multi class course.
+form_crs_template_type_single_group#:#Just One Class
+form_crs_template_type_single_group_info#:#"Just One Class" means, that the courses which will use this template only have one class. If you select this option, the course template will be created empty.
+
+
 global_available#:#Global Available
 manage_proposals#:#Manage Proposals
 no#:#No
 overview#:#Overview
+propose#:#Propose
 quantity_admin_role_members#:#Quantity of Admin Role Members
 quantity_crs_templates#:#Quantity of Crs-Templates
+
+role_description_container_admin#:#Admin role for course template container with reference id:
+role_description_crs_template_editor#:#Admin role for editors of course template with reference id:
+role_title_container_admin#:#Course Template Container Admin
+role_title_crs_template_editor#:#Course Template Editor
+
 root_location_of_wizard#:#Root Location of Wizard
 settings#:#Settings
+
+status#:#Status
+status_draft#:#Draft
+status_pending#:#Pending
+status_change_requested#:#Change Requested
+status_declined#:#Declined
+status_approved#:#Approved
+
 template_container#:#Template Container
+template_title#:#Title of the new Template
+template_description#:#Description of the new Template
+
+view_course_template#:#View Course Template
+
 yes#:#Yes
