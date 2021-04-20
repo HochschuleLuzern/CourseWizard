@@ -1,5 +1,8 @@
 <?php
 
+use CourseWizard\role\LocalRolesDefinition;
+use CourseWizard\role\RoleTemplatesDefinition;
+
 class ilObjCourseWizard extends ilObjectPlugin
 {
     public const POSTVAR_IS_GLOBAL = 'xcwi_is_global';
@@ -46,13 +49,14 @@ class ilObjCourseWizard extends ilObjectPlugin
         $obj->createReference();
         $obj->putInTree($this->ref_id);
 
+        $role = \ilObjRole::createDefaultRole(
+            $this->plugin->txt(LocalRolesDefinition::ROLE_LNG_TITLE_CRS_EDITOR),
+            $this->plugin->txt(LocalRolesDefinition::ROLE_DESCRIPTION_CRS_EDITOR) . $obj->getRefId(),
+            RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR, // Admin role template from ilObjCourse,
+            $obj->getRefId()
+        );
+
         $this->crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj);
-
-
-
-        //$this->object->addNewCourseTemplate($obj);
-
-
     }
 
 
@@ -104,7 +108,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $role = ilObjRole::createDefaultRole(
             $role_title,
             "Admin role for Template Container" . $this->getId(),
-            \CourseWizard\role\RoleTemplatesDefinition::ROLE_TPL_TITLE_CONTAINER_ADMIN,
+            RoleTemplatesDefinition::ROLE_TPL_TITLE_CONTAINER_ADMIN,
             $this->getRefId()
         );
 

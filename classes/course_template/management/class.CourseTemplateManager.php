@@ -4,6 +4,7 @@ namespace CourseWizard\CourseTemplate\management;
 
 use CourseWizard\DB\CourseTemplateRepository;
 use CourseWizard\DB\Models\CourseTemplate;
+use CourseWizard\role\LocalRolesDefinition;
 
 class CourseTemplateManager
 {
@@ -22,13 +23,6 @@ class CourseTemplateManager
     public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
     {
         global $DIC;
-
-        $role = \ilObjRole::createDefaultRole(
-            'Course Template Editor',
-            "Admin role for Template Container" . $crs_obj->getRefId(),
-            'crs_admin', // Admin role template from ilObjCourse,
-            $crs_obj->getRefId()
-        );
 
         $this->crs_template_repo->createAndAddNewCourseTemplate(
             $crs_obj->getRefId(),

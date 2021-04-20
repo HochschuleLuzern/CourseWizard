@@ -8,9 +8,15 @@ class RoleTemplatesDefinition
     public const ROLE_TPL_TITLE_CONTENT_CREATOR = 'xcwi_container_content_creator';
     public const ROLE_TPL_TITLE_CRS_IMPORTER = 'xcwi_t_crs_importer';
 
+    public const ROLE_TPL_DESCRIPTION_CONTAINER_ADMIN = 'role_tpl_description_container_admin';
+    public const ROLE_TPL_DESCRIPTION_CONTENT_CREATOR = 'role_tpl_description_content_creator';
+    public const ROLE_TPL_DESCRIPTION_CRS_IMPORTER = 'role_tpl_description_crs_importer';
+
     public const CONF_KEY_ROLT_CONTAINER_ADMIN = 'rolt_container_admin';
     public const CONF_KEY_ROLT_CONTENT_CREATOR = 'rolt_content_creator';
     public const CONF_KEY_ROLT_CRS_IMPORTER = 'rolt_crs_importer';
+
+    public const DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR = 'il_crs_admin';
 
     private $title;
     private $description;
@@ -60,17 +66,17 @@ class RoleTemplatesDefinition
 
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CONTAINER_ADMIN,
-            '',
+            self::ROLE_TPL_DESCRIPTION_CONTAINER_ADMIN,
             self::CONF_KEY_ROLT_CONTAINER_ADMIN);
 
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CONTENT_CREATOR,
-            '',
+            self::ROLE_TPL_DESCRIPTION_CONTENT_CREATOR,
             self::CONF_KEY_ROLT_CONTENT_CREATOR);
 
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CRS_IMPORTER,
-            '',
+            self::ROLE_TPL_DESCRIPTION_CRS_IMPORTER,
             self::CONF_KEY_ROLT_CRS_IMPORTER);
 
         return $rolt_definitions;
