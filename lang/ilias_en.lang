@@ -1,3 +1,4 @@
+action#:#Action
 author#:#Author
 btn_back#:#Back
 btn_continue#:#Continue
@@ -9,6 +10,7 @@ btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 conf_container_table_title#:#Overview of Available Template Containers Objects
 cancel#:#cancel
 change_status#:#Change Status
+configure#:#Configure
 create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
 create_template#:#Create Template
@@ -19,7 +21,9 @@ form_crs_template_type_multi_group#:#Multiple Classes
 form_crs_template_type_multi_group_info#:#"Multiple Classes" means, that the courses which will use this template have multiple classes and therefore multiple groups in it. If you select this option, the course template will be created with a group. This group serves as the template for the groups in a multi class course.
 form_crs_template_type_single_group#:#Just One Class
 form_crs_template_type_single_group_info#:#"Just One Class" means, that the courses which will use this template only have one class. If you select this option, the course template will be created empty.
-
+form_is_global#:#Is Global
+form_is_global_info#:#As global defined Course Template Containers are available at all locations in the Course Wizard
+form_title_container_config#:#Configuration of Course Template Container: 
 
 global_available#:#Global Available
 manage_proposals#:#Manage Proposals
@@ -35,6 +39,7 @@ role_title_container_admin#:#Course Template Container Admin
 role_title_crs_template_editor#:#Course Template Editor
 
 root_location_of_wizard#:#Root Location of Wizard
+save#:#Save
 settings#:#Settings
 
 status#:#Status

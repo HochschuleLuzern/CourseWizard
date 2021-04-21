@@ -126,6 +126,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
                 $gui = new ilObjCourseWizardTemplateManagementGUI($template_manager, $this, $this->plugin, $this->tpl);
 
+                $this->tabs->activateTab(self::TAB_MANAGE_PROPOSALS);
                 $this->ctrl->forwardCommand($gui);
 
             default:
@@ -282,7 +283,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
                     $container_content[] = $propose_modal;
                     $actions_buttons[] = $f->button()->shy($this->plugin->txt('btn_propose_crs_template'), $propose_modal->getShowSignal());
-                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('view_course_template'), $link);
+                    $actions_buttons[] = $f->link()->standard($this->plugin->txt('view_course_template'), \ilLink::_getLink($crs_template->getCrsRefId()))->withOpenInNewViewport(true);
                 }
 
                 //$actions = $this->prepareActionsDropdownForOwner($crs_template, $f);

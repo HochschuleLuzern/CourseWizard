@@ -9,6 +9,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     const CMD_EDIT_CONTAINER_CONF = 'edit_container_conf';
     const CMD_SAVE_CONTAINER_CONF = 'save_container_conf';
     const FORM_GLOBAL_ROLE = 'global_role';
+    const FORM_CONT_IS_GLOBAL = 'is_global';
 
     /** @var ilTemplate */
     private $tpl;
@@ -44,7 +45,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $selected_role->setValue('Title of current selected role: ');
         $form->addItem($selected_role);
 
-        $form->addCommandButton(self::CMD_SAVE, $this->lng->txt('save'));
+        $form->addCommandButton(self::CMD_SAVE, $this->plugin_object->txt('save'));
 
         return $form;
     }
@@ -57,12 +58,16 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
                 $this->showConfigForm();
                 break;
 
+            case self::CMD_SAVE:
+                $this->saveConfig();
+                break;
+
             case self::CMD_EDIT_CONTAINER_CONF:
                 $this->editContainerConfig();
                 break;
 
-            case self::CMD_SAVE:
-                $this->saveConfig();
+            case self::CMD_SAVE_CONTAINER_CONF:
+                $this->saveContainerConfig();
                 break;
 
             case 'apiGlobalRoles':
@@ -106,14 +111,32 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         global $DIC;
         $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
-        $plugin_conf_form = $this->initPluginConfForm();
+        //$plugin_conf_form = $this->initPluginConfForm();
 
         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($db);
         $data_provider = new \CourseWizard\admin\CourseTemplateContainerTableDataProvider($conf_repo, $template_repo, $this->plugin_object);
         $table = new CourseTemplateContainerTableGUI($this, '', $this->plugin_object);
         $table->setData($data_provider->prepareTableDataWithAllContainers());
 
-        $this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
+        //$this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
+        $this->tpl->setContent($table->getHTML());
+    }
+
+    private function initEditContainerConfig($conf)
+    {
+        $form = new ilPropertyFormGUI();
+        $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_SAVE_CONTAINER_CONF));
+
+        $form->setTitle($this->plugin_object->txt('form_title_container_config') . ' ' . ilObject::_lookupTitle($conf->getObjId()));
+
+        $is_global = new ilCheckboxInputGUI($this->plugin_object->txt('form_is_global'), self::FORM_CONT_IS_GLOBAL);
+        $is_global->setInfo($this->plugin_object->txt('form_is_global_info'));
+        $form->addItem($is_global);
+
+        $form->addCommandButton(self::CMD_SAVE_CONTAINER_CONF, $this->plugin_object->txt('save'));
+        $form->addCommandButton(self::CMD_CONFIGURE, $this->plugin_object->txt('cancel'));
+
+        return $form;
     }
 
     private function editContainerConfig()
@@ -126,22 +149,51 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
 
+        $this->ctrl->setParameter($this, 'container_id', $container_id);
+
         $db        = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
         $conf      = $conf_repo->getContainerConfiguration($container_id);
 
-        $form = new ilPropertyFormGUI();
-        $form->setTitle(ilObject::_lookupTitle($conf->getObjId()));
-        $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_SAVE_CONTAINER_CONF));
+        $form = $this->initEditContainerConfig($conf);
 
-        $is_global = new ilCheckboxInputGUI($this->plugin_object->txt('is_global'), '');
-        $is_global->setValue($conf->isGlobal());
-        $form->addItem($is_global);
-
-        $role_users = new ilDclMultiTextInputGUI('Multi Text Input', '');
-        $form->addItem($role_users);
+        $form->setValuesByArray(array(
+            self::FORM_CONT_IS_GLOBAL => $conf->isGlobal()
+        ));
 
         $this->tpl->setContent($form->getHTML());
+    }
+
+    private function saveContainerConfig()
+    {
+        global $DIC;
+
+        $container_id = (int) ($this->request->getQueryParams()['container_id']);
+        if ($container_id <= 0) {
+            ilUtil::sendFailure("Container ID of $container_id does not exist", true);
+            $this->ctrl->redirect($this, self::CMD_CONFIGURE);
+        }
+
+        $db        = $DIC->database();
+        $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
+        $conf      = $conf_repo->getContainerConfiguration($container_id);
+
+        $form = $this->initEditContainerConfig($conf);
+
+        if($form->checkInput()) {
+            $is_global = $form->getInput(self::FORM_CONT_IS_GLOBAL); //== '1';
+            $is_global = $is_global == '1';
+
+            $conf = new \CourseWizard\DB\Models\TemplateContainerConfiguration($conf->getObjId(), $conf->getRootLocationRefId(), $conf->getResponsibleRoleId(), $is_global);
+            $conf_repo->setContainerConfiguration($conf);
+
+            $this->ctrl->setParameter($this, 'container_id', $container_id);
+            ilUtil::sendSuccess($this->plugin_object->txt('container_conf_saved'), true);
+            $this->ctrl->redirect($this, self::CMD_EDIT_CONTAINER_CONF);
+        } else {
+            ilUtil::sendFailure($this->plugin_object->txt('form_error'), true);
+            $this->ctrl->redirect($this, self::CMD_EDIT_CONTAINER_CONF);
+        }
     }
 
 }

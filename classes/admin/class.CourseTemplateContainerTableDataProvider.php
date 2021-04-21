@@ -5,6 +5,7 @@ namespace CourseWizard\admin;
 use CourseWizard\DB\CourseTemplateRepository;
 use CourseWizard\DB\Models\TemplateContainerConfiguration;
 use CourseWizard\DB\TemplateContainerConfigurationRepository;
+use ILIAS\DI\Exceptions\Exception;
 
 class CourseTemplateContainerTableDataProvider
 {
@@ -44,7 +45,6 @@ class CourseTemplateContainerTableDataProvider
 
     private function getActionDropdown(TemplateContainerConfiguration $conf, $conf_link)
     {
-
         $actions = array(
             $this->ui_factory->button()->shy($this->plugin->txt('configure'), $conf_link)
         );
@@ -68,15 +68,22 @@ class CourseTemplateContainerTableDataProvider
         return $this->ui_renderer->render($ui_component);
     }
 
-    private function getNumberOfRoleMembersAsLink(int $responsibleRoleId) : string
+    private function getNumberOfRoleMembersAsLink(int $responsibleRoleId, int $container_obj_id) : string
     {
         $number_of_role_members = $this->rbac_review->getNumberOfAssignedUsers([$responsibleRoleId]);
 
-        $refs = \ilObject::_getAllReferences($responsibleRoleId);
-        $ref_id = array_pop($refs);
-        $link = \ilLink::_getLink($ref_id, 'role');
+        try {
+            $refs = \ilObject::_getAllReferences($container_obj_id);
+            $ref_id = array_pop($refs);
 
-        return $this->getAsRenderedLink($number_of_role_members, $link);
+            $this->ctrl->setParameterByClass(\ilPermissionGUI::class, 'ref_id', $ref_id);
+            $link = $this->ctrl->getLinkTargetByClass([\ilObjPluginDispatchGUI::class, \ilObjCourseWizardGUI::class, \ilPermissionGUI::class], 'perm');
+
+            return $this->getAsRenderedLink($number_of_role_members, $link);
+        } catch(Exception $e) {
+            return $number_of_role_members;
+        }
+
     }
 
     private function getNumberOfCrsTemplatesAsLink(int $obj_id) : string
@@ -106,7 +113,7 @@ class CourseTemplateContainerTableDataProvider
             $table_row[CourseTemplateContainerTableGUI::COL_CONTAINER_TITLE] = $this->getAsRenderedLink(\ilObject::_lookupTitle($conf->getObjId()), $conf_link);
             $table_row[CourseTemplateContainerTableGUI::COL_ROOT_LOCATION_TITLE] = $this->getRootLocationAsLink($conf->getRootLocationRefId());
             $table_row[CourseTemplateContainerTableGUI::COL_QUANTITY_CRS_TEMPLATES] = $this->getNumberOfCrsTemplatesAsLink($conf->getObjId());
-            $table_row[CourseTemplateContainerTableGUI::COL_QUANTITY_ADMIN_ROLE_MEMBERS] = $this->getNumberOfRoleMembersAsLink($conf->getResponsibleRoleId());
+            $table_row[CourseTemplateContainerTableGUI::COL_QUANTITY_ADMIN_ROLE_MEMBERS] = $this->getNumberOfRoleMembersAsLink($conf->getResponsibleRoleId(), $conf->getObjId());
             $table_row[CourseTemplateContainerTableGUI::COL_IS_GLOBAL] = $conf->isGlobal() ? $this->plugin->txt('yes') : $this->plugin->txt('no');
             $table_row[CourseTemplateContainerTableGUI::COL_ACTION_DROPDOWN] = $this->getActionDropdown($conf, $conf_link);
 

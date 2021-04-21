@@ -17,6 +17,9 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
 
     protected $change_status_modals;
 
+    /** @var \ilCourseWizardPlugin */
+    private $plugin;
+
     public function __construct($a_parent_obj, string $a_command, \ilCourseWizardPlugin $plugin)
     {
         global $DIC;
@@ -95,7 +98,7 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
 
             array(
                 'field'    => self::COL_ACTION_DROPDOWN,
-                'txt'      => $this->lng->txt('action'),
+                'txt'      => $this->plugin->txt('action'),
                 'default'  => true,
                 'optional' => false,
                 'sortable' => false
