@@ -34,8 +34,8 @@ il.CourseWizardModalFunctions = (function (scope) {
 		let checked_id = $('#xcwi_template_selection_div_id').find('input:checked').val();
 
 		if(checked_id != null) {
-			let nextPageUrl = priv.config['nextPageUrl'] + '&template_id=' + checked_id;
-			currentWizardObj['templateId'] = checked_id;
+			let nextPageUrl = priv.config['nextPageUrl'] + '&template_ref_id=' + checked_id;
+			currentWizardObj['templateRefId'] = checked_id;
 			priv.storeCurrentWizardObj()
 
 			priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: nextPageUrl});
@@ -59,8 +59,8 @@ il.CourseWizardModalFunctions = (function (scope) {
 	pub.loadPreviousPage = function(e) {
 
 		let previousPageUrl = priv.config['previousPageUrl']
-		if(currentWizardObj['templateId']) {
-			previousPageUrl += '&template_id=' + currentWizardObj['templateId'];
+		if(currentWizardObj['templateRefId']) {
+			previousPageUrl += '&template_ref_id=' + currentWizardObj['templateRefId'];
 		}
 		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: previousPageUrl});
 	}

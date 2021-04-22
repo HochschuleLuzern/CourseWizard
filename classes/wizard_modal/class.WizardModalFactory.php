@@ -13,7 +13,9 @@ use CourseWizard\DB\Models\WizardFlow;
 use CourseWizard\Modal\CourseTemplates\ModalBaseCourseTemplate;
 use CourseWizard\Modal\Page\ModalPagePresenter;
 use CourseWizard\Modal\Page\StateMachine;
+use GuzzleHttp\Psr7\Request;
 use ILIAS\UI\Component\Modal\RoundTrip;
+use Psr\Http\Message\RequestInterface;
 
 class WizardModalFactory
 {
@@ -36,6 +38,7 @@ class WizardModalFactory
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
         $this->request = $request;
+        $this->query_params;
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
     }
@@ -142,8 +145,8 @@ class WizardModalFactory
                 break;
 
             case Page\StateMachine::CONTENT_INHERITANCE_PAGE:
-                if(isset($_GET['template_id'])) {
-                    $page_presenter = $this->buildContentInheritancePage($state_machine, $_GET['template_id']);
+                if(isset($_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID])) {
+                    $page_presenter = $this->buildContentInheritancePage($state_machine, $_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID]);
                 } else {
                     throw new \InvalidArgumentException('Missing the argument template_id which is needed for the content inheritance page');
                 }

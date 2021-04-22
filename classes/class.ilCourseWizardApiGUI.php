@@ -22,6 +22,8 @@ class ilCourseWizardApiGUI
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
+    const GET_TEMPLATE_REF_ID = 'template_ref_id';
+
     public function __construct()
     {
         global $DIC;
