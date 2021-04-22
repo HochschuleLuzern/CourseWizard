@@ -10,7 +10,7 @@ class TemplateSelectionRadioOptionGUI
 {
     private $crs_template;
 
-    private $ui_factory;
+    protected $ui_factory;
 
     public function __construct(ModalBaseCourseTemplate $crs_template, Factory $ui_factory)
     {
@@ -38,7 +38,7 @@ class TemplateSelectionRadioOptionGUI
 
         $component = array(
             $this->ui_factory->legacy("<div class='option crs_tmp_option' style='stack'>
-                <div><input value='{$this->crs_template->getTemplateId()}' style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id='$unique_id' onclick='il.CourseWizardModalFunctions.switchSelectedTemplate(this)'/></div>
+                <div><input value='{$this->crs_template->getRefId()}' style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id='$unique_id' onclick='il.CourseWizardModalFunctions.switchSelectedTemplate(this)'/></div>
                 <div><label for='$unique_id'><span></span>"),
             $item,
             $this->ui_factory->legacy("</label></div></div>"));

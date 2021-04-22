@@ -2,6 +2,7 @@
 
 namespace CourseWizard\Modal;
 
+use CourseWizard\CustomUI\InheritExistingCourseRadioOptionGUI;
 use CourseWizard\DB\CourseTemplateRepository;
 use CourseWizard\DB\CourseWizardSpecialQueries;
 use CourseWizard\DB\Models\CourseTemplate;
@@ -59,6 +60,23 @@ class WizardModalFactory
             $view_control->addNewSubPage($department_subpage);
         }
 
+        global $DIC;
+        $user = $DIC->user();
+        $obj_ids_with_membership = \ilParticipants::_getMembershipByType($user->getId(), 'crs');
+
+        $inherit_subpage = new RadioGroupViewControlSubPageGUI('Inherit');
+
+        foreach($obj_ids_with_membership as $obj_id) {
+
+            $ref_ids_for_object = \ilObject::_getAllReferences($obj_id);
+            foreach($ref_ids_for_object as $ref_id) {
+                $crs = new \ilObjCourse($ref_id, true);
+                $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory));
+            }
+        }
+
+        $view_control->addNewSubPage($inherit_subpage);
+
 
 
         /** @var CourseTemplate $crs_template
@@ -86,8 +104,10 @@ class WizardModalFactory
 
     private function buildContentInheritancePage($state_machine, $template_id)
     {
-        $template = $this->template_repository->getCourseTemplateByTemplateId($template_id);
-        $template_ref_id = $template->getCrsRefId();
+        //$template_ref_id = $this->template_repository->getCourseTemplateByRefId($template_id);
+        $template_ref_id = $template_id;
+        //$template = $this->template_repository->getCourseTemplateByTemplateId($template_id);
+        //$template_ref_id = $template->getCrsRefId();
         return new Page\ContentInheritancePage(
             $template_ref_id,
             $state_machine,

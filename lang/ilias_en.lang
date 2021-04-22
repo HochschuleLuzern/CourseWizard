@@ -1,12 +1,13 @@
 action#:#Action
 author#:#Author
+btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 btn_back#:#Back
+btn_close_modal#:#Close Modal
 btn_continue#:#Continue
 btn_delete_crs_template#:#Delete Course Template
+btn_execute_import#:#Execute Import
 btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
-btn_close_modal#:#Close Modal
-btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 conf_container_table_title#:#Overview of Available Template Containers Objects
 cancel#:#cancel
 change_status#:#Change Status

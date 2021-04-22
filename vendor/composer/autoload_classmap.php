@@ -16,6 +16,7 @@ return array(
     'CourseWizard\\CourseTemplate\\CourseTemplateObject' => $baseDir . '/classes/course_template/class.CourseTemplateObject.php',
     'CourseWizard\\CourseTemplate\\management\\CourseTemplateManager' => $baseDir . '/classes/course_template/management/class.CourseTemplateManager.php',
     'CourseWizard\\CustomUI\\ContentInheritanceTableGUI' => $baseDir . '/classes/wizard_modal/custom_ui/ContentInheritanceTableGUI.php',
+    'CourseWizard\\CustomUI\\InheritExistingCourseRadioOptionGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.InheritExistingCourseRadioOptionGUI.php',
     'CourseWizard\\CustomUI\\RadioGroupViewControlSubPageGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.RadioGroupViewControlSubPageGUI.php',
     'CourseWizard\\CustomUI\\RadioSelectionViewControlGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.RadioSelectionViewControlGUI.php',
     'CourseWizard\\CustomUI\\TemplateSelectionRadioGroupGUI' => $baseDir . '/classes/wizard_modal/custom_ui/class.TemplateSelectionRadioGroupGUI.php',

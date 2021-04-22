@@ -28,7 +28,7 @@ class CourseImportObjectFactory
             throw new InvalidArgumentException('Unknown or missing Template ID');
         }
 
-        return $this->template_repo->getCourseTemplateByTemplateId($template_id)->getCrsRefId();
+        return $template_id;//$this->template_repo->getCourseTemplateByTemplateId($template_id)->getCrsRefId();
     }
 
     private function readTargetRefId()
