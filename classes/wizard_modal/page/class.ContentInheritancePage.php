@@ -17,6 +17,8 @@ class ContentInheritancePage extends BaseModalPagePresenter
     {
         $this->template_ref_id = $template_ref_id;
         parent::__construct($state_machine, $ui_factory);
+
+        $this->current_navigation_step = 'step_content_inheritance';
     }
 
     public function getModalPageAsComponentArray() : array

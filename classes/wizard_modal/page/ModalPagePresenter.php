@@ -11,4 +11,6 @@ interface ModalPagePresenter
     public function getJsNextPageMethod() : string;
 
     public function getJSConfigsAsUILegacy($replace_signal, $close_signal) : \ILIAS\UI\Component\Legacy\Legacy;
+
+    public function getCurrentNavigationStep() : string;
 }

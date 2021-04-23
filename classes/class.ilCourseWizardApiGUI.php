@@ -32,8 +32,7 @@ class ilCourseWizardApiGUI
         $this->request = $DIC->http()->request();
         $this->ui_factory = $DIC->ui()->factory();
         $this->ui_renderer = $DIC->ui()->renderer();
-
-
+        $this->plugin = new ilCourseWizardPlugin();
     }
 
     public function executeCommand()
@@ -62,7 +61,8 @@ class ilCourseWizardApiGUI
                             $this->ctrl,
                             $this->request,
                             $this->ui_factory,
-                            $this->ui_renderer
+                            $this->ui_renderer,
+                            $this->plugin
                         );
 
                         $modal = $modal_factory->buildModalFromStateMachine($state_machine);
@@ -85,7 +85,8 @@ class ilCourseWizardApiGUI
                             $this->ctrl,
                             $this->request,
                             $this->ui_factory,
-                            $this->ui_renderer
+                            $this->ui_renderer,
+                            $this->plugin
                         );
 
                         $modal = $modal_factory->buildModalFromStateMachine($state_machine);

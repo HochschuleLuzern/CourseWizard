@@ -50,6 +50,11 @@ status_change_requested#:#Change Requested
 status_declined#:#Declined
 status_approved#:#Approved
 
+step_content_inheritance#:#Content Inheritance
+step_introduction#:#Introduction
+step_settings#:#Settings
+step_template_selection#:#Template Selection
+
 template_container#:#Template Container
 template_title#:#Title of the new Template
 template_description#:#Description of the new Template

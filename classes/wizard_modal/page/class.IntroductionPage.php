@@ -6,6 +6,8 @@ class IntroductionPage extends BaseModalPagePresenter
 {
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory){
         parent::__construct($state_machine, $ui_factory);
+
+        $this->current_navigation_step = 'step_introduction';
     }
 
     public function getModalPageAsComponentArray() : array

@@ -6,3 +6,29 @@
 .crs_tmp_checked {
 	border:2px solid #338af9;
 }
+
+.xcwi_modal_navigation_container {
+	overflw-y: hidden;
+	width: 100%;
+	padding: 0;
+	display: flex;
+	min-height: 2em;
+}
+
+.xcwi_modal_navigation_step {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-direction: column;
+	height: auto;
+	vertical-align: middle;
+	margin: 0 5px;
+	text-align: center;
+	border: 2px #0b58a2 dotted;
+	font-size: 10px;
+}
+
+.xcwi_modal_navigation_step.active {
+	font-weight: bold;
+	border: 3px #0b3e6f solid;
+}

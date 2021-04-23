@@ -22,6 +22,8 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
     /** @var string */
     protected $save_form_data_base_url;
 
+    protected $current_navigation_step = '';
+
     public const JS_NAMESPACE = 'il.CourseWizardModalFunctions';
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
@@ -72,6 +74,11 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
 
     protected function getAdditionalButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal) {
 
+    }
+
+    public function getCurrentNavigationStep() : string
+    {
+        return $this->current_navigation_step;
     }
 
     public function getPageActionButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal) : array

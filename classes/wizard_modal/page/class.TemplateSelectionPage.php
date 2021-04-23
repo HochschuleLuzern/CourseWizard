@@ -20,6 +20,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         parent::__construct($state_machine, $ui_factory);
 
         $this->view_control = $view_control;
+        $this->current_navigation_step = 'step_template_selection';
     }
 
     public function getWizardTitle() : string

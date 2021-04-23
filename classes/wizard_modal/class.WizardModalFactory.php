@@ -15,6 +15,8 @@ use CourseWizard\Modal\Page\ModalPagePresenter;
 use CourseWizard\Modal\Page\StateMachine;
 use GuzzleHttp\Psr7\Request;
 use ILIAS\UI\Component\Modal\RoundTrip;
+use ILIAS\UI\Factory;
+use ILIAS\UI\Renderer;
 use Psr\Http\Message\RequestInterface;
 
 class WizardModalFactory
@@ -30,10 +32,16 @@ class WizardModalFactory
 
     private $request;
 
+    /** @var Factory */
     private $ui_factory;
+
+    /** @var Renderer */
     private $ui_renderer;
 
-    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $request, $ui_factory, $ui_renderer)
+    /** @var \ilCourseWizardPlugin */
+    private $plugin;
+
+    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $request, Factory $ui_factory, Renderer $ui_renderer, \ilCourseWizardPlugin $plugin)
     {
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
@@ -41,6 +49,7 @@ class WizardModalFactory
         $this->query_params;
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
+        $this->plugin = $plugin;
     }
 
     private function buildTemplateSelectionPage(StateMachine $state_machine)
@@ -123,7 +132,8 @@ class WizardModalFactory
         $modal = new RoundtripWizardModalGUI(
             new RoundtripModalPresenter(
                 $this->buildModalPresenter($state_machine),
-                $this->ui_factory
+                $this->ui_factory,
+                $this->plugin
             ),
             $this->ui_renderer
         );
