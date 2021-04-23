@@ -17,7 +17,8 @@ class QuitWizardPage extends BaseModalPagePresenter
 
     public function getModalPageAsComponentArray() : array
     {
-        return array($this->ui_factory->legacy('Kurs ohne Hilfe einrichten?'));
+        $text = $this->plugin->txt('wizard_quit_text');
+        return array($this->ui_factory->legacy($text));
     }
 
     public function getPageActionButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal) : array

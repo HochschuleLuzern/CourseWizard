@@ -27,8 +27,10 @@ class SettingsPage extends BaseModalPagePresenter
     {
         global $DIC;
 
+        $text = $this->plugin->txt('wizard_settings_text');
+
         $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy('Hier sind dann so allgemeine Einstellungen die vorgenommen werden können.<br><br>');
+        $ui_components[] = $this->ui_factory->legacy($text);
 
         $input_factory = $this->ui_factory->input()->field();
         $ui_components[] = $input_factory->select('Sortierung', $this->getSortingOptions(), 'Verwendete Objektsortierung im Kurs. Keine Auswahl bedeutet wie in Kursvorlage');

@@ -25,8 +25,10 @@ class ContentInheritancePage extends BaseModalPagePresenter
     {
         global $DIC;
 
+        $text = $this->plugin->txt('wizard_content_inheritance_text');
+
         $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy('Hier kann der User auswählen, was aus dem alten Kurs kopiert / verknüpft werden soll.<br><br>');
+        $ui_components[] = $this->ui_factory->legacy($text);
 
         $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
         $table->parseSource($this->template_ref_id);
