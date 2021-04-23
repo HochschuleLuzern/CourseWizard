@@ -22,7 +22,11 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
     /** @var string */
     protected $save_form_data_base_url;
 
+    /** @var string */
     protected $current_navigation_step = '';
+
+    /** @var \ilCourseWizardPlugin */
+    protected $plugin;
 
     public const JS_NAMESPACE = 'il.CourseWizardModalFunctions';
 

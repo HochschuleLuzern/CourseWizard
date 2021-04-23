@@ -17,11 +17,16 @@ class IntroductionPage extends BaseModalPagePresenter
         // TODO: Implement getModalPageAsComponentArray() method.
         $ui_components = array();
 
-
-        $ui_components[] = $this->ui_factory->legacy('Willkommen im ILIAS Kurs Wizard!<br><br>Hier wird irgendwann mal eine kurze Einleitung stehen die erklärt, was das eigentlich ist und wie man es bedienen soll. Aber im Moment ist hier einfach dieser nutzlose Text.<br>');
-
-        //$ui_components[] = $this->createButtonForPageReplacement($this->ui_factory->button(), $replace_signal, 'Weiter', $async_url, $this->state_machine->getPageForNextState());
+        $text = $this->plugin->txt('wizard_introduction_text');
+        $ui_components[] = $this->ui_factory->legacy($text);//'Willkommen im ILIAS Kurs Wizard!<br><br>Hier wird irgendwann mal eine kurze Einleitung stehen die erklärt, was das eigentlich ist und wie man es bedienen soll. Aber im Moment ist hier einfach dieser nutzlose Text.<br>');
 
         return $ui_components;
+    }
+
+    protected function getNextPageButton(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
+    {
+        $next_page_name = $this->state_machine->getPageForNextState();
+        $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
+        return $this->ui_factory->button()->primary($this->plugin->txt('btn_continue'), $replace_signal->withAsyncRenderUrl($url));
     }
 }
