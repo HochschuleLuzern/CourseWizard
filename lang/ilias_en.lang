@@ -43,6 +43,12 @@ root_location_of_wizard#:#Root Location of Wizard
 save#:#Save
 settings#:#Settings
 
+sort_object#:#Sort of course objects
+sort_by_template#:#Like in the Selected Template
+sort_by_title#:#By Object Title
+sort_by_manually#:#Manually
+sort_by_date#:#By Creation Date
+
 status#:#Status
 status_draft#:#Draft
 status_pending#:#Pending
@@ -60,5 +66,11 @@ template_title#:#Title of the new Template
 template_description#:#Description of the new Template
 
 view_course_template#:#View Course Template
+
+wizard_introduction_text#:#This is just a placeholder for the
+wizard_tempalte_selection_text#:#Select the template on which you want to base your course
+wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
+wizard_settings_text#:#Choose some additional settings that you want to apply to your course
+wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
 
 yes#:#Yes
