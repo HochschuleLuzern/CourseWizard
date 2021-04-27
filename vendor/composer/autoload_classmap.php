@@ -10,6 +10,7 @@ return array(
     'CourseImportController' => $baseDir . '/classes/course_import/CourseImportController.php',
     'CourseImportData' => $baseDir . '/classes/course_import/CourseImportData.php',
     'CourseImportObjectFactory' => $baseDir . '/classes/course_import/CourseImportObjectFactory.php',
+    'CourseSettingsData' => $baseDir . '/classes/course_import/CourseSettingsData.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateCollector' => $baseDir . '/classes/course_template/class.CourseTemplateCollector.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableDataProvider' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableDataProvider.php',
     'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => $baseDir . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',

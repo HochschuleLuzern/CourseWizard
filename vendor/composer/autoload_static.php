@@ -25,6 +25,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseImportController' => __DIR__ . '/../..' . '/classes/course_import/CourseImportController.php',
         'CourseImportData' => __DIR__ . '/../..' . '/classes/course_import/CourseImportData.php',
         'CourseImportObjectFactory' => __DIR__ . '/../..' . '/classes/course_import/CourseImportObjectFactory.php',
+        'CourseSettingsData' => __DIR__ . '/../..' . '/classes/course_import/CourseSettingsData.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateCollector' => __DIR__ . '/../..' . '/classes/course_template/class.CourseTemplateCollector.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableDataProvider' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManagementTableDataProvider.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',
