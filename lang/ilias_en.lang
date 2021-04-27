@@ -31,6 +31,8 @@ manage_proposals#:#Manage Proposals
 no#:#No
 overview#:#Overview
 propose#:#Propose
+propose_template#:#Propose Template
+propose_template_text#:#Do you want to propose following template:
 quantity_admin_role_members#:#Quantity of Admin Role Members
 quantity_crs_templates#:#Quantity of Crs-Templates
 

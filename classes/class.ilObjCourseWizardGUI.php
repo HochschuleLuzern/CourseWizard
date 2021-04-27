@@ -117,6 +117,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $this->ctrl->redirectByClass(['ilObjPluginDispatchGUI', self::class], $cmd);
         }
 
+        if($_GET['cmd'] == 'post' && $_GET['fallbackCmd'] == self::CMD_PROPOSE_TEMPLATE_CONFIRM) {
+            $cmd = self::CMD_PROPOSE_TEMPLATE_CONFIRM;
+        }
+
         $next_class = $this->ctrl->getNextClass();
         switch($next_class) {
 
@@ -185,7 +189,9 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
         global $DIC;
 
+        /** @var \ILIAS\UI\Factory $f */
         $f = $DIC->ui()->factory();
+        /** @var \ILIAS\UI\Renderer $r */
         $r = $DIC->ui()->renderer();
 
         $repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
@@ -197,8 +203,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_PROPOSE_TEMPLATE_CONFIRM);
-
-        $modal = $f->modal()->interruptive('Propose Template', 'Do you want to propose following template: ' . $_GET['dep_id'], $form_action)->withActionButtonLabel('Propose')
+        $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text') . ' ' . $_GET['dep_id'], $form_action)
+            ->withActionButtonLabel($this->plugin->txt('propose'))
             ->withAffectedItems(array(
                 $f->modal()->interruptiveItem($template->getCrsRefId(), $title, $icon, $description)
             ));
