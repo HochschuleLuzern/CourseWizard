@@ -25,6 +25,9 @@ form_crs_template_type_single_group_info#:#"Just One Class" means, that the cour
 form_is_global#:#Is Global
 form_is_global_info#:#As global defined Course Template Containers are available at all locations in the Course Wizard
 form_title_container_config#:#Configuration of Course Template Container: 
+form_root_location_ref#:#Ref ID of Root Location
+form_root_location_ref_info#:#This reference ID determines the scope, on which the course templates well be shown in the Wizard (usually the category in which this container is in will be the root location). Is not used for global Course Template Containers
+form_role_title#:#Title of the local role which contains the template admins
 
 global_available#:#Global Available
 manage_proposals#:#Manage Proposals
@@ -74,5 +77,9 @@ wizard_tempalte_selection_text#:#Select the template on which you want to base y
 wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
 wizard_settings_text#:#Choose some additional settings that you want to apply to your course
 wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
+
+xcwi_add#:#Create Course Template Container
+xcwi_duplicate#:#Copy existing Course Template Container
+xcwi_new#:#Create new Course Template Container
 
 yes#:#Yes
