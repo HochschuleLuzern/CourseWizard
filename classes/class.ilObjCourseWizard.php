@@ -56,6 +56,8 @@ class ilObjCourseWizard extends ilObjectPlugin
             $obj->getRefId()
         );
 
+        $DIC->rbac()->admin()->assignUser($role->getId(), $DIC->user()->getId());
+
         $this->crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj);
     }
 
