@@ -23,7 +23,7 @@ class CourseImportObjectFactory
 
     private function readTemplateRefId()
     {
-        $template_id = (int) $this->crs_wizard_obj[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID];
+        $template_id = (int) $this->crs_wizard_obj['templateRefId'];
         if($template_id <= 0) {
             throw new InvalidArgumentException('Unknown or missing Template ID');
         }
