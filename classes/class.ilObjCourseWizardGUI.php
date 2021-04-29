@@ -353,17 +353,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $form = $this->initCrsTemplateCreationForm();
 
         if($form->checkInput()) {
-
-
             $title = $form->getInput(self::FORM_CRS_TEMPLATE_TITLE);
             $description = $form->getInput(self::FORM_CRS_TEMPLATE_DESCRIPTION);
             $template_type = (int)$form->getInput(self::FORM_CRS_TEMPLATE_TYPE);
 
-            $this->object->createNewCourseTemplate($title, $description, $template_type);
+            $crs_obj = $this->object->createNewCourseTemplate($title, $description, $template_type);
 
-            ilUtil::sendSuccess('Template created!');
-            $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
+            ilUtil::sendSuccess($this->plugin->txt('create_crs_template_success'), true);
+            $this->ctrl->redirectToURL(ilLink::_getLink($crs_obj->getRefId(), 'crs'));
+        } else {
+            ilUtil::sendFailure($this->plugin->txt('invalid_form_input'), true);
+            $this->ctrl->redirect($this, self::CMD_CRS_TEMPLATE_CREATION_SITE);
         }
-
     }
 }

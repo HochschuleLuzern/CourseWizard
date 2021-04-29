@@ -38,7 +38,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->setType(ilCourseWizardPlugin::ID);
     }
 
-    public function createNewCourseTemplate(string $title, string $description, int $type)
+    public function createNewCourseTemplate(string $title, string $description, int $type) : ilObjCourse
     {
         global $DIC;
 
@@ -59,6 +59,8 @@ class ilObjCourseWizard extends ilObjectPlugin
         $DIC->rbac()->admin()->assignUser($role->getId(), $DIC->user()->getId());
 
         $this->crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj);
+
+        return $obj;
     }
 
 

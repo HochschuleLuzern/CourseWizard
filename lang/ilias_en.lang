@@ -14,6 +14,7 @@ change_status#:#Change Status
 configure#:#Configure
 create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
+create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
 
 form_crs_template_type#:#Template Type
@@ -30,6 +31,7 @@ form_root_location_ref_info#:#This reference ID determines the scope, on which t
 form_role_title#:#Title of the local role which contains the template admins
 
 global_available#:#Global Available
+invalid_form_input#:#Invalid from input
 manage_proposals#:#Manage Proposals
 no#:#No
 overview#:#Overview
