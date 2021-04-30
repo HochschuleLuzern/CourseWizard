@@ -132,6 +132,9 @@ class ilCourseWizardApiGUI
                         if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
                             $wizard_flow = $wizard_flow->withQuitedStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                            ilUtil::sendInfo($this->plugin->txt('wizard_dismissed_info'), true);
+                            $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
                         }
                         break;
 

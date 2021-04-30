@@ -74,11 +74,13 @@ template_description#:#Description of the new Template
 
 view_course_template#:#View Course Template
 
-wizard_introduction_text#:#This is just a placeholder for the
-wizard_tempalte_selection_text#:#Select the template on which you want to base your course
 wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
-wizard_settings_text#:#Choose some additional settings that you want to apply to your course
+wizard_dismissed_info#:#Course Wizard successfully dismissed for this course
+wizard_introduction_text#:#This is just a placeholder for the
+wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. To open the Course Wizard again, click on the following link:
 wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
+wizard_settings_text#:#Choose some additional settings that you want to apply to your course
+wizard_tempalte_selection_text#:#Select the template on which you want to base your course
 
 xcwi_add#:#Create Course Template Container
 xcwi_duplicate#:#Copy existing Course Template Container
