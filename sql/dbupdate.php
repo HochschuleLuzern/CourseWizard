@@ -154,3 +154,31 @@ if(!$ilDB->tableExists($current_table))
     $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\WizardFlowRepository::COL_TARGET_REF_ID));
 }
 ?>
+<#5>
+<?php
+$current_table = \CourseWizard\DB\UserPreferencesRepository::TABLE_NAME;
+if(!$ilDB->tableExists($current_table))
+{
+    $fields = array(
+        \CourseWizard\DB\UserPreferencesRepository::COL_USER_ID => array(
+            'type' => 'integer',
+            'length' => 8,
+            'notnull' => true
+        ),
+        \CourseWizard\DB\UserPreferencesRepository::COL_SKIP_INTRO => array(
+            'type' => 'integer',
+            'length' => 1,
+            'default' => 0,
+            'notnull' => true
+        ),
+        \CourseWizard\DB\UserPreferencesRepository::COL_SKIP_INTRO_DATE => array(
+            'type' => 'timestamp',
+            'notnull' => false,
+            "default" => null
+        )
+	);
+
+    $ilDB->createTable($current_table, $fields);
+    $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\UserPreferencesRepository::COL_USER_ID));
+}
+?>

@@ -16,7 +16,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         $btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal", $link);
         $btn = $this->dic->ui()->factory()->link()->standard("Reactivate Modal (Link btn)", $link);
         $btn_str = $this->dic->ui()->renderer()->render($btn);
-        //ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
+        ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
     }
 
     private function showWizardModal(int $ref_id)

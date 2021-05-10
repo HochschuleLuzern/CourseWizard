@@ -44,6 +44,14 @@ il.CourseWizardModalFunctions = (function (scope) {
 		}
 	};
 
+	pub.introductionPageFinished = function(e) {
+		let skip_introduction = $('#xcwi_skip_introduction').is(":checked");
+
+		let nextPageUrl = priv.config['nextPageUrl'] + '&skip_intro=' + (skip_introduction ? '1' : '0');
+		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+
+	}
+
 	pub.pushContentInheritanceSelection = function (e) {
 		currentWizardObj.contentInheritance= {};
 		 $("#coursewizard").find('form input:checked').each(function(key, value) {

@@ -50,14 +50,25 @@ class ilCourseWizardApiGUI
                 {
                     // Creates full modal (used for the first modal page)
                     case self::CMD_ASYNC_BASE_MODAL:
-                        $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE;//INTRODUCTION_PAGE;
+                        $db = $DIC->database();
+                        $user = $DIC->user();
+
+                        $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
+                        $user_preferences = $user_pref_repo->getUserPreferences($user, true);
+
+                        $page = $this->request->getQueryParams()['page'];
+                        if($page == null) {
+                            $page = $user_preferences->wasSkipIntroductionsClicked() ?
+                                Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE : Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                        }
+
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($db, $user);
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
-                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($db),
                             $this->ctrl,
                             $this->request,
                             $this->ui_factory,
@@ -74,9 +85,22 @@ class ilCourseWizardApiGUI
 
                     // Creates new modal page (used for async page replacement in Roundtrip Modal)
                     case self::CMD_ASYNC_MODAL:
-                        $page = $this->request->getQueryParams()['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
-                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+                        $db = $DIC->database();
+                        $user = $DIC->user();
+
+                        $query_params = $this->request->getQueryParams();
+                        $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                        $target_ref_id = $query_params['ref_id'] ?? 0;
+                        $skip_intro_value_set = isset($query_params['skip_intro']);
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
+
+                        if($skip_intro_value_set) {
+                            $skip_intro_value = $query_params['skip_intro'] == '1';
+                            $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
+                            $user_preferences = $user_pref_repo->getUserPreferences($user, true);
+                            $user_preferences = $user_preferences->withSkipIntroChanged($skip_intro_value);
+                            $user_pref_repo->updateUserPreferences($user_preferences);
+                        }
 
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);

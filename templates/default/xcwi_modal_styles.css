@@ -32,3 +32,11 @@
 	font-weight: bold;
 	border: 3px #0b3e6f solid;
 }
+
+.xcwi_modal_checkbox_div {
+	text-align: center;
+}
+.xcwi_modal_checkbox_label {
+	margin-right: 1em;
+	font-family: italic;
+}
