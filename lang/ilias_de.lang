@@ -1,0 +1,91 @@
+action#:#Aktion
+author#:#Autor
+btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
+btn_back#:#Zurück
+btn_close_modal#:#Modal schliessen
+btn_continue#:#Weiter
+btn_delete_crs_template#:#Kursvorlage löschen
+btn_execute_import#:#Import ausführen
+btn_postpone#:#Verschieben
+btn_propose_crs_template#:#Kursvorlage vorschlagen
+conf_container_table_title#:#Übersicht der verfügbaren Kursvorlage Container Objekte
+cancel#:#Abbrechen
+change_status#:#Status Ändern
+configure#:#Konfigurieren
+create_crs_template_draft#:#Entwurf einer Kursvorlage erstellen
+create_crs_template_form#:#Neue Kursvorlage erstellen
+create_crs_template_success#:#Kursvorlage wurde erstellt!
+create_template#:#Vorlage erstellen
+
+form_crs_template_type#:#Vorlage Typ
+form_crs_template_type_info#:#Wählen Sie, für welche Art von Kurs die Vorlage erstellt werden soll. Diese Auswahl kann später nicht mehr verändert werden!
+form_crs_template_type_multi_group#:#Mehrere Klassen
+form_crs_template_type_multi_group_info#:#"Mehrere Klassen" bedeutet, dass die Kurse, für welche die Vorlage erstellt werden jeweils mehrere Gruppen (Klassen) enthalten. Wenn Sie diese Option wählen, wird in der Kursvorlage eine Gruppe erstellt, welche als Vorlage für die jeweiligen Klassen dienen wird.
+form_crs_template_type_single_group#:#Nur eine Klasse
+form_crs_template_type_single_group_info#:#"Nur eine Klasse" bedeutet, dass die Kurse, für welche die Vorlage erstellt wird jeweils für nur 1 Klasse bestimmt ist. Wird diese Option gewählt, so wird die Kursvorlage leer erstellt.
+form_is_global#:#Global
+form_is_global_info#:#Als global definierte Kursvorlagen Container werden für den Wizard im gesamten Magazin angezeigt
+form_title_container_config#:#Konfigurieren Sie einen Kursvorlagen Container:
+form_root_location_ref#:#Ref ID der Stammverzeichnisses
+form_root_location_ref_info#:#Diese "Reference ID" gibt an, in welchem der Kursvorlagen Container mit seinen Vorlagen angezeigt wird. Alle Kurse, welche im Magazinbaum unterhalb der angegebenen "Referenz ID" liegen, werden diesen Kursvorlagen Container im Wizard ersichtlich haben. Bei als "Global" definierten Containern spielt diser Wert keine Rolle.
+form_role_title#:#Bezeichnung für die lokale Adminrolle dieses Containers
+form_skip_introduction#:#Einleitung für die nächsten male Überspringen
+form_skip_introduction_info#:#Wenn ausgewählt, öffnet der Wizard für die nächsten Monate direkt auf der "Template auswählen" Seite
+
+global_available#:#Global verfügbar
+invalid_form_input#:#Ungültige Eingabe
+manage_proposals#:#Vorschläge verwalten
+no#:#Nein
+overview#:#Übersicht
+propose#:#Vorschlagen
+propose_template#:#Vorlage Vorschlagen
+propose_template_text#:#Möchten Sie den folgenden Kurs als Vorlage vorschlagen:
+quantity_admin_role_members#:#Anzahl Mitglieder in der Adminrolle
+quantity_crs_templates#:#Anzahl Kursvorlagen
+
+role_description_container_admin#:#Adminrolle für Kursvorlagen mit der Referenz ID:
+role_description_crs_template_editor#:#Adminrolle für Editoren für Kursvorlagen mit der Referenz ID:
+role_title_container_admin#:#Kursvorlagen Container Admin
+role_title_crs_template_editor#:#Kursvorlagen Editor
+
+root_location_of_wizard#:#Stammverzeichniss für Wizard
+save#:#Speichern
+settings#:#Einstellungen
+
+sort_object#:#Sortierung der Kursobjekte
+sort_by_template#:#Wie im ausgewählten Template
+sort_by_title#:#Nach Objekttitel
+sort_by_manually#:#Manuell
+sort_by_date#:#Nach Erstellungsdatum
+
+status#:#Status
+status_draft#:#Entwurf
+status_pending#:#Ausstehend
+status_change_requested#:#Änderung Notwendig
+status_declined#:#Abgelehnt
+status_approved#:#Akzeptiert
+
+step_content_inheritance#:#Inhalte Vererben
+step_introduction#:#Einleitung
+step_settings#:#Einstellungen
+step_template_selection#:#Vorlage Auswählen
+
+template_container#:#Vorlagen Container
+template_title#:#Vorlagen Titel
+template_description#:#Vorlagen Beschreibung
+
+view_course_template#:#Kursvorlage ansehen
+
+wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
+wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
+wizard_introduction_text#:#
+wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. To open the Course Wizard again, click on the following link:
+wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
+wizard_settings_text#:#Choose some additional settings that you want to apply to your course
+wizard_template_selection_text#:#Select the template on which you want to base your course
+
+xcwi_add#:#Neuen Kursvorlage Container erstellen
+xcwi_duplicate#:#Kopiere bereits existierenden Kursvorlage Container
+xcwi_new#:#Kursvorlage Container erstellen
+
+yes#:#Ja
