@@ -36,7 +36,10 @@ class CourseTemplate
     /** @var int */
     protected $template_container_ref_id;
 
-    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id) {
+    /** @var int */
+    protected $editor_role_id;
+
+    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id) {
         $this->template_id = $template_id;
         $this->crs_ref_id = $crs_ref_id;
         $this->crs_obj_id = $crs_obj_id;
@@ -44,6 +47,7 @@ class CourseTemplate
         $this->status = $status;
         $this->creator_user_id = $creator_user_id;
         $this->template_container_ref_id = $template_container_ref_id;
+        $this->editor_role_id = $editor_role_id;
     }
 
     public static function getCourseTemplateTypes() : array
@@ -111,5 +115,13 @@ class CourseTemplate
     public function getTemplateContainerRefId() : int
     {
         return $this->template_container_ref_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEditorRoleId() : int
+    {
+        return $this->editor_role_id;
     }
 }

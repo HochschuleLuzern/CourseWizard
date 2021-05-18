@@ -14,54 +14,30 @@ class CourseTemplateManager
     /** @var CourseTemplateRepository */
     private $crs_template_repo;
 
+    /** @var CourseTemplateRoleManagement */
+    private $role_manager;
+
     public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_template_repo)
     {
         $this->container_obj = $container_obj;
         $this->crs_template_repo = $crs_template_repo;
     }
 
-    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
+    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, \ilObjRole $editor_role, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
     {
         global $DIC;
 
-        $this->crs_template_repo->createAndAddNewCourseTemplate(
+        $crs_template_obj = $this->crs_template_repo->createAndAddNewCourseTemplate(
             $crs_obj->getRefId(),
             $crs_obj->getId(),
             $template_type,
             \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
             $DIC->user()->getId(),
-            $this->container_obj->getRefId()
-            //, editor_role_id as a new value?
+            $this->container_obj->getRefId(),
+            $editor_role->getId()
         );
-    }
 
-    public function changeStatusOfCourseTemplate($crs_template, $new_status)
-    {
-        switch($new_status) {
-            case CourseTemplate::STATUS_DRAFT:
-                break;
-            case CourseTemplate::STATUS_PENDING:
-                break;
-            case CourseTemplate::STATUS_CHANGE_REQUESTED:
-                break;
-            case CourseTemplate::STATUS_DECLINED:
-                break;
-            case CourseTemplate::STATUS_APPROVED:
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    private function createRoleForCourseTemplate()
-    {
-
-    }
-
-    private function adjustRoleForStatusChange()
-    {
-        global $DIC;
-
+        $status_manager = new CourseTemplateStatusManager($this->crs_template_repo, new CourseTemplateRoleManagement());
+        $status_manager->initStartStatusForCrsTemplate($crs_template_obj);
     }
 }

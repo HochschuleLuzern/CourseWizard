@@ -31,6 +31,8 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'CourseWizard\\CourseTemplate\\CourseTemplateManagementTableGUI' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManagementTableGUI.php',
         'CourseWizard\\CourseTemplate\\CourseTemplateObject' => __DIR__ . '/../..' . '/classes/course_template/class.CourseTemplateObject.php',
         'CourseWizard\\CourseTemplate\\management\\CourseTemplateManager' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateManager.php',
+        'CourseWizard\\CourseTemplate\\management\\CourseTemplateRoleManagement' => __DIR__ . '/../..' . '/classes/course_template/management/CourseTemplateRoleManagement.php',
+        'CourseWizard\\CourseTemplate\\management\\CourseTemplateStatusManager' => __DIR__ . '/../..' . '/classes/course_template/management/class.CourseTemplateStatusManager.php',
         'CourseWizard\\CustomUI\\ContentInheritanceTableGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/custom_ui/ContentInheritanceTableGUI.php',
         'CourseWizard\\CustomUI\\InheritExistingCourseRadioOptionGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/custom_ui/class.InheritExistingCourseRadioOptionGUI.php',
         'CourseWizard\\CustomUI\\RadioGroupViewControlSubPageGUI' => __DIR__ . '/../..' . '/classes/wizard_modal/custom_ui/class.RadioGroupViewControlSubPageGUI.php',

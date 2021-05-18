@@ -203,10 +203,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_PROPOSE_TEMPLATE_CONFIRM);
-        $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text') . ' ' . $_GET['dep_id'], $form_action)
+        $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text'), $form_action)
             ->withActionButtonLabel($this->plugin->txt('propose'))
             ->withAffectedItems(array(
-                $f->modal()->interruptiveItem($template->getCrsRefId(), $title, $icon, $description)
+                $f->modal()->interruptiveItem($template->getTemplateId(), $title, $icon, $description)
             ));
         echo $r->renderAsync($modal);
         die;
@@ -219,9 +219,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         {
             $item_id = $_POST['interruptive_items'][0];
             $repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
-            $crs_template = $repo->getCourseTemplateByRefId($item_id);
+            $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager($repo, new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement());
 
-            $repo->updateTemplateStatus($crs_template, \CourseWizard\DB\Models\CourseTemplate::STATUS_PENDING);
+            $template_manager->changeStatusOfCourseTemplateById($item_id, \CourseWizard\DB\Models\CourseTemplate::STATUS_PENDING);
+
 
             ilUtil::sendSuccess('Template proposed', true);
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
@@ -320,15 +321,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $description = new ilTextAreaInputGUI($this->plugin->txt('template_description'), self::FORM_CRS_TEMPLATE_DESCRIPTION);
         $form->addItem($description);
 
+
         $radio_crs_template_type = new ilRadioGroupInputGUI($this->plugin->txt('form_crs_template_type'), self::FORM_CRS_TEMPLATE_TYPE);
         $radio_crs_template_type->setInfo($this->plugin->txt('form_crs_template_type_info'));
-        $radio_crs_template_type->setRequired(true);
+        //$radio_crs_template_type->setRequired(true);
         foreach(\CourseWizard\DB\Models\CourseTemplate::getCourseTemplateTypes() as $crs_template_type) {
             $option_title = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title']);
             $option_value = $crs_template_type['type_code'];
             $option_info = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title'] . '_info');
             $radio_crs_template_type->addOption(new ilRadioOption($option_title, $option_value, $option_info));
         }
+        $radio_crs_template_type->setDisabled(true);
         $form->addItem($radio_crs_template_type);
 
         $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_CREATE_NEW_CRS_TEMPLATE));
@@ -355,7 +358,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         if($form->checkInput()) {
             $title = $form->getInput(self::FORM_CRS_TEMPLATE_TITLE);
             $description = $form->getInput(self::FORM_CRS_TEMPLATE_DESCRIPTION);
-            $template_type = (int)$form->getInput(self::FORM_CRS_TEMPLATE_TYPE);
+
+            // TODO: Implement template type feature
+            //$template_type = (int)$form->getInput(self::FORM_CRS_TEMPLATE_TYPE);
+            $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE;
 
             $crs_obj = $this->object->createNewCourseTemplate($title, $description, $template_type);
 

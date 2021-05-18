@@ -47,6 +47,12 @@ if(!$ilDB->tableExists($current_table))
             'notnull' => true,
             'default'=> 0
         ),
+        \CourseWizard\DB\CourseTemplateRepository::COL_EDITOR_ROLE_ID => array(
+            'type' => 'integer',
+            'length' => 8,
+            'notnull' => true,
+            'default'=> 0
+        ),
     );
 
     $ilDB->createTable($current_table, $fields);

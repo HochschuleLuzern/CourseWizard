@@ -17,6 +17,7 @@ class CourseTemplateRepository
     const COL_CREATOR_USER_ID = 'creator_user_id';
     const COL_CREATE_DATE = 'create_date';
     const COL_TEMPLATE_CONTAINER_REF_ID = 'template_container_ref_id';
+    const COL_EDITOR_ROLE_ID = 'editor_role_id';
 
     /** @var \ilDBInterface */
     protected $db;
@@ -30,11 +31,11 @@ class CourseTemplateRepository
         }
     }
 
-    public function createAndAddNewCourseTemplate(int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id) : CourseTemplate
+    public function createAndAddNewCourseTemplate(int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id) : CourseTemplate
     {
         $template_id = $this->db->nextId(self::TABLE_NAME);
 
-        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $template_container_ref_id);
+        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $template_container_ref_id, $editor_role_id);
 
         $this->db->insert(self::TABLE_NAME, array(
             self::COL_TEMPLATE_ID => array('integer', $model->getTemplateId()),
@@ -43,8 +44,9 @@ class CourseTemplateRepository
             self::COL_TEMPLATE_TYPE => array('integer', $model->getTemplateTypeAsCode()),
             self::COL_STATUS_CODE => array('integer', $model->getStatusAsCode()),
             self::COL_CREATOR_USER_ID => array('integer', $model->getCreatorUserId()),
-            self::COL_CREATE_DATE => array('timestamp', $this->db->now()),
-            self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId())
+            self::COL_CREATE_DATE => array('timestamp', time()),
+            self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId()),
+            self::COL_EDITOR_ROLE_ID => array('integer', $model->getTemplateContainerRefId())
         ));
 
         return $model;
@@ -180,7 +182,8 @@ class CourseTemplateRepository
             self::COL_TEMPLATE_TYPE => array('integer', $model->getTemplateTypeAsCode()),
             self::COL_STATUS_CODE => array('integer', $model->getStatusAsCode()),
             self::COL_CREATOR_USER_ID => array('integer', $model->getCreatorUserId()),
-            self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId())),
+            self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId()),
+            self::COL_EDITOR_ROLE_ID => array('integer', $model->getEditorRoleId())),
 
             // WHERE
             array(self::COL_TEMPLATE_ID => array('integer', $model->getTemplateId()))
@@ -218,7 +221,9 @@ class CourseTemplateRepository
             $row['template_type'],
             $row['status_code'],
             $row['creator_user_id'],
-            $row['template_container_ref_id']);
+            $row['template_container_ref_id'],
+            $row['editor_role_id']
+        );
     }
 
     public function getNumberOfCrsTemplates(int $container_id) : int

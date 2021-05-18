@@ -59,7 +59,7 @@ class WizardModalFactory
 
         $view_control = new RadioSelectionViewControlGUI($this->ui_factory);
 
-        $obj_ids = CourseWizardSpecialQueries::getContainerObjectIdsForGivenRefId($_GET['ref_id']);
+        $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId($_GET['ref_id']);
         foreach($obj_ids as $container_obj_id)
         {
             $department_subpage = new RadioGroupViewControlSubPageGUI(\ilObject::_lookupTitle($container_obj_id));

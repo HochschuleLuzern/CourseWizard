@@ -4,7 +4,7 @@ namespace CourseWizard\DB;
 
 class CourseWizardSpecialQueries
 {
-    public static function getContainerObjectIdsForGivenRefId($ref_id)
+    public static function fetchContainerObjectIdsForGivenRefId($ref_id)
     {
         global $DIC;
 
@@ -26,5 +26,23 @@ class CourseWizardSpecialQueries
         }
 
         return $obj_ids;
+    }
+
+    public static function lookupRoleIdForRoleTemplateName(string $role_template_name)
+    {
+        global $DIC;
+
+        $role_template_id = 0;
+        $db = $DIC->database();
+
+        $query = "SELECT obj_id FROM object_data " .
+                " WHERE type=" . $db->quote("rolt", "text") .
+                " AND title=" . $db->quote($role_template_name, "text");
+        $res = $db->query($query);
+        while ($row = $db->fetchAssoc($res)) {
+            $role_template_id = $row['obj_id'];
+        }
+
+        return $role_template_id;
     }
 }
