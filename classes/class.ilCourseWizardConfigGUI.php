@@ -122,16 +122,39 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $this->tpl->setContent($table->getHTML());
     }
 
-    private function initEditContainerConfig($conf)
+    private function initEditContainerConfig(\CourseWizard\DB\Models\TemplateContainerConfiguration $conf)
     {
+        global $DIC;
+
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_SAVE_CONTAINER_CONF));
 
         $form->setTitle($this->plugin_object->txt('form_title_container_config') . ' ' . ilObject::_lookupTitle($conf->getObjId()));
 
-        $is_global = new ilCheckboxInputGUI($this->plugin_object->txt('form_is_global'), self::FORM_CONT_IS_GLOBAL);
-        $is_global->setInfo($this->plugin_object->txt('form_is_global_info'));
-        $form->addItem($is_global);
+        $radio_availability_scope = new ilRadioGroupInputGUI($this->plugin_object->txt('form_xcwi_container_scope'), ilObjCourseWizardGUI::FORM_CONTAINER_SCOPE);
+
+        $root_location_input = new ilTextInputGUI($this->plugin_object->txt('form_root_location_ref'), ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
+        $root_location_input->setInfo($this->plugin_object->txt('form_root_location_ref_info'));
+        if($conf->isGlobal()) {
+            $root_location_ref_id = 1;
+            foreach(ilObject::_getAllReferences($conf->getObjId()) as $ref_id) {
+                $root_location_ref_id = $DIC->repositoryTree()->getParentId($ref_id);
+            }
+        } else {
+            $root_location_ref_id = $conf->getRootLocationRefId();
+        }
+        $root_location_input->setValue($root_location_ref_id);
+        $root_location_input->setRequired(true);
+        $limited_scope = new ilRadioOption($this->plugin_object->txt('form_limited_scope'),  ilObjCourseWizardGUI::FORM_LIMITED_SCOPE, $this->plugin_object->txt('form_limited_scope_info'));
+        $limited_scope->addSubItem($root_location_input);
+        $radio_availability_scope->addOption($limited_scope);
+
+        $global_scope_option = new ilRadioOption($this->plugin_object->txt('form_global'), ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE, $this->plugin_object->txt('form_global_info'));
+        $radio_availability_scope->addOption($global_scope_option);
+
+        $radio_availability_scope->setValue($conf->isGlobal() ? ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE : ilObjCourseWizardGUI::FORM_LIMITED_SCOPE);
+        $radio_availability_scope->setRequired(true);
+        $form->addItem($radio_availability_scope);
 
         $form->addCommandButton(self::CMD_SAVE_CONTAINER_CONF, $this->plugin_object->txt('save'));
         $form->addCommandButton(self::CMD_CONFIGURE, $this->plugin_object->txt('cancel'));
@@ -157,10 +180,6 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $form = $this->initEditContainerConfig($conf);
 
-        $form->setValuesByArray(array(
-            self::FORM_CONT_IS_GLOBAL => $conf->isGlobal()
-        ));
-
         $this->tpl->setContent($form->getHTML());
     }
 
@@ -181,10 +200,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $form = $this->initEditContainerConfig($conf);
 
         if($form->checkInput()) {
-            $is_global = $form->getInput(self::FORM_CONT_IS_GLOBAL); //== '1';
-            $is_global = $is_global == '1';
 
-            $conf = new \CourseWizard\DB\Models\TemplateContainerConfiguration($conf->getObjId(), $conf->getRootLocationRefId(), $conf->getResponsibleRoleId(), $is_global);
+            $scope = $form->getInput(ilObjCourseWizardGUI::FORM_CONTAINER_SCOPE);
+            if($scope == ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE) {
+                $conf = $conf->withGlobalScope();
+            } else {
+                $root_location_ref_id = $form->getInput(ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
+                $conf = $conf->withLimitedScope($root_location_ref_id);
+            }
+
             $conf_repo->setContainerConfiguration($conf);
 
             $this->ctrl->setParameter($this, 'container_id', $container_id);

@@ -36,4 +36,20 @@ class TemplateContainerConfiguration
     {
         return $this->is_global;
     }
+
+    public function withGlobalScope() : TemplateContainerConfiguration
+    {
+        $obj = clone $this;
+        $obj->root_location_ref_id = 1;
+        $obj->is_global = true;
+        return $obj;
+    }
+
+    public function withLimitedScope(int $root_location_ref_id) : TemplateContainerConfiguration
+    {
+        $obj = clone $this;
+        $obj->root_location_ref_id = $root_location_ref_id;
+        $obj->is_global = false;
+        return $obj;
+    }
 }
