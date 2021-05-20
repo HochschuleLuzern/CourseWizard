@@ -126,5 +126,4 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     {
         return false;
     }
-
 }

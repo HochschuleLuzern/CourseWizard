@@ -23,14 +23,19 @@ form_crs_template_type_multi_group#:#Mehrere Klassen
 form_crs_template_type_multi_group_info#:#"Mehrere Klassen" bedeutet, dass die Kurse, für welche die Vorlage erstellt werden jeweils mehrere Gruppen (Klassen) enthalten. Wenn Sie diese Option wählen, wird in der Kursvorlage eine Gruppe erstellt, welche als Vorlage für die jeweiligen Klassen dienen wird.
 form_crs_template_type_single_group#:#Nur eine Klasse
 form_crs_template_type_single_group_info#:#"Nur eine Klasse" bedeutet, dass die Kurse, für welche die Vorlage erstellt wird jeweils für nur 1 Klasse bestimmt ist. Wird diese Option gewählt, so wird die Kursvorlage leer erstellt.
-form_is_global#:#Global
-form_is_global_info#:#Als global definierte Kursvorlagen Container werden für den Wizard im gesamten Magazin angezeigt
+form_global#:#Global
+form_global_info#:#Als global definierte Kursvorlagen Container werden für den Wizard im gesamten Magazin angezeigt
+form_limited_scope#:#Limitierter Gültigkeitsbereich
+form_limited_scope_info#:#Kursvorlagen werden im Course Wizard nur innerhalb des angegebenen Gültigkeitsbereichs angezeigt
 form_title_container_config#:#Konfigurieren Sie einen Kursvorlagen Container:
 form_root_location_ref#:#Ref ID der Stammverzeichnisses
 form_root_location_ref_info#:#Diese "Reference ID" gibt an, in welchem der Kursvorlagen Container mit seinen Vorlagen angezeigt wird. Alle Kurse, welche im Magazinbaum unterhalb der angegebenen "Referenz ID" liegen, werden diesen Kursvorlagen Container im Wizard ersichtlich haben. Bei als "Global" definierten Containern spielt diser Wert keine Rolle.
-form_role_title#:#Bezeichnung für die lokale Adminrolle dieses Containers
+form_role_title#:#Bezeichnung für Container Adminrolle
+form_role_title_info#:#Die Personen, welche in dieses Rolle eingetragen werde, Verwalten die vorgeschlagenen Kursvorlagen
 form_skip_introduction#:#Einleitung für die nächsten male Überspringen
 form_skip_introduction_info#:#Wenn ausgewählt, öffnet der Wizard für die nächsten Monate direkt auf der "Template auswählen" Seite
+form_xcwi_container_scope#:#Gültigkeitsbereich
+form_xcwi_container_scope_info#:#Definiere den Gültigkeitsbereich dieses Kursvorlagen Containers
 
 global_available#:#Global verfügbar
 invalid_form_input#:#Ungültige Eingabe

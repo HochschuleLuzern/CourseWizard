@@ -23,14 +23,19 @@ form_crs_template_type_multi_group#:#Multiple Classes
 form_crs_template_type_multi_group_info#:#"Multiple Classes" means, that the courses which will use this template have multiple classes and therefore multiple groups in it. If you select this option, the course template will be created with a group. This group serves as the template for the groups in a multi class course.
 form_crs_template_type_single_group#:#Just One Class
 form_crs_template_type_single_group_info#:#"Just One Class" means, that the courses which will use this template only have one class. If you select this option, the course template will be created empty.
-form_is_global#:#Is Global
-form_is_global_info#:#As global defined Course Template Containers are available at all locations in the Course Wizard
+form_global#:#Global
+form_global_info#:#As global defined Course Template Containers are available at all locations in the Course Wizard
+form_limited_scope#:#Limited Scope
+form_limited_scope_info#:#Course Templates will only be shown in the Course Wizard if it is in the specified location
 form_title_container_config#:#Configuration of Course Template Container: 
 form_root_location_ref#:#Ref ID of Root Location
 form_root_location_ref_info#:#This reference ID determines the scope, on which the course templates well be shown in the Wizard (usually the category in which this container is in will be the root location). Is not used for global Course Template Containers
-form_role_title#:#Title of the local role which contains the template admins
+form_role_title#:#Title for Container Admin Role
+form_role_title_info#:#The admins of this container manage the proposed Course Templates
 form_skip_introduction#:#Skip Introductions for next Wizards
 form_skip_introduction_info#:#If selected, the introduction page will not be shown for the next 6 months
+form_xcwi_container_scope#:#Scope
+form_xcwi_container_scope_info#:#Define the scope for this Course Template Container
 
 global_available#:#Global Available
 invalid_form_input#:#Invalid from input

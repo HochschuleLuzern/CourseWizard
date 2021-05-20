@@ -5,10 +5,6 @@ use CourseWizard\role\RoleTemplatesDefinition;
 
 class ilObjCourseWizard extends ilObjectPlugin
 {
-    public const POSTVAR_IS_GLOBAL = 'xcwi_is_global';
-    public const POSTVAR_ROOT_LOCATION_REF = 'xcwi_root_location_ref';
-    public const POSTVAR_ROLE_TITLE = 'xcwi_role_title';
-
     /** @var \CourseWizard\DB\TemplateContainerConfigurationRepository */
     private $xcwi_conf_repository;
 
