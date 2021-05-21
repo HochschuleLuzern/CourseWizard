@@ -58,6 +58,7 @@ return array(
     'CourseWizard\\role\\LocalRolesDefinition' => $baseDir . '/classes/role/LocalRolesDefinition.php',
     'CourseWizard\\role\\RoleTemplatesDefinition' => $baseDir . '/classes/role/RoleTemplatesDefinition.php',
     'ilCourseWizardApiGUI' => $baseDir . '/classes/class.ilCourseWizardApiGUI.php',
+    'ilCourseWizardConfig' => $baseDir . '/classes/class.ilCourseWizardConfig.php',
     'ilCourseWizardConfigGUI' => $baseDir . '/classes/class.ilCourseWizardConfigGUI.php',
     'ilCourseWizardGlobalScreenModificationProvider' => $baseDir . '/classes/class.ilCourseWizardGlobalScreenModificationProvider.php',
     'ilCourseWizardPlugin' => $baseDir . '/classes/class.ilCourseWizardPlugin.php',

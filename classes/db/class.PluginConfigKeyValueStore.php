@@ -10,6 +10,7 @@ class PluginConfigKeyValueStore
     const COL_VALUE = 'conf_value';
 
     const KEY_PLUGIN_ARRANGED = 'plugin_arranged';
+    const KEY_CRS_IMPORTER_ROLE_ID = 'crs_importer_role_id';
 
     /** @var \ilDBInterface */
     private $db;

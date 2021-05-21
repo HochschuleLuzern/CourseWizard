@@ -23,6 +23,9 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     /** @var ilLanguage */
     private $lng;
 
+    /**  */
+    private $plugin_config;
+
     public function __construct()
     {
         global $DIC;
@@ -31,19 +34,30 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $this->ctrl = $DIC->ctrl();
         $this->request = $DIC->http()->request();
         $this->lng = $DIC->language();
+        $this->plugin_config = new ilCourseWizardConfig(
+            new \CourseWizard\DB\PluginConfigKeyValueStore($DIC->database())
+        );
     }
 
-    private function initPluginConfForm() : ilPropertyFormGUI
+    private function initPluginConfForm(ilCourseWizardConfig $plugin_config) : ilPropertyFormGUI
     {
         $form = new ilPropertyFormGUI();
         $form->setFormAction($this->ctrl->getFormAction($this));
 
-        $content_creator_role = new ilRoleAutoCompleteInputGUI('Role Input', self::FORM_GLOBAL_ROLE, $this, 'apiGlobalRoles');
-        $form->addItem($content_creator_role);
+        $importer_role_id = $plugin_config->getCrsImporterRoleId() ?? '';
+        $importer_role_input = new ilTextInputGUI($this->plugin_object->txt('form_crs_importer_role_input'), self::FORM_GLOBAL_ROLE);
+        $importer_role_input->setDataSource($this->ctrl->getLinkTarget($this, 'apiGlobalRoles'));
+        $importer_role_input->setInfo($this->plugin_object->txt('form_crs_importer_role_input_info'));
+        $importer_role_input->setValue($importer_role_id);
+        $form->addItem($importer_role_input);
 
-        $selected_role = new ilNonEditableValueGUI('Title', 'non_postable');
-        $selected_role->setValue('Title of current selected role: ');
-        $form->addItem($selected_role);
+        if($importer_role_id != '') {
+            $role_title = ilObject::_lookupTitle($importer_role_id);
+            $selected_role = new ilNonEditableValueGUI($this->plugin_object->txt('form_crs_importer_role_title'), 'non_postable');
+            $selected_role->setValue($role_title);
+            $selected_role->setInfo($this->plugin_object->txt('form_crs_importer_role_title_info'));
+            $form->addItem($selected_role);
+        }
 
         $form->addCommandButton(self::CMD_SAVE, $this->plugin_object->txt('save'));
 
@@ -83,7 +97,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
                 $result = array();
                 while ($row = $res->fetchRow(ilDBConstants::FETCHMODE_OBJECT)) {
                     $result[$counter] = new stdClass();
-                    $result[$counter]->value = $row->role;
+                    $result[$counter]->value = $row->id;
                     $result[$counter]->label = $row->role . " (" . $row->id . ")";
                     ++$counter;
                 }
@@ -98,11 +112,20 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     {
         global $DIC;
 
-        $form = $this->initPluginConfForm();
+        $form = $this->initPluginConfForm($this->plugin_config);
 
         if($form->checkInput()) {
-            $global_role_name = $form->getInput(self::FORM_GLOBAL_ROLE);
-            //$DIC->rbac()->review()
+            $crs_importer_role_id = $form->getInput(self::FORM_GLOBAL_ROLE);
+
+            try {
+                $this->plugin_config->setCrsImporterRoleId($crs_importer_role_id);
+                $this->plugin_config->save();
+                ilUtil::sendSuccess($this->plugin_object->txt('confiugration_saved'));
+            } catch(InvalidArgumentException $e) {
+                ilUtil::sendFailure($this->plugin_object->txt('invalid_form_input')."\n".$this->plugin_object->txt($e->getMessage()), true);
+            }
+
+            $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
     }
 
@@ -111,15 +134,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         global $DIC;
         $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
-        //$plugin_conf_form = $this->initPluginConfForm();
+        $plugin_conf_form = $this->initPluginConfForm($this->plugin_config);
 
         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($db);
         $data_provider = new \CourseWizard\admin\CourseTemplateContainerTableDataProvider($conf_repo, $template_repo, $this->plugin_object);
         $table = new CourseTemplateContainerTableGUI($this, '', $this->plugin_object);
         $table->setData($data_provider->prepareTableDataWithAllContainers());
 
-        //$this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
-        $this->tpl->setContent($table->getHTML());
+        $this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
+        //$this->tpl->setContent($table->getHTML());
     }
 
     private function initEditContainerConfig(\CourseWizard\DB\Models\TemplateContainerConfiguration $conf)

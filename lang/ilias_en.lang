@@ -12,11 +12,16 @@ conf_container_table_title#:#Overview of Available Template Containers Objects
 cancel#:#cancel
 change_status#:#Change Status
 configure#:#Configure
+configuration_saved#:#Configuration saved
 create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
 create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
 
+form_crs_importer_role_input#:#Importer Role ID
+form_crs_importer_role_input_info#:#Role ID of existing global role for users, which should be able to use the "Course Wizard" in their course
+form_crs_importer_role_title#:#Title of given Role
+form_crs_importer_role_title_info#:#ILIAS needs a unique ID instead of a role title which technically could have duplicates. This field is only here to display the title to the given role ID for convenience reasons.
 form_crs_template_type#:#Template Type
 form_crs_template_type_info#:#Select for which type of courses you want to create the template. The selection can't be changed later!
 form_crs_template_type_multi_group#:#Multiple Classes

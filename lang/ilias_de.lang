@@ -12,11 +12,16 @@ conf_container_table_title#:#Übersicht der verfügbaren Kursvorlage Container O
 cancel#:#Abbrechen
 change_status#:#Status Ändern
 configure#:#Konfigurieren
+configuration_saved#:#Einstellungen gespeichert
 create_crs_template_draft#:#Entwurf einer Kursvorlage erstellen
 create_crs_template_form#:#Neue Kursvorlage erstellen
 create_crs_template_success#:#Kursvorlage wurde erstellt!
 create_template#:#Vorlage erstellen
 
+form_crs_importer_role_input#:#Importerrolle ID
+form_crs_importer_role_input_info#:#Rollen ID einer existierenden globalen Rolle für ILIAS benutzende, welche den "Course Wizard" bedienen dürfen
+form_crs_importer_role_title#:#Titel der angegebenen Rolle
+form_crs_importer_role_title_info#:#ILIAS benötigt eine eindeutige ID anstelle eines Rollentitles, welcher technisch gesehen für mehrere Rollen verwendet werde könnte. Aus gründen der Übersichtlichkeit, wird in diesem Feld der passende Titel zur angegebenen ID angezeigt.
 form_crs_template_type#:#Vorlage Typ
 form_crs_template_type_info#:#Wählen Sie, für welche Art von Kurs die Vorlage erstellt werden soll. Diese Auswahl kann später nicht mehr verändert werden!
 form_crs_template_type_multi_group#:#Mehrere Klassen
