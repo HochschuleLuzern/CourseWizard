@@ -20,12 +20,17 @@ class ilObjCourseWizard extends ilObjectPlugin
     /** @var \CourseWizard\CourseTemplate\management\CourseTemplateManager */
     private $crs_template_manager;
 
+    /** @var ilCourseWizardConfig */
+    private $plugin_config;
+
     public function __construct($a_ref_id = 0)
     {
         parent::__construct($a_ref_id);
 
         $this->crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($this->db);
         $this->crs_template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this, $this->crs_template_repo, $this->tree);
+        $plugin_config_repo = new \CourseWizard\DB\PluginConfigKeyValueStore($this->db);
+        $this->plugin_config = new ilCourseWizardConfig($plugin_config_repo);
     }
 
     protected function initType()
@@ -54,7 +59,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $DIC->rbac()->admin()->assignUser($role->getId(), $DIC->user()->getId());
 
         $crs_template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this, $this->crs_template_repo);
-        $crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj, $role);
+        $crs_template_manager->addNewlyCreatedCourseTemplateToDB($obj, $role, $this->plugin_config->getCrsImporterRoleId());
 
         return $obj;
     }
@@ -127,4 +132,8 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->xcwi_conf_repository->createTemplateContainerConfiguration($conf);
     }
 
+    public function getPluginConfigObject() : ilCourseWizardConfig
+    {
+        return $this->plugin_config;
+    }
 }

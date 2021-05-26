@@ -17,13 +17,13 @@ class CourseTemplateRoleManagement
     private $rolt_crs_admin;
     private $rolt_crs_non_member;
 
-    public function __construct() {
+    public function __construct($role_folder_id, $role_global_importer) {
         global $DIC;
         $this->rbac_review = $DIC->rbac()->review();
         $this->rbac_admin = $DIC->rbac()->admin();
 
-        $this->role_folder_id = ROLE_FOLDER_ID;
-        $this->role_global_importer = 4;
+        $this->role_folder_id = $role_folder_id;
+        $this->role_global_importer = $role_global_importer;
         $this->rolt_crs_admin = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR);
         $this->rolt_crs_non_member = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_NO_MEMBER);
     }

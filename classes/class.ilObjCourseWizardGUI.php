@@ -270,8 +270,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         if(isset($_POST['interruptive_items']))
         {
             $item_id = $_POST['interruptive_items'][0];
-            $repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
-            $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager($repo, new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement());
+            $crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
+
+            /** @var ilCourseWizardConfig $plugin_config */
+            $plugin_config = $this->object->getPluginConfigObject();
+            $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
+                $crs_template_repo,
+                new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement(
+                    ROLE_FOLDER_ID,
+                    $plugin_config->getCrsImporterRoleId()
+                )
+            );
 
             $template_manager->changeStatusOfCourseTemplateById($item_id, \CourseWizard\DB\Models\CourseTemplate::STATUS_PENDING);
 
@@ -302,7 +311,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
         //$collector->checkAndAddNewlyCreatedCourses();
 
-        $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId(), $this->user->getId());
+        $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId());
         $container_content = array();
         $group_views = array();
         foreach($crs_templates_for_overview as $category_name => $crs_list) {
@@ -353,9 +362,19 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $courses[] = $item;
             }
 
-            $group_views[] = $f->item()->group($category_name, $courses);
+            $ctaegory_title = $this->plugin->txt($category_name);
+            if(count($courses) > 0) {
+                $group_views[] = $f->item()->group($ctaegory_title, $courses);
+            } else {
+                $group_views[] = $f->item()->group(
+                    $ctaegory_title,
+                    [
+                        $f->item()->standard($this->plugin->txt('overview_no_crs_templates'))
+                    ]
+                );
+            }
         }
-        $container_content[] = $f->panel()->listing()->standard('Kurstemplates', $group_views);
+        $container_content[] = $f->panel()->listing()->standard($this->plugin->txt('overview_crs_templates'), $group_views);
 
         $html = $r->render($container_content);
         $this->tpl->setContent($html);

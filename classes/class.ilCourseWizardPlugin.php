@@ -8,7 +8,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     private $role_template_list;
 
     /** @var \CourseWizard\DB\PluginConfigKeyValueStore  */
-    private $plugin_config;
+    private $plugin_config_repo;
 
     public function __construct()
     {
@@ -22,7 +22,8 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
             $this->provider_collection->setModificationProvider(new ilCourseWizardGlobalScreenModificationProvider($DIC, $this));
         }
 
-        $this->plugin_config = new \CourseWizard\DB\PluginConfigKeyValueStore($this->db);
+        $this->plugin_config_repo = new \CourseWizard\DB\PluginConfigKeyValueStore($this->db);
+
 
         $this->role_template_list = array(
             array('title' => 'xcwi_container_admin',
@@ -41,7 +42,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
         foreach($rolt_definition_list as $rolt_definition) {
 
-            $obj_id = $this->plugin_config->get($rolt_definition->getConfKey());
+            $obj_id = $this->plugin_config_repo->get($rolt_definition->getConfKey());
 
             if ($obj_id != null) {
                 $rolt = ilObjectFactory::getInstanceByObjId($obj_id, false);
@@ -60,9 +61,9 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 
     public function activate()
     {
-        if($this->plugin_config->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED) != '1') {
+        if($this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED) != '1') {
             $this->arrangePluginArtifacts();
-            $this->plugin_config->set(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED, '1');
+            $this->plugin_config_repo->set(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED, '1');
 
             ilUtil::sendSuccess($this->txt('plugin_db_artifacts_created'), true);
         }
@@ -92,7 +93,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         foreach(\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
             $obj_role = $this->createRoleTemplate($rolt_definition);
 
-            $this->plugin_config->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
+            $this->plugin_config_repo->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
 
             ilUtil::sendSuccess($this->txt('plugin_rolt_created') . ' ' . $rolt_definition->getTitle(), true);
         }
@@ -125,5 +126,10 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     public function allowCopy()
     {
         return false;
+    }
+
+    public function getGlobalCrsImporterRole()
+    {
+        return $this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_CRS_IMPORTER_ROLE_ID);
     }
 }

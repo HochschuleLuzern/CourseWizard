@@ -105,9 +105,14 @@ class ilObjCourseWizardTemplateManagementGUI
             $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
             $model = $crs_repo->getCourseTemplateByTemplateId($template_id);
 
-            $crs_template_status_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager($crs_repo, new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement());
+            $crs_template_status_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
+                $crs_repo,
+                new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement(
+                    ROLE_FOLDER_ID,
+                    $this->plugin->getGlobalCrsImporterRole()
+                )
+            );
             $crs_template_status_manager->changeStatusOfCourseTemplateById($template_id, $status_code);
-            $crs_repo->updateTemplateStatus($model, $status_code);
 
             ilUtil::sendSuccess('Status changed to: ' . $status_code, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);

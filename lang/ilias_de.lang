@@ -47,6 +47,10 @@ invalid_form_input#:#Ungültige Eingabe
 manage_proposals#:#Vorschläge verwalten
 no#:#Nein
 overview#:#Übersicht
+overview_approved_templates#:#Bestätigte
+overview_crs_templates#:#Kursvorlagen Übersicht
+overview_no_crs_templates#:#In dieser Liste befinden sich zurzeit noch keine Kursvorlagen
+overview_your_templates#:#Von Ihnen erstellte
 propose#:#Vorschlagen
 propose_template#:#Vorlage Vorschlagen
 propose_template_text#:#Möchten Sie den folgenden Kurs als Vorlage vorschlagen:

@@ -47,6 +47,10 @@ invalid_form_input#:#Invalid from input
 manage_proposals#:#Manage Proposals
 no#:#No
 overview#:#Overview
+overview_approved_templates#:#Approved
+overview_crs_templates#:#Course Templates Overview
+overview_no_crs_templates#:#There are currently no Course Templates in this list
+overview_your_templates#:#Created By You
 propose#:#Propose
 propose_template#:#Propose Template
 propose_template_text#:#Do you want to propose following template:

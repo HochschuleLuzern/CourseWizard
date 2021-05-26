@@ -30,7 +30,7 @@ class CourseTemplateCollector
         $approved_templates = $this->crs_repo->getAllApprovedCourseTemplates($this->container_ref_id);
         $user_templates = $this->crs_repo->getAllCourseTemplatesForUserByContainerRefId($user_id_of_viewer, $this->container_ref_id);
 
-        return array("user_templates" => $user_templates, "approved" => $approved_templates);
+        return array("overview_your_templates" => $user_templates, "overview_approved_templates" => $approved_templates);
     }
 
     public function checkAndAddNewlyCreatedCourses()
