@@ -92,7 +92,14 @@ view_course_template#:#Kursvorlage ansehen
 
 wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
-wizard_introduction_text#:#
+wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs Aufgrund einer Vorlage einzurichten.
+wizard_introduction_text_p2#:#<b>Schritt 1</b>: Lesen Sie diese Anleitung aufmerksam durch. Klicken Sie anschliessend auf "Weiter" am Ende der Seite um zum nächsten Schritt zu gelangen. Wenn Sie keine Hilfe beim Einrichten benötigen, klicken Sie auf den Knopf "Kurs ohne Hilfe Einrichten" am Ende der Seite.
+wizard_introduction_text_p3#:#<b>Schritt 2</b>: Auf der folgenden Seite können Sie eine der verfügbaren Kursvorlagen auswählen. Ihnen werden sowohl die Kursvorlagen Ihres Departementes, sowie auch die globalen Kursvorlagen der HSLU zur verfügung stehen. Alternativ können Sie auch einen Kurs auswählen, in welchem Sie als Kursadmin eingetragen sind.
+wizard_introduction_text_p4#:#<b>Schritt 3</b>: Aufgrund der Auswahl im 2. Schritt, können Sie auf dieser Seite auswählen welche Inhalte übernommen werden sollen.
+wizard_introduction_text_p5#:#<b>Schritt 4</b>: Die letzte Seite bietet noch einige Einstellungsmöglichkeiten an, welche auf Ihren kurs angewendet werden. Mit einem Klick auf "Import ausführen" wird die ausgewähle Vorlage importiert und auf den jetzigen Kurs angewendet werden.
+wizard_introduction_text_p6#:#<b>Kurs ohne Hilfe einrichten</b>: Möchten Sie den Kurs ohne Hilfe einrichten, so klicken Sie auf den Knopf unten "Ohne Wizard einrichten".
+
+
 wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. To open the Course Wizard again, click on the following link:
 wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
 wizard_settings_text#:#Choose some additional settings that you want to apply to your course
