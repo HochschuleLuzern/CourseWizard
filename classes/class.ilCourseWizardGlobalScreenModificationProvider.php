@@ -3,6 +3,34 @@
 class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen\Scope\Layout\Provider\AbstractModificationPluginProvider
 {
 
+    private function checkIfWizardCouldBeDisplayed(int $ref_id) : bool
+    {
+        return (
+            // Object type has to be a course
+            ilObject::_lookupType($ref_id, true) == 'crs'
+
+            // ... and course should be empty ...
+            && count($this->dic->repositoryTree()->getChilds($ref_id)) <= 0
+
+            // ... and parent object has to be a category (no course wizard container or anything else) ...
+            && ilObject::_lookupType($this->dic->repositoryTree()->getParentId($ref_id), true) == 'cat'
+
+            // ... and user has permissions to see the wizard ...
+            && $this->userHasWizardPermissions($this->dic->user(), $ref_id)
+
+            // ... and user is on the content-view-page
+            && $this->isContentViewPage($this->dic->http()->request())
+        );
+    }
+
+    private function userHasWizardPermissions(ilObjUser $user, int $ref_id)
+    {
+        return $this->dic->rbac()
+                         ->system()
+                         ->checkAccessOfUser($user->getId(), 'write',$ref_id);
+    }
+
+
     private function showWizardInfoImportRunning()
     {
         ilUtil::sendInfo("Import currently running", true);
@@ -13,7 +41,6 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         $ctrl = $this->dic->ctrl();
         $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $link = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
-        $btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal", $link);
         $btn = $this->dic->ui()->factory()->link()->standard("Reactivate Modal (Link btn)", $link);
         $btn_str = $this->dic->ui()->renderer()->render($btn);
         ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
@@ -57,37 +84,39 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
     {
         // TODO: Needs refactoring
-        if($screen_context_stack->current()->hasReferenceId()){
+        try{
+            if($screen_context_stack->current()->hasReferenceId()){
 
-            $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
-            $request = $this->dic->http()->request();
-            if(ilObject::_lookupType($ref_id, true) == 'crs'
-                && count($this->dic->repositoryTree()->getChilds($ref_id)) <= 0
-                && ilObject::_lookupType($this->dic->repositoryTree()->getParentId($ref_id), true) == 'cat'
-                && $this->isContentViewPage($this->dic->http()->request())) {
+                $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
 
-                $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($this->dic->database(), $this->dic->user());
-                $wizard_flow = $wizard_repo->getWizardFlowForCrs($ref_id);
+                if($this->checkIfWizardCouldBeDisplayed($ref_id)) {
 
-                switch($wizard_flow->getCurrentStatus()) {
-                    case \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS:
-                        $this->showWizardModal($ref_id);
-                        break;
+                    $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($this->dic->database(), $this->dic->user());
+                    $wizard_flow = $wizard_repo->getWizardFlowForCrs($ref_id);
 
-                    case \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED:
-                        $this->showWizardInfoPostponed($ref_id);
-                        break;
+                    switch ($wizard_flow->getCurrentStatus()) {
+                        case \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS:
+                            $this->showWizardModal($ref_id);
+                            break;
 
-                    case \CourseWizard\DB\Models\WizardFlow::STATUS_IMPORTING:
-                        $this->showWizardInfoImportRunning();
-                        break;
+                        case \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED:
+                            $this->showWizardInfoPostponed($ref_id);
+                            break;
 
-                    default:
-                        break;
+                        case \CourseWizard\DB\Models\WizardFlow::STATUS_IMPORTING:
+                            $this->showWizardInfoImportRunning();
+                            break;
 
+                        default:
+                            break;
+
+                    }
                 }
-
             }
+        } catch(Exception $e)
+        {
+            // If there is a bug in showing the wizard like access-checking because of unhandled ILIAS-Context or something else
+            // Do nothing. Do nothing means therefore -> do not show the wizard
         }
         return parent::getContentModification($screen_context_stack); // TODO: Change the autogenerated stub
     }

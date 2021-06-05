@@ -119,14 +119,23 @@ class ilCourseWizardApiGUI
                         exit;
 
                     case self::CMD_EXECUTE_CRS_IMPORT:
+
+
+
                         $obj_str = $_POST['obj'];
                         $obj = json_decode($obj_str, true);
                         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
 
                         $factory = new CourseImportObjectFactory($obj, $template_repo);
                         $course_import_data = $factory->createCourseImportDataObject();
-                        $controller = new CourseImportController();
-                        $controller->executeImport($course_import_data);
+
+                        if(!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
+                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                            exit;
+                        } else {
+                            $controller = new CourseImportController();
+                            $controller->executeImport($course_import_data);
+                        }
 
                         break;
 
