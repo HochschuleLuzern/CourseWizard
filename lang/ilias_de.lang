@@ -1,5 +1,8 @@
 action#:#Aktion
 author#:#Autor
+obj_xcwi#:#Kurswizard
+objs_xcwi#:#Kursvorlagen
+
 btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
 btn_back#:#Zurück
 btn_close_modal#:#Modal schliessen
