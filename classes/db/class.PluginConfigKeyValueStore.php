@@ -26,24 +26,24 @@ class PluginConfigKeyValueStore
 
     public function get(string $key) : ?string
     {
-        if(isset($this->data_cache[$key])) {
+        if (isset($this->data_cache[$key])) {
             return $this->data_cache[$key];
         }
 
         $query = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE ' . self::COL_KEY . '=' . $this->db->quote($key, \ilDBConstants::T_TEXT);
         $result = $this->db->query($query);
 
-        if($data = $this->db->fetchAssoc($result)) {
+        if ($data = $this->db->fetchAssoc($result)) {
             $this->data_cache[$key] = $data[self::COL_VALUE];
             return $data[self::COL_VALUE];
         }
 
-        return NULL;
+        return null;
     }
 
     public function set(string $key, string $value)
     {
-        if($this->get($key) == NULL) {
+        if ($this->get($key) == null) {
             $this->insertNewKeyValuePair($key, $value);
         } else {
             $this->updateExistingKeyValuePair($key, $value);

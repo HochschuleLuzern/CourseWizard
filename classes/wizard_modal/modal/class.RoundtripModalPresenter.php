@@ -32,9 +32,9 @@ class RoundtripModalPresenter implements ModalPresenter
 
         /*
         $html = '<div style="overflw-y: hidden; width: 100%; padding: 0; display: flex; text-align: center">
-					<div width="25%" style="display: inline-block; width: 25%; margin: 0">1. Einführung</div><div width="25%" style="display: inline-block; width: 25%; margin: 0; background: #4c6586; color: white;">2. Auswahl</div><div width="25%" style="display: inline-block; width: 25%; margin: 0">3. Vererbung</div>	
-					<div width="25%" style="display: inline-block; width: 25%; margin: 0">4. Einstellung</div>	
- 	      </div>';*/
+                    <div width="25%" style="display: inline-block; width: 25%; margin: 0">1. Einführung</div><div width="25%" style="display: inline-block; width: 25%; margin: 0; background: #4c6586; color: white;">2. Auswahl</div><div width="25%" style="display: inline-block; width: 25%; margin: 0">3. Vererbung</div>
+                    <div width="25%" style="display: inline-block; width: 25%; margin: 0">4. Einstellung</div>
+          </div>';*/
 
 
 
@@ -42,11 +42,10 @@ class RoundtripModalPresenter implements ModalPresenter
         $first = true;
         $with_in_percent = 100 / count($steps);
         $number = 1;
-        foreach($steps as $step)
-        {
+        foreach ($steps as $step) {
             $step_title = $this->plugin->txt($step['title']);
             $active_class = $step['title'] == $current_navigation_step ? ' active' : '';
-            $html .= '<div class="xcwi_modal_navigation_step'.$active_class.'" style="width: '.$with_in_percent.'%;">'.$step_title.'</div>';
+            $html .= '<div class="xcwi_modal_navigation_step' . $active_class . '" style="width: ' . $with_in_percent . '%;">' . $step_title . '</div>';
             $number++;
             /*
             if(!$first) {
@@ -86,8 +85,10 @@ class RoundtripModalPresenter implements ModalPresenter
         $close_signal = $modal->getCloseSignal();
 
         $header = $this->getStepsHeader($this->presenter->getCurrentNavigationStep());
-        $content = array_merge([$this->ui_factory->legacy('<div id="coursewizard">')],
-            $this->presenter->getModalPageAsComponentArray());
+        $content = array_merge(
+            [$this->ui_factory->legacy('<div id="coursewizard">')],
+            $this->presenter->getModalPageAsComponentArray()
+        );
         $content[] = $this->ui_factory->legacy('</div>');
         $content[] = $this->presenter->getJSConfigsAsUILegacy($replace_signal, $close_signal);
 

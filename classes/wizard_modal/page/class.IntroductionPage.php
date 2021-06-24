@@ -6,9 +6,10 @@ use ILIAS\UI\Implementation\Component\Input\Field\Checkbox;
 
 class IntroductionPage extends BaseModalPagePresenter
 {
-    protected const JS_CONTINUE_AFTER_INTRODUCTION_PAGE =  self::JS_NAMESPACE . '.' . 'introductionPageFinished';
+    protected const JS_CONTINUE_AFTER_INTRODUCTION_PAGE = self::JS_NAMESPACE . '.' . 'introductionPageFinished';
 
-    public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory){
+    public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
+    {
         parent::__construct($state_machine, $ui_factory);
 
         $this->current_navigation_step = 'step_introduction';
@@ -24,12 +25,12 @@ class IntroductionPage extends BaseModalPagePresenter
         $text = $this->plugin->txt('wizard_introduction_text');
 
         $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p1').'</p>');
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p2').'</p>');
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p3').'</p>');
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p4').'</p>');
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p5').'</p>');
-        $ui_components[] = $this->ui_factory->legacy('<p>'.$this->plugin->txt('wizard_introduction_text_p6').'</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p1') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p2') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p3') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p4') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p5') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p6') . '</p>');
 
         //$ui_components[] = $this->ui_factory->legacy($text);//'Willkommen im ILIAS Kurs Wizard!<br><br>Hier wird irgendwann mal eine kurze Einleitung stehen die erklärt, was das eigentlich ist und wie man es bedienen soll. Aber im Moment ist hier einfach dieser nutzlose Text.<br>');
         $ui_components[] = $this->ui_factory->divider()->horizontal();
@@ -44,14 +45,15 @@ class IntroductionPage extends BaseModalPagePresenter
         return $ui_components;
     }
 
-    public function getJsNextPageMethod() : string {
+    public function getJsNextPageMethod() : string
+    {
         return self::JS_CONTINUE_AFTER_INTRODUCTION_PAGE;
     }
-/*
-    protected function getNextPageButton(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
-    {
-        $next_page_name = $this->state_machine->getPageForNextState();
-        $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
-        return $this->ui_factory->button()->primary($this->plugin->txt('btn_continue'), $replace_signal->withAsyncRenderUrl($url));
-    }*/
+    /*
+        protected function getNextPageButton(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
+        {
+            $next_page_name = $this->state_machine->getPageForNextState();
+            $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
+            return $this->ui_factory->button()->primary($this->plugin->txt('btn_continue'), $replace_signal->withAsyncRenderUrl($url));
+        }*/
 }

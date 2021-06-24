@@ -13,7 +13,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
     /** @var array */
     protected $view_control;
 
-    protected const JS_POST_SELECTION_METHOD =  self::JS_NAMESPACE . '.' . 'pushTemplateSelection';
+    protected const JS_POST_SELECTION_METHOD = self::JS_NAMESPACE . '.' . 'pushTemplateSelection';
 
     public function __construct(RadioSelectionViewControlGUI $view_control, StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {

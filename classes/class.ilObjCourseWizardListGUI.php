@@ -2,7 +2,6 @@
 
 class ilObjCourseWizardListGUI extends ilObjectPluginListGUI
 {
-
     public function getGuiClass()
     {
         return ilObjCourseWizardGUI::class;
@@ -24,14 +23,14 @@ class ilObjCourseWizardListGUI extends ilObjectPluginListGUI
         $this->commands = array(
             array(
                 "permission" => "read",
-                "cmd"        => ilObjCourseWizardGUI::CMD_SHOW_MAIN,
-                "default"    => true
+                "cmd" => ilObjCourseWizardGUI::CMD_SHOW_MAIN,
+                "default" => true
             ),
             array(
                 "permission" => "write",
-                "cmd"        => ilObjCourseWizardGUI::CMD_EDIT,
-                "txt"        => $this->txt('settings'),
-                "default"    => false
+                "cmd" => ilObjCourseWizardGUI::CMD_EDIT,
+                "txt" => $this->txt('settings'),
+                "default" => false
             ),
         );
 

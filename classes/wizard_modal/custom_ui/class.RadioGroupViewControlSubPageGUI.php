@@ -24,8 +24,8 @@ class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
         $content = array();
 
         /** @var TemplateSelectionRadioOptionGUI $option */
-        foreach($this->options as $option) {
-            foreach($option->getAsLegacyComponent() as $ui_component) {
+        foreach ($this->options as $option) {
+            foreach ($option->getAsLegacyComponent() as $ui_component) {
                 $content[] = $ui_component;
             }
         }

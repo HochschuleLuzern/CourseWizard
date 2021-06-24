@@ -4,7 +4,7 @@ namespace CourseWizard\Modal\Page;
 
 class SettingsPage extends BaseModalPagePresenter
 {
-    protected const JS_POST_SELECTION_METHOD =  self::JS_NAMESPACE . '.' . 'executeImport';
+    protected const JS_POST_SELECTION_METHOD = self::JS_NAMESPACE . '.' . 'executeImport';
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
@@ -23,14 +23,15 @@ class SettingsPage extends BaseModalPagePresenter
         );
     }
 
-    private function settingToUIComponent($setting) {
+    private function settingToUIComponent($setting)
+    {
         $ui_component = null;
 
-        switch($setting['title']) {
+        switch ($setting['title']) {
             case \CourseSettingsData::FORM_SORT_DROPDOWN_TITLE:
                 $title = $this->plugin->txt($setting['title']);
                 $options = array();
-                foreach($setting['options'] as $option) {
+                foreach ($setting['options'] as $option) {
                     $options[] = $this->plugin->txt($option);
                 }
 
@@ -52,9 +53,9 @@ class SettingsPage extends BaseModalPagePresenter
         $ui_components[] = $this->ui_factory->legacy($text);
 
         $settings = \CourseSettingsData::getSettings();
-        foreach($settings as $setting) {
+        foreach ($settings as $setting) {
             $ui_component = $this->settingToUIComponent($setting);
-            if($ui_component) {
+            if ($ui_component) {
                 $ui_components[] = $ui_component;
             }
         }

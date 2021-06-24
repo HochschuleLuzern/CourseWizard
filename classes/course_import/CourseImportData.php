@@ -7,9 +7,10 @@ class CourseImportData
     private $content_inheritance_data;
     private $specific_settings_data;
 
-    public function __construct(int $template_crs_ref_id, int $target_crs_ref_id, array $content_inheritance_data, $specific_settings_data) {
+    public function __construct(int $template_crs_ref_id, int $target_crs_ref_id, array $content_inheritance_data, $specific_settings_data)
+    {
         $this->template_crs_ref_id = $template_crs_ref_id;
-        $this->target_crs_ref_id   = $target_crs_ref_id;
+        $this->target_crs_ref_id = $target_crs_ref_id;
         $this->content_inheritance_data = $content_inheritance_data;
         $this->specific_settings_data = $specific_settings_data;
     }
@@ -33,5 +34,4 @@ class CourseImportData
     {
         return $this->specific_settings_data;
     }
-
 }

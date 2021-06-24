@@ -70,7 +70,6 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->setLimit(999999);
 
         $this->setFormName('cmd');
-
     }
 
     /**
@@ -206,5 +205,4 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         }
         $this->tpl->parseCurrentBlock();
     }
-
 }

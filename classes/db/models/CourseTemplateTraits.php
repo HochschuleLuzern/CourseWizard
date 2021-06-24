@@ -6,8 +6,7 @@ trait CourseTemplateTraits
 {
     public function getStatusAsLanguageVariable() : string
     {
-        switch($this->getStatusAsCode())
-        {
+        switch ($this->getStatusAsCode()) {
             case CourseTemplate::STATUS_DRAFT:
                 return 'status_draft';
 
@@ -30,8 +29,7 @@ trait CourseTemplateTraits
 
     public function getTemplateTypeAsLanguageVariable() : string
     {
-        switch($this->getTemplateTypeAsCode())
-        {
+        switch ($this->getTemplateTypeAsCode()) {
             case CourseTemplate::TYPE_SINGLE_CLASS_COURSE:
                 return "crs_template_single_class";// "Ausstehend";
                 break;

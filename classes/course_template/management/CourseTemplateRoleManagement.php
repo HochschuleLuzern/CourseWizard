@@ -17,7 +17,8 @@ class CourseTemplateRoleManagement
     private $rolt_crs_admin;
     private $rolt_crs_non_member;
 
-    public function __construct($role_folder_id, $role_global_importer) {
+    public function __construct($role_folder_id, $role_global_importer)
+    {
         global $DIC;
         $this->rbac_review = $DIC->rbac()->review();
         $this->rbac_admin = $DIC->rbac()->admin();
@@ -30,12 +31,12 @@ class CourseTemplateRoleManagement
 
     private function setPermissionsForRole(int $target_role_id, int $role_template_id, int $crs_template_ref)
     {
-        $this->rbac_admin->copyRoleTemplatePermissions($role_template_id,
+        $this->rbac_admin->copyRoleTemplatePermissions(
+            $role_template_id,
             ROLE_FOLDER_ID,
             $crs_template_ref,
             $target_role_id
-            );
-
+        );
     }
 
     public function setRolePermissionsForDraftStatus(CourseTemplate $crs_template)

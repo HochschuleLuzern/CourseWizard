@@ -9,14 +9,13 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
 
     public function __construct(\CourseWizard\DB\Models\CourseTemplate $template_model, \ilObjCourse $course_object)
     {
-        if($course_object->getRefId() != $template_model->getCrsRefId()
-        || $course_object->getId() != $template_model->getCrsObjId()){
+        if ($course_object->getRefId() != $template_model->getCrsRefId()
+        || $course_object->getId() != $template_model->getCrsObjId()) {
             throw new \InvalidArgumentException("IDs of given Template Model and Course Object do not match.");
         }
 
         $this->course_object = $course_object;
         $this->template_model = $template_model;
-
     }
 
     public function getTemplateId() : int

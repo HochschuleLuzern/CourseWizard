@@ -23,20 +23,20 @@ class TemplateContainerConfigurationRepository
     {
         $this->db = $db;
 
-        if(!$db->sequenceExists(self::TABLE_NAME)) {
+        if (!$db->sequenceExists(self::TABLE_NAME)) {
             $db->createSequence(self::TABLE_NAME);
         }
     }
 
     public function getContainerConfiguration(int $obj_id) : ?TemplateContainerConfiguration
     {
-        if($this->data_cache[$obj_id]) {
+        if ($this->data_cache[$obj_id]) {
             return $this->data_cache[$obj_id];
         }
 
         $query = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE ' . self::COL_OBJ_ID . ' = ' . $this->db->quote($obj_id, \ilDBConstants::T_INTEGER);
         $result = $this->db->query($query);
-        if($row = $this->db->fetchAssoc($result)) {
+        if ($row = $this->db->fetchAssoc($result)) {
             $model = $this->getObjFromRow($row);
             $this->data_cache[$obj_id] = $model;
             return $model;
@@ -51,7 +51,7 @@ class TemplateContainerConfigurationRepository
         $result = $this->db->query($query);
 
         $list = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $model = $this->getObjFromRow($row);
             $this->data_cache[$model->getObjId()] = $model;
             $list[] = $model;
@@ -62,7 +62,7 @@ class TemplateContainerConfigurationRepository
 
     public function setContainerConfiguration(TemplateContainerConfiguration $conf)
     {
-        if($this->getContainerConfiguration($conf->getObjId()) == null) {
+        if ($this->getContainerConfiguration($conf->getObjId()) == null) {
             $this->createTemplateContainerConfiguration($conf);
         } else {
             $this->updateTemplateContainerConfiguration($conf);
@@ -109,6 +109,7 @@ class TemplateContainerConfigurationRepository
             $row[self::COL_OBJ_ID],
             $row[self::COL_ROOT_LOCATION_REF_ID],
             $row[self::COL_RESPONSIBLE_ROLE_ID],
-            $row[self::COL_IS_GLOBAL] != 0);
+            $row[self::COL_IS_GLOBAL] != 0
+        );
     }
 }

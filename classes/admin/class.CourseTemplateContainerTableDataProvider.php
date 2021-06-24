@@ -80,10 +80,9 @@ class CourseTemplateContainerTableDataProvider
             $link = $this->ctrl->getLinkTargetByClass([\ilObjPluginDispatchGUI::class, \ilObjCourseWizardGUI::class, \ilPermissionGUI::class], 'perm');
 
             return $this->getAsRenderedLink($number_of_role_members, $link);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $number_of_role_members;
         }
-
     }
 
     private function getNumberOfCrsTemplatesAsLink(int $obj_id) : string
@@ -103,8 +102,7 @@ class CourseTemplateContainerTableDataProvider
         $data = array();
 
         /** @var TemplateContainerConfiguration $conf */
-        foreach($this->conf_repo->getAllConfigs() as $conf) {
-
+        foreach ($this->conf_repo->getAllConfigs() as $conf) {
             $table_row = array();
             $this->ctrl->setParameterByClass(\ilCourseWizardConfigGUI::class, 'container_id', $conf->getObjId());
             $conf_link = $this->ctrl->getLinkTargetByClass(\ilCourseWizardConfigGUI::class, \ilCourseWizardConfigGUI::CMD_EDIT_CONTAINER_CONF);

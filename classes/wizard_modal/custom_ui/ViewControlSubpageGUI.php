@@ -4,5 +4,4 @@ namespace CourseWizard\CustomUI;
 
 interface ViewControlSubpageGUI
 {
-
 }

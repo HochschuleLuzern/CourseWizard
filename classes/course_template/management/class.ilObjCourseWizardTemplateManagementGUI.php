@@ -11,7 +11,7 @@ use CourseWizard\DB\Models\CourseTemplate;
 class ilObjCourseWizardTemplateManagementGUI
 {
     const GET_PARAM_DEP_ID = 'dep_id';
-   // public const CMD_MANAGE_PROPOSALS = 'manage_proposals';
+    // public const CMD_MANAGE_PROPOSALS = 'manage_proposals';
     const CMD_MANAGE_PROPOSALS = 'show_crs_templates';
     const CMD_CHANGE_COURSE_STATUS = 'approve_crs_template';
 
@@ -52,7 +52,7 @@ class ilObjCourseWizardTemplateManagementGUI
         $ctrl = $DIC->ctrl();
         $cmd = $ctrl->getCmd();
 
-        switch($cmd) {
+        switch ($cmd) {
             case self::CMD_MANAGE_PROPOSALS:
                 $this->showCourseTemplates();
                 break;
@@ -77,7 +77,7 @@ class ilObjCourseWizardTemplateManagementGUI
 
         $table = new CourseWizard\CourseTemplate\CourseTemplateManagementTableGUI($this, self::CMD_MANAGE_PROPOSALS, $this->plugin);
 
-        $data = array(array('template_title' => "Titel 1", 'template_description' => "Description", 'proposal_date'=>'Heute', 'status' => 'Pending'));
+        $data = array(array('template_title' => "Titel 1", 'template_description' => "Description", 'proposal_date' => 'Heute', 'status' => 'Pending'));
         $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
         $data = $data_provider->getCourseTemplatesForManagementTable();
         $table->setData($data);
@@ -90,15 +90,15 @@ class ilObjCourseWizardTemplateManagementGUI
     {
         global $DIC;
         $ctrl = $DIC->ctrl();
-        $template_id = (int)$_POST['template_id'];
-        $status_code = (int)$_POST['status'];
+        $template_id = (int) $_POST['template_id'];
+        $status_code = (int) $_POST['status'];
 
 
         $allowed_status = array(CourseTemplate::STATUS_CHANGE_REQUESTED,
                                 CourseTemplate::STATUS_APPROVED,
                                 CourseTemplate::STATUS_DECLINED);
 
-        if(!in_array($status_code, $allowed_status)){
+        if (!in_array($status_code, $allowed_status)) {
             ilUtil::sendFailure("Invalid Status given: " . $status_code, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         } else {
@@ -121,7 +121,5 @@ class ilObjCourseWizardTemplateManagementGUI
 
     public function disproveCrsTemplate()
     {
-
     }
-
 }

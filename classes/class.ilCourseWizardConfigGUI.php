@@ -51,7 +51,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $importer_role_input->setValue($importer_role_id);
         $form->addItem($importer_role_input);
 
-        if($importer_role_id != '') {
+        if ($importer_role_id != '') {
             $role_title = ilObject::_lookupTitle($importer_role_id);
             $selected_role = new ilNonEditableValueGUI($this->plugin_object->txt('form_crs_importer_role_title'), 'non_postable');
             $selected_role->setValue($role_title);
@@ -66,8 +66,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
     public function performCommand($cmd)
     {
-        switch($cmd)
-        {
+        switch ($cmd) {
             case self::CMD_CONFIGURE:
                 $this->showConfigForm();
                 break;
@@ -114,15 +113,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $form = $this->initPluginConfForm($this->plugin_config);
 
-        if($form->checkInput()) {
+        if ($form->checkInput()) {
             $crs_importer_role_id = $form->getInput(self::FORM_GLOBAL_ROLE);
 
             try {
                 $this->plugin_config->setCrsImporterRoleId($crs_importer_role_id);
                 $this->plugin_config->save();
                 ilUtil::sendSuccess($this->plugin_object->txt('confiugration_saved'));
-            } catch(InvalidArgumentException $e) {
-                ilUtil::sendFailure($this->plugin_object->txt('invalid_form_input')."\n".$this->plugin_object->txt($e->getMessage()), true);
+            } catch (InvalidArgumentException $e) {
+                ilUtil::sendFailure($this->plugin_object->txt('invalid_form_input') . "\n" . $this->plugin_object->txt($e->getMessage()), true);
             }
 
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
@@ -141,7 +140,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         $table = new CourseTemplateContainerTableGUI($this, '', $this->plugin_object);
         $table->setData($data_provider->prepareTableDataWithAllContainers());
 
-        $this->tpl->setContent($plugin_conf_form->getHTML() .  $table->getHTML());
+        $this->tpl->setContent($plugin_conf_form->getHTML() . $table->getHTML());
         //$this->tpl->setContent($table->getHTML());
     }
 
@@ -158,9 +157,9 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $root_location_input = new ilTextInputGUI($this->plugin_object->txt('form_root_location_ref'), ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
         $root_location_input->setInfo($this->plugin_object->txt('form_root_location_ref_info'));
-        if($conf->isGlobal()) {
+        if ($conf->isGlobal()) {
             $root_location_ref_id = 1;
-            foreach(ilObject::_getAllReferences($conf->getObjId()) as $ref_id) {
+            foreach (ilObject::_getAllReferences($conf->getObjId()) as $ref_id) {
                 $root_location_ref_id = $DIC->repositoryTree()->getParentId($ref_id);
             }
         } else {
@@ -168,7 +167,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         }
         $root_location_input->setValue($root_location_ref_id);
         $root_location_input->setRequired(true);
-        $limited_scope = new ilRadioOption($this->plugin_object->txt('form_limited_scope'),  ilObjCourseWizardGUI::FORM_LIMITED_SCOPE, $this->plugin_object->txt('form_limited_scope_info'));
+        $limited_scope = new ilRadioOption($this->plugin_object->txt('form_limited_scope'), ilObjCourseWizardGUI::FORM_LIMITED_SCOPE, $this->plugin_object->txt('form_limited_scope_info'));
         $limited_scope->addSubItem($root_location_input);
         $radio_availability_scope->addOption($limited_scope);
 
@@ -197,9 +196,9 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $this->ctrl->setParameter($this, 'container_id', $container_id);
 
-        $db        = $DIC->database();
+        $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
-        $conf      = $conf_repo->getContainerConfiguration($container_id);
+        $conf = $conf_repo->getContainerConfiguration($container_id);
 
         $form = $this->initEditContainerConfig($conf);
 
@@ -216,16 +215,15 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
 
-        $db        = $DIC->database();
+        $db = $DIC->database();
         $conf_repo = new \CourseWizard\DB\TemplateContainerConfigurationRepository($db);
-        $conf      = $conf_repo->getContainerConfiguration($container_id);
+        $conf = $conf_repo->getContainerConfiguration($container_id);
 
         $form = $this->initEditContainerConfig($conf);
 
-        if($form->checkInput()) {
-
+        if ($form->checkInput()) {
             $scope = $form->getInput(ilObjCourseWizardGUI::FORM_CONTAINER_SCOPE);
-            if($scope == ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE) {
+            if ($scope == ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE) {
                 $conf = $conf->withGlobalScope();
             } else {
                 $root_location_ref_id = $form->getInput(ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
@@ -242,5 +240,4 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             $this->ctrl->redirect($this, self::CMD_EDIT_CONTAINER_CONF);
         }
     }
-
 }

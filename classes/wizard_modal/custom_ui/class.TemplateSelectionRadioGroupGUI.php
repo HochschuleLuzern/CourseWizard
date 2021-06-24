@@ -19,11 +19,13 @@ class TemplateSelectionRadioGroupGUI
         $this->template_list = array();
     }
 
-    public function addTemplateToList(ModalCourseTemplate $crs_template) {
+    public function addTemplateToList(ModalCourseTemplate $crs_template)
+    {
         $this->template_list[] = $crs_template;
     }
 
-    private function renderOptionAsPanel(ModalCourseTemplate $crs_template) {
+    private function renderOptionAsPanel(ModalCourseTemplate $crs_template)
+    {
         global $DIC;
         $f = $DIC->ui()->factory();
         $r = $DIC->ui()->renderer();
@@ -49,7 +51,8 @@ class TemplateSelectionRadioGroupGUI
         return $html;
     }
 
-    private function renderOptionAsItem(ModalCourseTemplate $crs_template) {
+    private function renderOptionAsItem(ModalCourseTemplate $crs_template)
+    {
         global $DIC;
         $f = $DIC->ui()->factory();
         $r = $DIC->ui()->renderer();
@@ -150,9 +153,8 @@ class TemplateSelectionRadioGroupGUI
         $css_container_id = 'crs_temp_selection';
 
         $html = "<div class='crs_temp_selection' id='$css_container_id' style='box-sizing: content-box'>";
-        foreach($this->template_list as $crs_template) {
-
-            switch($render_option) {
+        foreach ($this->template_list as $crs_template) {
+            switch ($render_option) {
                 case self::RENDER_PANEL:
                     $html .= $this->renderOptionAsPanel($crs_template);
                     break;
@@ -169,13 +171,9 @@ class TemplateSelectionRadioGroupGUI
                     $html .= $this->renderOptionAsItemWithBorder($crs_template);
                     break;
             }
-
-
-
-
         }
         $html .= "</div>";
-        if($render_option == self::RENDER_CUSTOM || $render_option == self::RENDER_ITEM_WITH_CUSTOM) {
+        if ($render_option == self::RENDER_CUSTOM || $render_option == self::RENDER_ITEM_WITH_CUSTOM) {
             $html .= "<link rel='stylesheet' type='text/css' href='./Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/templates/default/modal.css'>";
 
             $js = "<script>

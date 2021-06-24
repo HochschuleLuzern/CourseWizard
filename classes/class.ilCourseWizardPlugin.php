@@ -12,13 +12,11 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 
     public function __construct()
     {
-
         parent::__construct();
 
         global $DIC;
         require_once $this->getDirectory() . '/vendor/autoload.php';
-        if($DIC->isDependencyAvailable('globalScreen'))
-        {
+        if ($DIC->isDependencyAvailable('globalScreen')) {
             $this->provider_collection->setModificationProvider(new ilCourseWizardGlobalScreenModificationProvider($DIC, $this));
         }
 
@@ -40,14 +38,13 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         global $DIC;
 
         /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
-        foreach($rolt_definition_list as $rolt_definition) {
-
+        foreach ($rolt_definition_list as $rolt_definition) {
             $obj_id = $this->plugin_config_repo->get($rolt_definition->getConfKey());
 
             if ($obj_id != null) {
                 $rolt = ilObjectFactory::getInstanceByObjId($obj_id, false);
 
-                if($rolt != null) {
+                if ($rolt != null) {
                     $rolt->delete();
                 }
             }
@@ -61,7 +58,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 
     public function activate()
     {
-        if($this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED) != '1') {
+        if ($this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED) != '1') {
             $this->arrangePluginArtifacts();
             $this->plugin_config_repo->set(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_PLUGIN_ARRANGED, '1');
 
@@ -81,8 +78,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
                      \CourseWizard\DB\WizardFlowRepository::TABLE_NAME
             );
 
-        foreach($dbs as $db)
-        {
+        foreach ($dbs as $db) {
             $this->db->dropTable($db, false);
         }
     }
@@ -90,7 +86,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     private function arrangePluginArtifacts()
     {
         /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
-        foreach(\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
+        foreach (\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
             $obj_role = $this->createRoleTemplate($rolt_definition);
 
             $this->plugin_config_repo->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
@@ -105,13 +101,13 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         $role_template = new ilObjRoleTemplate();
         $role_template->setTitle($rolt_definition->getTitle());
         $role_template->setDescription($rolt_definition->getDescription());
-        $role_template->create();;
+        $role_template->create();
+        ;
         $rbac_admin = $DIC->rbac()->admin();
         $rbac_admin->assignRoleToFolder($role_template->getId(), ROLE_FOLDER_ID, 'n');
         $rbac_admin->setProtected($role_template->getRefId(), $role_template->getId(), 'y');
 
         return $role_template;
-
     }
 
     /**

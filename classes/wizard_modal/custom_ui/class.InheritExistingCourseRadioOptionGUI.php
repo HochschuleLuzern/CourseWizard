@@ -23,7 +23,7 @@ class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGU
         $obj_id = $this->crs->getId();
         $ref_id = $this->crs->getRefId();
         $image_path = \ilObject::_getIcon($obj_id);
-        $preview_link = \ilLink::_getLink($ref_id,'crs');
+        $preview_link = \ilLink::_getLink($ref_id, 'crs');
         $btn_preview = $this->ui_factory->link()->standard("Preview", $preview_link)->withOpenInNewViewport(true);
         $dropdown = $this->ui_factory->dropdown()->standard([$btn_preview]);
 

@@ -20,16 +20,17 @@ class WizardFlow
 
     private function __construct($crs_ref_id, $executing_user, $current_status, $first_open_ts, $selected_template, $finished_import_ts)
     {
-        $this->crs_ref_id         = $crs_ref_id;
-        $this->executing_user     = $executing_user;
-        $this->current_status     = $current_status;
-        $this->first_open_ts      = $first_open_ts;
-        $this->selected_template  = $selected_template;
+        $this->crs_ref_id = $crs_ref_id;
+        $this->executing_user = $executing_user;
+        $this->current_status = $current_status;
+        $this->first_open_ts = $first_open_ts;
+        $this->selected_template = $selected_template;
         $this->finished_import_ts = $finished_import_ts;
     }
 
 
-    public static function newlyCreatedWizardFlow($target_crs_ref_id, $executing_user) {
+    public static function newlyCreatedWizardFlow($target_crs_ref_id, $executing_user)
+    {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -40,7 +41,8 @@ class WizardFlow
         );
     }
 
-    public static function unfinishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $current_status) {
+    public static function unfinishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $current_status)
+    {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -51,7 +53,8 @@ class WizardFlow
         );
     }
 
-    public static function finishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $selected_template, $finished_import_ts) {
+    public static function finishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $selected_template, $finished_import_ts)
+    {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -62,7 +65,8 @@ class WizardFlow
         );
     }
 
-    public static function quitedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $finished_import_ts) {
+    public static function quitedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $finished_import_ts)
+    {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -75,7 +79,7 @@ class WizardFlow
 
     public function withPostponedStatus()
     {
-        if($this->current_status == self::STATUS_IN_PROGRESS) {
+        if ($this->current_status == self::STATUS_IN_PROGRESS) {
             $clone = clone $this;
             $clone->current_status = self::STATUS_POSTPONED;
             return $clone;
@@ -86,7 +90,7 @@ class WizardFlow
 
     public function withInProgressStatus()
     {
-        if($this->current_status == self::STATUS_POSTPONED) {
+        if ($this->current_status == self::STATUS_POSTPONED) {
             $clone = clone $this;
             $clone->current_status = self::STATUS_IN_PROGRESS;
             return $clone;
@@ -97,7 +101,7 @@ class WizardFlow
 
     public function withQuitedStatus()
     {
-        if($this->current_status == self::STATUS_IN_PROGRESS || $this->current_status == self::STATUS_QUIT) {
+        if ($this->current_status == self::STATUS_IN_PROGRESS || $this->current_status == self::STATUS_QUIT) {
             $clone = clone $this;
             $clone->current_status = self::STATUS_QUIT;
             $clone->finished_import_ts = time();
@@ -146,7 +150,8 @@ class WizardFlow
         return $this->current_step;
     }
 
-    public static function wizardFlowWithSelectedTemplate($crs_ref_id, $template_selection) {
+    public static function wizardFlowWithSelectedTemplate($crs_ref_id, $template_selection)
+    {
         return new self(
             $crs_ref_id,
             $template_selection,
@@ -156,7 +161,8 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowWithContentInheritance($crs_ref_id, $template_selection, $content_inheritance) {
+    public static function wizardFlowWithContentInheritance($crs_ref_id, $template_selection, $content_inheritance)
+    {
         return new self(
             $crs_ref_id,
             $template_selection,
@@ -166,7 +172,8 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowFinished($crs_ref_id, $template_selection, $content_inheritance, $selected_settings) {
+    public static function wizardFlowFinished($crs_ref_id, $template_selection, $content_inheritance, $selected_settings)
+    {
         return new self(
             $crs_ref_id,
             $template_selection,
@@ -175,5 +182,4 @@ class WizardFlow
             self::STATUS_FINISHED
         );
     }
-
 }

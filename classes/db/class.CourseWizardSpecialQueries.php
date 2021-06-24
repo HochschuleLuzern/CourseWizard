@@ -19,8 +19,8 @@ class CourseWizardSpecialQueries
         $result = $db->query($query);
 
         $obj_ids = array();
-        while($row = $db->fetchAssoc($result)) {
-            if($row['is_global'] == 1 || in_array($row['root_ref'], $path)) {
+        while ($row = $db->fetchAssoc($result)) {
+            if ($row['is_global'] == 1 || in_array($row['root_ref'], $path)) {
                 $obj_ids[] = $row['obj_id'];
             }
         }

@@ -11,8 +11,8 @@ class CourseImportObjectFactory
         $this->template_repo = $template_repo;
     }
 
-    public function createCourseImportDataObject() {
-
+    public function createCourseImportDataObject()
+    {
         $template_ref_id = $this->readTemplateRefId();
         $target_id = $this->readTargetRefId();
         $content_inheritance = $this->readContentInheritance();
@@ -24,7 +24,7 @@ class CourseImportObjectFactory
     private function readTemplateRefId()
     {
         $template_id = (int) $this->crs_wizard_obj['templateRefId'];
-        if($template_id <= 0) {
+        if ($template_id <= 0) {
             throw new InvalidArgumentException('Unknown or missing Template ID');
         }
 
@@ -34,7 +34,7 @@ class CourseImportObjectFactory
     private function readTargetRefId()
     {
         $target_id = (int) $this->crs_wizard_obj['targetRefId'];
-        if($target_id <= 0) {
+        if ($target_id <= 0) {
             throw new InvalidArgumentException('Unknown or missing Target ID');
         }
 
@@ -59,7 +59,7 @@ class CourseImportObjectFactory
     {
         $parsed_content_inheritance = array();
 
-        foreach($content_inheritance as $key => $value) {
+        foreach ($content_inheritance as $key => $value) {
             $id = explode('_', $value['id'])[2];
             $parsed_content_inheritance[$id] = array('type' => $value['value']);
         }

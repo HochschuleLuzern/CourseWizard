@@ -12,9 +12,9 @@ class ContentInheritanceData
 
     private $available_import_options = array(self::IMPORT_OPTION_COPY, self::IMPORT_OPTION_LINK, self::IMPORT_OPTION_OMIT);
 
-    public function __construct(int $ref_id, string $import_option, $child_objects = array()) {
-
-        if(!in_array($import_option, $this->available_import_options)) {
+    public function __construct(int $ref_id, string $import_option, $child_objects = array())
+    {
+        if (!in_array($import_option, $this->available_import_options)) {
             throw new InvalidArgumentException("Argument '$import_option' is not an available import option");
         }
 
