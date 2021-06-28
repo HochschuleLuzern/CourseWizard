@@ -27,7 +27,7 @@ class ilCourseWizardConfig
     public function save()
     {
         $obj_type_of_given_role_id = ilObject::_lookupType($this->crs_importer_role_id);
-        if($obj_type_of_given_role_id != 'role') {
+        if ($obj_type_of_given_role_id != 'role') {
             throw new InvalidArgumentException('invalid_role_input');
         }
         $this->config_repo->set(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_CRS_IMPORTER_ROLE_ID, $this->crs_importer_role_id);

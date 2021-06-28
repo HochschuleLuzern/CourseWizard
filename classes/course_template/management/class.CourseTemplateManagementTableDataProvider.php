@@ -44,8 +44,8 @@ class CourseTemplateManagementTableDataProvider
         $item = new \ilSelectInputGUI('Status', 'status');
         $item->setOptions(array(
             CourseTemplate::STATUS_CHANGE_REQUESTED => $this->plugin->txt('status_change_requested'),
-            CourseTemplate::STATUS_APPROVED         => $this->plugin->txt('status_approved'),
-            CourseTemplate::STATUS_DECLINED         => $this->plugin->txt('status_declined')
+            CourseTemplate::STATUS_APPROVED => $this->plugin->txt('status_approved'),
+            CourseTemplate::STATUS_DECLINED => $this->plugin->txt('status_declined')
         ));
         $form->addItem($item);
 
@@ -91,8 +91,7 @@ class CourseTemplateManagementTableDataProvider
 
         $table_data = array();
         /** @var CourseTemplate $model */
-        foreach($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
-
+        foreach ($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
             $dropdown_and_modal = $this->createRenderedDropdownAndModal($model->getTemplateId(), $model->getCrsRefId());
             $dropdown = $dropdown_and_modal['dropdown'];
             $modal = $dropdown_and_modal['modal'];

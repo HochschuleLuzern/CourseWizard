@@ -9,7 +9,8 @@ class CourseSettingsData
     const FORM_SORT_BY_MANUALLY = 'sort_by_manually';
     const FORM_SORT_BY_DATE = 'sort_by_date';
 
-    public static function getSettings() {
+    public static function getSettings()
+    {
         return array(
             self::SETTING_SORT => array(
                 'title' => self::FORM_SORT_DROPDOWN_TITLE,

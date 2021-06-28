@@ -68,17 +68,20 @@ class RoleTemplatesDefinition
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CONTAINER_ADMIN,
             self::ROLE_TPL_DESCRIPTION_CONTAINER_ADMIN,
-            self::CONF_KEY_ROLT_CONTAINER_ADMIN);
+            self::CONF_KEY_ROLT_CONTAINER_ADMIN
+        );
 
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CONTENT_CREATOR,
             self::ROLE_TPL_DESCRIPTION_CONTENT_CREATOR,
-            self::CONF_KEY_ROLT_CONTENT_CREATOR);
+            self::CONF_KEY_ROLT_CONTENT_CREATOR
+        );
 
         $rolt_definitions[] = new RoleTemplatesDefinition(
             self::ROLE_TPL_TITLE_CRS_IMPORTER,
             self::ROLE_TPL_DESCRIPTION_CRS_IMPORTER,
-            self::CONF_KEY_ROLT_CRS_IMPORTER);
+            self::CONF_KEY_ROLT_CRS_IMPORTER
+        );
 
         return $rolt_definitions;
     }

@@ -39,7 +39,8 @@ class CourseTemplate
     /** @var int */
     protected $editor_role_id;
 
-    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id) {
+    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id)
+    {
         $this->template_id = $template_id;
         $this->crs_ref_id = $crs_ref_id;
         $this->crs_obj_id = $crs_obj_id;
@@ -55,11 +56,11 @@ class CourseTemplate
         return array(
             array(
                 'type_title' => 'single_group',
-                'type_code'  => self::TYPE_SINGLE_CLASS_COURSE
+                'type_code' => self::TYPE_SINGLE_CLASS_COURSE
             ),
             array(
                 'type_title' => 'multi_group',
-                'type_code'  => self::TYPE_MULTI_CLASS_COURSE
+                'type_code' => self::TYPE_MULTI_CLASS_COURSE
             )
         );
     }

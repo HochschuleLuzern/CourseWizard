@@ -23,7 +23,7 @@ class CourseTemplateManager
         $this->crs_template_repo = $crs_template_repo;
     }
 
-    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, \ilObjRole $editor_role, int $global_importer_role_id,int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
+    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, \ilObjRole $editor_role, int $global_importer_role_id, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
     {
         global $DIC;
 
@@ -42,7 +42,8 @@ class CourseTemplateManager
             new CourseTemplateRoleManagement(
                 ROLE_FOLDER_ID,
                 $global_importer_role_id
-            ));
+            )
+        );
         $status_manager->initStartStatusForCrsTemplate($crs_template_obj);
     }
 }

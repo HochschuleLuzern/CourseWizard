@@ -27,17 +27,20 @@ class UserPreferencesRepository
 
     private function buildPreferenceObjectWithDefaultValues(\ilObjUser $user)
     {
-        return new UserPreferences($user->getId(),
+        return new UserPreferences(
+            $user->getId(),
             false,
-        null
+            null
         );
     }
 
     private function buildPreferenceObjectFromDBRow($row) : UserPreferences
     {
-        $user_pref = new UserPreferences($row[self::COL_USER_ID],
+        $user_pref = new UserPreferences(
+            $row[self::COL_USER_ID],
             $row[self::COL_SKIP_INTRO] == 1,
-            $row[self::COL_SKIP_INTRO_DATE]);
+            $row[self::COL_SKIP_INTRO_DATE]
+        );
 
         return $user_pref;
     }
@@ -46,7 +49,8 @@ class UserPreferencesRepository
     {
         $user_pref = $this->buildPreferenceObjectWithDefaultValues($user);
 
-        $this->db->insert(self::TABLE_NAME,
+        $this->db->insert(
+            self::TABLE_NAME,
             array(
                 self::COL_USER_ID => array('integer', $user_pref->getUserId()),
                 self::COL_SKIP_INTRO => array('integer', $user_pref->wasSkipIntroductionsClicked() ? 1 : 0),
@@ -61,9 +65,9 @@ class UserPreferencesRepository
     {
         $query = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE ' . self::COL_USER_ID . '=' . $this->db->quote($user->getId(), 'integer');
         $result = $this->db->query($query);
-        if($row = $this->db->fetchAssoc($result)) {
+        if ($row = $this->db->fetchAssoc($result)) {
             return $this->buildPreferenceObjectFromDBRow($row);
-        } else if($create_if_not_exists) {
+        } elseif ($create_if_not_exists) {
             return $this->createNewUserPreferencesEntry($user);
         }
 
@@ -72,11 +76,11 @@ class UserPreferencesRepository
 
     public function updateUserPreferences(UserPreferences $user_pref)
     {
-        $this->db->update(self::TABLE_NAME,
+        $this->db->update(
+            self::TABLE_NAME,
             array(self::COL_SKIP_INTRO => array('integer', $user_pref->wasSkipIntroductionsClicked() ? '1' : '0'),
                   self::COL_SKIP_INTRO_DATE => array('timestamp', $user_pref->getSkipIntroductionsClickedDate())
             ),
-
             array(self::COL_USER_ID => array('integer', $user_pref->getUserId()))
         );
     }

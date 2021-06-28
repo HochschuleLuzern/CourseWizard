@@ -9,7 +9,6 @@
  */
 class ilObjCourseWizardGUI extends ilObjectPluginGUI
 {
-
     public const CMD_SHOW_MAIN = 'show_main';
     public const CMD_MANAGE_PROPOSALS = 'manage_proposals';
     public const CMD_PROPOSE_TEMPLATE_MODAL = 'propose_template_modal';
@@ -40,23 +39,21 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
         global $DIC;
-
     }
 
 
     public function afterSave(ilObject $newObj)
     {
-        if($newObj instanceof ilObjCourseWizard) {
-
+        if ($newObj instanceof ilObjCourseWizard) {
             $form = $this->initCreateForm('xcwi');
 
-            if($form->checkInput()) {
+            if ($form->checkInput()) {
                 $scope = $form->getInput(self::FORM_CONTAINER_SCOPE);
 
-                if($scope == self::FORM_LIMITED_SCOPE) {
+                if ($scope == self::FORM_LIMITED_SCOPE) {
                     $root_location_ref = $form->getInput(self::FORM_ROOT_LOCATION_REF);
                     $is_global = false;
-                } else if($scope == self::FORM_GLOBAL_SCOPE){
+                } elseif ($scope == self::FORM_GLOBAL_SCOPE) {
                     $root_location_ref = 1;
                     $is_global = true;
                 } else {
@@ -65,7 +62,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 }
 
                 $role_title = $form->getInput(self::FORM_ROLE_TITLE);
-                if($role_title == null || $role_title == '') {
+                if ($role_title == null || $role_title == '') {
                     $role_title = $this->estimateAdminRoleTitle($root_location_ref);
                 }
 
@@ -88,13 +85,13 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
         $params = $this->request->getQueryParams();
 
-        if(isset($params['ref_id'])) {
+        if (isset($params['ref_id'])) {
             $given_ref_id = $params['ref_id'];
-            $given_type   = ilObject::_lookupType($given_ref_id, true);
+            $given_type = ilObject::_lookupType($given_ref_id, true);
             if ($given_type == 'cat') {
                 return $given_ref_id;
-            } else if ($given_type == 'xcwi') {
-                    return $this->tree->getParentId($given_ref_id);
+            } elseif ($given_type == 'xcwi') {
+                return $this->tree->getParentId($given_ref_id);
             } else {
                 return null;
             }
@@ -114,7 +111,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $root_location_ref_id = $this->estimateRootLocationRefId();
         $root_location_input->setValue($root_location_ref_id);
         $root_location_input->setRequired(true);
-        $limited_scope = new ilRadioOption($this->plugin->txt('form_limited_scope'),  self::FORM_LIMITED_SCOPE, $this->plugin->txt('form_limited_scope_info'));
+        $limited_scope = new ilRadioOption($this->plugin->txt('form_limited_scope'), self::FORM_LIMITED_SCOPE, $this->plugin->txt('form_limited_scope_info'));
         $limited_scope->addSubItem($root_location_input);
         $radio_availability_scope->addOption($limited_scope);
 
@@ -161,20 +158,20 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
     }
 
-    function performCommand($cmd)
+    public function performCommand($cmd)
     {
         global $DIC;
 
-        if(strtolower($_GET['baseClass']) == 'ilrepositorygui') {
+        if (strtolower($_GET['baseClass']) == 'ilrepositorygui') {
             $this->ctrl->redirectByClass(['ilObjPluginDispatchGUI', self::class], $cmd);
         }
 
-        if($_GET['cmd'] == 'post' && $_GET['fallbackCmd'] == self::CMD_PROPOSE_TEMPLATE_CONFIRM) {
+        if ($_GET['cmd'] == 'post' && $_GET['fallbackCmd'] == self::CMD_PROPOSE_TEMPLATE_CONFIRM) {
             $cmd = self::CMD_PROPOSE_TEMPLATE_CONFIRM;
         }
 
         $next_class = $this->ctrl->getNextClass();
-        switch($next_class) {
+        switch ($next_class) {
 
             case strtolower(ilObjCourseWizardTemplateManagementGUI::class):
                 $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
@@ -185,9 +182,9 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $this->tabs->activateTab(self::TAB_MANAGE_PROPOSALS);
                 $this->ctrl->forwardCommand($gui);
 
+                // no break
             default:
-                switch($cmd)
-                {
+                switch ($cmd) {
                     case self::CMD_SHOW_MAIN:
                         $this->tabs->activateTab(self::TAB_OVERVIEW);
                         $this->showMainPage();
@@ -219,7 +216,6 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                         break;
                 }
         }
-
     }
 
     public function setTabs()
@@ -229,8 +225,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $this->tabs->addTab(self::TAB_OVERVIEW, $this->plugin->txt('overview'), $this->ctrl->getLinkTarget($this, self::CMD_SHOW_MAIN));
 
-        if($this->access->checkAccess('write', '', $this->ref_id))
-        {
+        if ($this->access->checkAccess('write', '', $this->ref_id)) {
             $this->tabs->addTab(self::TAB_MANAGE_PROPOSALS, $this->plugin->txt('manage_proposals'), $this->ctrl->getLinkTargetByClass(ilObjCourseWizardTemplateManagementGUI::class, ilObjCourseWizardTemplateManagementGUI::CMD_MANAGE_PROPOSALS));
             $this->tabs->addTab(self::TAB_EDIT, $this->plugin->txt('settings'), $this->ctrl->getLinkTarget($this, self::CMD_EDIT));
         }
@@ -267,8 +262,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     protected function proposeCourseTemplate()
     {
         global $DIC;
-        if(isset($_POST['interruptive_items']))
-        {
+        if (isset($_POST['interruptive_items'])) {
             $item_id = $_POST['interruptive_items'][0];
             $crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
 
@@ -290,7 +284,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         }
     }
 
-    protected function showMainPage(){
+    protected function showMainPage()
+    {
         global $DIC;
 
         //$this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->ref_id);
@@ -314,10 +309,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId());
         $container_content = array();
         $group_views = array();
-        foreach($crs_templates_for_overview as $category_name => $crs_list) {
+        foreach ($crs_templates_for_overview as $category_name => $crs_list) {
             $courses = array();
             /** @var \CourseWizard\DB\Models\CourseTemplate $crs_template */
-            foreach($crs_list as $crs_template) {
+            foreach ($crs_list as $crs_template) {
                 $title = ilObject::_lookupTitle($crs_template->getCrsObjId());
                 $description = ilObject::_lookupDescription($crs_template->getCrsObjId());
                 $link = ilLink::_getLink($crs_template->getCrsRefId(), 'crs');
@@ -334,9 +329,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                                ->withLeadIcon($icon);
 
                 $actions_buttons = array();
-                if($crs_template->getCreatorUserId() == $this->user->getId()
+                if ($crs_template->getCreatorUserId() == $this->user->getId()
                     && $crs_template->getStatusAsCode() == \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT) {
-
                     $this->ctrl->setParameter($this, self::GET_DEP_ID, $crs_template->getCrsRefId());
                     $link = $this->ctrl->getLinkTarget($this, self::CMD_PROPOSE_TEMPLATE_MODAL); //\ilLink::_getLink($this->ref_id, $this->getType(), array('dep_id' => $crs_template->getCrsRefId()));
                     $this->ctrl->setParameter($this, self::GET_DEP_ID, '');
@@ -355,7 +349,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 }
 
                 //$actions = $this->prepareActionsDropdownForOwner($crs_template, $f);
-                if(count($actions_buttons) > 0){
+                if (count($actions_buttons) > 0) {
                     $item = $item->withActions($f->dropdown()->standard($actions_buttons));
                 }
 
@@ -363,7 +357,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             }
 
             $ctaegory_title = $this->plugin->txt($category_name);
-            if(count($courses) > 0) {
+            if (count($courses) > 0) {
                 $group_views[] = $f->item()->group($ctaegory_title, $courses);
             } else {
                 $group_views[] = $f->item()->group(
@@ -396,7 +390,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $radio_crs_template_type = new ilRadioGroupInputGUI($this->plugin->txt('form_crs_template_type'), self::FORM_CRS_TEMPLATE_TYPE);
         $radio_crs_template_type->setInfo($this->plugin->txt('form_crs_template_type_info'));
         //$radio_crs_template_type->setRequired(true);
-        foreach(\CourseWizard\DB\Models\CourseTemplate::getCourseTemplateTypes() as $crs_template_type) {
+        foreach (\CourseWizard\DB\Models\CourseTemplate::getCourseTemplateTypes() as $crs_template_type) {
             $option_title = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title']);
             $option_value = $crs_template_type['type_code'];
             $option_info = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title'] . '_info');
@@ -426,7 +420,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $form = $this->initCrsTemplateCreationForm();
 
-        if($form->checkInput()) {
+        if ($form->checkInput()) {
             $title = $form->getInput(self::FORM_CRS_TEMPLATE_TITLE);
             $description = $form->getInput(self::FORM_CRS_TEMPLATE_DESCRIPTION);
 

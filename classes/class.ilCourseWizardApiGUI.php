@@ -4,7 +4,7 @@ use \CourseWizard\Modal;
 
 /**
  * Class ilCourseWizardApiGUI
- * @author               
+ * @author
  * @ilCtrl_isCalledBy    ilCourseWizardApiGUI: ilUIPluginRouterGUI
  */
 class ilCourseWizardApiGUI
@@ -42,12 +42,10 @@ class ilCourseWizardApiGUI
         $next_class = $this->ctrl->getNextClass();
         $cmd = $this->ctrl->getCmd();
 
-        switch ($next_class)
-        {
+        switch ($next_class) {
             default:
 
-                switch($cmd)
-                {
+                switch ($cmd) {
                     // Creates full modal (used for the first modal page)
                     case self::CMD_ASYNC_BASE_MODAL:
                         $db = $DIC->database();
@@ -57,7 +55,7 @@ class ilCourseWizardApiGUI
                         $user_preferences = $user_pref_repo->getUserPreferences($user, true);
 
                         $page = $this->request->getQueryParams()['page'];
-                        if($page == null) {
+                        if ($page == null) {
                             $page = $user_preferences->wasSkipIntroductionsClicked() ?
                                 Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE : Modal\Page\StateMachine::INTRODUCTION_PAGE;
                         }
@@ -68,7 +66,8 @@ class ilCourseWizardApiGUI
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($db, $user);
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
-                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($db),
+                        $modal_factory = new Modal\WizardModalFactory(
+                            new \CourseWizard\DB\CourseTemplateRepository($db),
                             $this->ctrl,
                             $this->request,
                             $this->ui_factory,
@@ -94,7 +93,7 @@ class ilCourseWizardApiGUI
                         $skip_intro_value_set = isset($query_params['skip_intro']);
                         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        if($skip_intro_value_set) {
+                        if ($skip_intro_value_set) {
                             $skip_intro_value = $query_params['skip_intro'] == '1';
                             $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
                             $user_preferences = $user_pref_repo->getUserPreferences($user, true);
@@ -105,7 +104,8 @@ class ilCourseWizardApiGUI
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
 
-                        $modal_factory = new Modal\WizardModalFactory(new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                        $modal_factory = new Modal\WizardModalFactory(
+                            new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
                             $this->ctrl,
                             $this->request,
                             $this->ui_factory,
@@ -129,7 +129,7 @@ class ilCourseWizardApiGUI
                         $factory = new CourseImportObjectFactory($obj, $template_repo);
                         $course_import_data = $factory->createCourseImportDataObject();
 
-                        if(!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
+                        if (!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
                             ilUtil::sendFailure('No permissions for the course wizard', true);
                             exit;
                         } else {
@@ -143,7 +143,7 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
                             $wizard_flow = $wizard_flow->withPostponedStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
 
@@ -152,7 +152,6 @@ class ilCourseWizardApiGUI
                             $btn = $this->ui_factory->link()->standard("Reactivate Modal (Link btn)", $link);
                             $btn_str = $this->ui_renderer->render($btn);
                             ilUtil::sendInfo("Modal Postponed. Click here to reactivate it: $btn_str", true);
-
                         }
 
 
@@ -162,7 +161,7 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
                             $wizard_flow = $wizard_flow->withQuitedStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
 
@@ -175,7 +174,7 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
                             $wizard_flow = $wizard_flow->withInProgressStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
                             $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
@@ -190,6 +189,5 @@ class ilCourseWizardApiGUI
 
                 break;
         }
-
     }
 }

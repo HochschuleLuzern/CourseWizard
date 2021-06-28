@@ -21,8 +21,7 @@ class CourseTemplateStatusManager
 
     public function changeStatusOfCourseTemplate(CourseTemplate $crs_template, $new_status)
     {
-
-        switch($new_status) {
+        switch ($new_status) {
             case CourseTemplate::STATUS_DRAFT:
                 $this->role_manager->setRolePermissionsForChangeRequestStatus($crs_template);
                 $this->crs_template_repo->updateTemplateStatus($crs_template, \CourseWizard\DB\Models\CourseTemplate::STATUS_PENDING);
@@ -56,7 +55,6 @@ class CourseTemplateStatusManager
             default:
                 break;
         }
-
     }
 
     public function changeStatusOfCourseTemplateById(int $item_id, int $new_status)

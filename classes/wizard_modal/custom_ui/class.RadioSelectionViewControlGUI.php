@@ -35,7 +35,7 @@ class RadioSelectionViewControlGUI
         $this->view_control_subpages[] = $subpage;
     }
 
-    public function getAsComponentListObsolete(): array
+    public function getAsComponentListObsolete() : array
     {
         $view_control_actions = array();
         $comps = array();
@@ -76,7 +76,7 @@ class RadioSelectionViewControlGUI
     {
         global $DIC;
 
-        if(count($this->view_control_subpages) < 1) {
+        if (count($this->view_control_subpages) < 1) {
             return [$this->ui_factory->legacy("No View Control Elements available")];
         }
 
@@ -88,7 +88,7 @@ class RadioSelectionViewControlGUI
         $selected_element = $this->view_control_subpages[0]->getTitle();
 
         /** @var RadioGroupViewControlSubPageGUI $subpage */
-        foreach($this->view_control_subpages as $subpage) {
+        foreach ($this->view_control_subpages as $subpage) {
             $subpage_title = $subpage->getTitle();
             $hidden = $selected_element == $subpage_title ? '' : 'style="display: none;"';
             $subpage_div_id = uniqid('xcwi');
@@ -96,7 +96,7 @@ class RadioSelectionViewControlGUI
             $content = $subpage->getContent();
             $radios_rendered = $DIC->ui()->renderer()->render($content);
 
-            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_div_id' class='$xcwi_vc_subpage_div' $hidden>".$radios_rendered."</div>")
+            $subpage_div = $this->ui_factory->legacy("<div id='$subpage_div_id' class='$xcwi_vc_subpage_div' $hidden>" . $radios_rendered . "</div>")
                                                   ->withCustomSignal($subpage_div_id, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_div_id');");
             $components[] = $subpage_div;
 

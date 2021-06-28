@@ -21,12 +21,11 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
 
     public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "")
     {
-
         if ($a_user_id == "") {
             $a_user_id = $this->user->getId();
         }
 
-        switch($a_cmd) {
+        switch ($a_cmd) {
             case ilObjCourseWizardGUI::CMD_SHOW_MAIN:
 
                 break;

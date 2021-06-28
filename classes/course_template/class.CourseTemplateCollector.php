@@ -21,8 +21,8 @@ class CourseTemplateCollector
     {
         $this->container_obj = $container_obj;
         $this->container_ref_id = $this->container_obj->getRefId();
-        $this->crs_repo      = $crs_repo;
-        $this->tree          = $tree;
+        $this->crs_repo = $crs_repo;
+        $this->tree = $tree;
     }
 
     public function getCourseTemplatesForOverview($user_id_of_viewer)
@@ -35,7 +35,7 @@ class CourseTemplateCollector
 
     public function checkAndAddNewlyCreatedCourses()
     {
-        foreach($this->crs_repo->getNewlyCreatedCourses($this->container_ref_id) as $crs_ref_id) {
+        foreach ($this->crs_repo->getNewlyCreatedCourses($this->container_ref_id) as $crs_ref_id) {
             $crs_obj_id = \ilObject::_lookupObjectId($crs_ref_id);
             $template_type = $this->evaluateTemplateType($crs_ref_id);
             $status = CourseTemplate::STATUS_DRAFT;
@@ -61,7 +61,7 @@ class CourseTemplateCollector
 
         $table_data = array();
         /** @var CourseTemplate $model */
-        foreach($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
+        foreach ($this->crs_repo->getCourseTemplateByContainerRefWithStatus($allowed_status, $this->container_ref_id) as $model) {
             $table_data[] = array(
                 "title" => \ilObject::_lookupTitle($model->getCrsObjId()),
                 "description" => \ilObject::_lookupDescription($model->getCrsObjId()),

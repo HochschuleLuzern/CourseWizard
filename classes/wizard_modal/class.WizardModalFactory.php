@@ -60,11 +60,10 @@ class WizardModalFactory
         $view_control = new RadioSelectionViewControlGUI($this->ui_factory);
 
         $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId($_GET['ref_id']);
-        foreach($obj_ids as $container_obj_id)
-        {
+        foreach ($obj_ids as $container_obj_id) {
             $department_subpage = new RadioGroupViewControlSubPageGUI(\ilObject::_lookupTitle($container_obj_id));
-            foreach(\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
-                foreach($this->template_repository->getAllApprovedCourseTemplates($container_ref_id) as $crs_template) {
+            foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
+                foreach ($this->template_repository->getAllApprovedCourseTemplates($container_ref_id) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
                     $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));
                 }
@@ -78,10 +77,9 @@ class WizardModalFactory
 
         $inherit_subpage = new RadioGroupViewControlSubPageGUI('Inherit');
 
-        foreach($obj_ids_with_membership as $obj_id) {
-
+        foreach ($obj_ids_with_membership as $obj_id) {
             $ref_ids_for_object = \ilObject::_getAllReferences($obj_id);
-            foreach($ref_ids_for_object as $ref_id) {
+            foreach ($ref_ids_for_object as $ref_id) {
                 $crs = new \ilObjCourse($ref_id, true);
                 $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory));
             }
@@ -143,7 +141,7 @@ class WizardModalFactory
 
     private function buildModalPresenter(StateMachine $state_machine) : ModalPagePresenter
     {
-        switch($state_machine->getPageForCurrentState()){
+        switch ($state_machine->getPageForCurrentState()) {
             case Page\StateMachine::INTRODUCTION_PAGE:
                 $page_presenter = new Page\IntroductionPage(
                     $state_machine,
@@ -155,7 +153,7 @@ class WizardModalFactory
                 break;
 
             case Page\StateMachine::CONTENT_INHERITANCE_PAGE:
-                if(isset($_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID])) {
+                if (isset($_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID])) {
                     $page_presenter = $this->buildContentInheritancePage($state_machine, $_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID]);
                 } else {
                     throw new \InvalidArgumentException('Missing the argument template_id which is needed for the content inheritance page');

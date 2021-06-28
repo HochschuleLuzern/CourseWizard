@@ -26,7 +26,7 @@ class CourseTemplateRepository
     {
         $this->db = $db;
 
-        if(!$db->sequenceExists(self::TABLE_NAME)) {
+        if (!$db->sequenceExists(self::TABLE_NAME)) {
             $db->createSequence(self::TABLE_NAME);
         }
     }
@@ -58,7 +58,7 @@ class CourseTemplateRepository
         $result = $this->db->query($sql);
 
         $templates = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $templates[] = $this->buildModelFromAssocArray($row);
         }
 
@@ -71,7 +71,7 @@ class CourseTemplateRepository
         $result = $this->db->query($sql);
 
         $templates = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $templates[] = $this->buildModelFromAssocArray($row);
         }
 
@@ -83,11 +83,11 @@ class CourseTemplateRepository
         $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE template_id = " . $this->db->quote($template_id, 'integer');
         $result = $this->db->query($sql);
 
-        if($row = $this->db->fetchAssoc($result)) {
+        if ($row = $this->db->fetchAssoc($result)) {
             return $this->buildModelFromAssocArray($row);
         }
 
-        return NULL;
+        return null;
     }
 
     public function getCourseTemplateByRefId(int $ref_id)
@@ -95,38 +95,37 @@ class CourseTemplateRepository
         $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE crs_ref_id = " . $this->db->quote($ref_id, 'integer');
         $result = $this->db->query($sql);
 
-        if($row = $this->db->fetchAssoc($result)) {
+        if ($row = $this->db->fetchAssoc($result)) {
             return $this->buildModelFromAssocArray($row);
         }
 
-        return NULL;
+        return null;
     }
 
     public function getCourseTemplateByContainerRefWithStatus(array $allowed_status, int $container_ref_id) : array
     {
-        if(count($allowed_status) <= 0) {
+        if (count($allowed_status) <= 0) {
             throw new \InvalidArgumentException('No status given for template selection');
         }
 
         $statement_binding = "";
         $allowed_status_statement = "";
-        foreach($allowed_status as $status) {
+        foreach ($allowed_status as $status) {
             $allowed_status_statement .= $statement_binding . $this->db->quote($status, 'integer');
             $statement_binding = ', ';
         }
 
         $allowed_status_statement = "(status_code IN ($allowed_status_statement))";
 
-        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE '.self::COL_TEMPLATE_CONTAINER_REF_ID.' = '.$this->db->quote($container_ref_id, 'integer').' AND ' . $allowed_status_statement;
+        $sql = 'SELECT * FROM ' . self::TABLE_NAME . ' WHERE ' . self::COL_TEMPLATE_CONTAINER_REF_ID . ' = ' . $this->db->quote($container_ref_id, 'integer') . ' AND ' . $allowed_status_statement;
         $result = $this->db->query($sql);
 
         $templates = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $templates[] = $this->buildModelFromAssocArray($row);
         }
 
         return $templates;
-
     }
 
     public function getAllCourseTemplatesForUserByContainerRefId(int $user_id, int $container_ref_id) : array
@@ -135,7 +134,7 @@ class CourseTemplateRepository
         $result = $this->db->query($sql);
 
         $templates = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $templates[] = $this->buildModelFromAssocArray($row);
         }
 
@@ -148,7 +147,7 @@ class CourseTemplateRepository
         $result = $this->db->query($sql);
 
         $templates = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $templates[] = $this->buildModelFromAssocArray($row);
         }
 
@@ -160,12 +159,12 @@ class CourseTemplateRepository
         $sql = "SELECT t.child as child FROM tree as t
                 JOIN object_reference as obj_ref ON t.child = obj_ref.ref_id
                 JOIN object_data as obj_data ON obj_ref.obj_id = obj_data.obj_id
-                WHERE t.parent = ".$this->db->quote($container_ref_id, 'integer')." AND t.child NOT IN(SELECT crs_ref_id FROM rep_robj_xcwi_templates WHERE template_container_ref_id = ".$this->db->quote($container_ref_id, 'integer').")";
+                WHERE t.parent = " . $this->db->quote($container_ref_id, 'integer') . " AND t.child NOT IN(SELECT crs_ref_id FROM rep_robj_xcwi_templates WHERE template_container_ref_id = " . $this->db->quote($container_ref_id, 'integer') . ")";
 
         $result = $this->db->query($sql);
 
         $crs_ref_ids = array();
-        while($row = $this->db->fetchAssoc($result)) {
+        while ($row = $this->db->fetchAssoc($result)) {
             $crs_ref_ids[] = $row['child'];
         }
 
@@ -174,7 +173,9 @@ class CourseTemplateRepository
 
     public function updateTemplate(CourseTemplate $model)
     {
-        $this->db->update(self::TABLE_NAME, array(
+        $this->db->update(
+            self::TABLE_NAME,
+            array(
 
             // VALUES
             self::COL_CRS_REF_ID => array('integer', $model->getCrsRefId()),
@@ -192,7 +193,8 @@ class CourseTemplateRepository
 
     public function updateTemplateStatus(CourseTemplate $model, int $new_status)
     {
-        $this->db->update(self::TABLE_NAME,
+        $this->db->update(
+            self::TABLE_NAME,
             // VALUES
             array(self::COL_STATUS_CODE => array('integer', $new_status)),
 
@@ -215,7 +217,8 @@ class CourseTemplateRepository
 
     protected function buildModelFromAssocArray(array $row)
     {
-        return new CourseTemplate($row['template_id'],
+        return new CourseTemplate(
+            $row['template_id'],
             $row['crs_ref_id'],
             $row['crs_obj_id'],
             $row['template_type'],
@@ -231,7 +234,7 @@ class CourseTemplateRepository
         $sql = "SELECT count(*) as cnt FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_CONTAINER_REF_ID . " = " . $this->db->quote($container_id, 'integer');
         $res = $this->db->query($sql);
 
-        if($row = $this->db->fetchAssoc($res)) {
+        if ($row = $this->db->fetchAssoc($res)) {
             return $row['cnt'];
         }
 

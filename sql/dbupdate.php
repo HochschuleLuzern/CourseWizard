@@ -1,8 +1,7 @@
 <#1>
 <?php
 $current_table = \CourseWizard\DB\CourseTemplateRepository::TABLE_NAME;
-if(!$ilDB->tableExists($current_table))
-{
+if (!$ilDB->tableExists($current_table)) {
     $fields = array(
         \CourseWizard\DB\CourseTemplateRepository::COL_TEMPLATE_ID => array(
             'type' => 'integer',
@@ -23,19 +22,19 @@ if(!$ilDB->tableExists($current_table))
             'type' => 'integer',
             'length' => 1,
             'notnull' => true,
-            'default'=> 0
+            'default' => 0
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_STATUS_CODE => array(
             'type' => 'integer',
             'length' => 1,
             'notnull' => true,
-            'default'=> 0
+            'default' => 0
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_CREATOR_USER_ID => array(
             'type' => 'integer',
             'length' => 8,
             'notnull' => false,
-            'default'=> 0
+            'default' => 0
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_CREATE_DATE => array(
             'type' => 'timestamp',
@@ -45,22 +44,21 @@ if(!$ilDB->tableExists($current_table))
             'type' => 'integer',
             'length' => 8,
             'notnull' => true,
-            'default'=> 0
+            'default' => 0
         ),
         \CourseWizard\DB\CourseTemplateRepository::COL_EDITOR_ROLE_ID => array(
             'type' => 'integer',
             'length' => 8,
             'notnull' => true,
-            'default'=> 0
+            'default' => 0
         ),
     );
 
     $ilDB->createTable($current_table, $fields);
     $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\CourseTemplateRepository::COL_TEMPLATE_ID));
-
 }
 
-if(!$ilDB->sequenceExists($current_table)) {
+if (!$ilDB->sequenceExists($current_table)) {
     $ilDB->createSequence($current_table);
 }
 
@@ -68,8 +66,7 @@ if(!$ilDB->sequenceExists($current_table)) {
 <#2>
 <?php
 $current_table = \CourseWizard\DB\PluginConfigKeyValueStore::TABLE_NAME;
-if(!$ilDB->tableExists($current_table))
-{
+if (!$ilDB->tableExists($current_table)) {
     $fields = array(
         \CourseWizard\DB\PluginConfigKeyValueStore::COL_KEY => array(
             'type' => 'text',
@@ -90,8 +87,7 @@ if(!$ilDB->tableExists($current_table))
 <#3>
 <?php
 $current_table = \CourseWizard\DB\TemplateContainerConfigurationRepository::TABLE_NAME;
-if(!$ilDB->tableExists($current_table))
-{
+if (!$ilDB->tableExists($current_table)) {
     $fields = array(
         \CourseWizard\DB\TemplateContainerConfigurationRepository::COL_OBJ_ID => array(
             'type' => 'integer',
@@ -122,8 +118,7 @@ if(!$ilDB->tableExists($current_table))
 <#4>
 <?php
 $current_table = \CourseWizard\DB\WizardFlowRepository::TABLE_NAME;
-if(!$ilDB->tableExists($current_table))
-{
+if (!$ilDB->tableExists($current_table)) {
     $fields = array(
         \CourseWizard\DB\WizardFlowRepository::COL_TARGET_REF_ID => array(
             'type' => 'integer',
@@ -139,7 +134,7 @@ if(!$ilDB->tableExists($current_table))
             'type' => 'integer',
             'length' => 8,
             'notnull' => false,
-            'default'=> null
+            'default' => null
         ),
         \CourseWizard\DB\WizardFlowRepository::COL_WIZARD_STATUS => array(
             'type' => 'integer',
@@ -163,8 +158,7 @@ if(!$ilDB->tableExists($current_table))
 <#5>
 <?php
 $current_table = \CourseWizard\DB\UserPreferencesRepository::TABLE_NAME;
-if(!$ilDB->tableExists($current_table))
-{
+if (!$ilDB->tableExists($current_table)) {
     $fields = array(
         \CourseWizard\DB\UserPreferencesRepository::COL_USER_ID => array(
             'type' => 'integer',
@@ -182,7 +176,7 @@ if(!$ilDB->tableExists($current_table))
             'notnull' => false,
             "default" => null
         )
-	);
+    );
 
     $ilDB->createTable($current_table, $fields);
     $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\UserPreferencesRepository::COL_USER_ID));

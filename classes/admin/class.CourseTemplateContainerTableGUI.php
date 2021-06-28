@@ -57,49 +57,49 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
         // TODO: Add language here
         return array(
             array(
-                'field'    => self::COL_CONTAINER_TITLE,
-                'txt'      => $this->plugin->txt('template_container'),
-                'default'  => true,
+                'field' => self::COL_CONTAINER_TITLE,
+                'txt' => $this->plugin->txt('template_container'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             ),
 
             array(
-                'field'    => self::COL_ROOT_LOCATION_TITLE,
-                'txt'      => $this->plugin->txt('root_location_of_wizard'),
-                'default'  => true,
+                'field' => self::COL_ROOT_LOCATION_TITLE,
+                'txt' => $this->plugin->txt('root_location_of_wizard'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             ),
 
             array(
-                'field'    => self::COL_QUANTITY_CRS_TEMPLATES,
-                'txt'      => $this->plugin->txt('quantity_crs_templates'),
-                'default'  => true,
+                'field' => self::COL_QUANTITY_CRS_TEMPLATES,
+                'txt' => $this->plugin->txt('quantity_crs_templates'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             ),
 
             array(
-                'field'    => self::COL_QUANTITY_ADMIN_ROLE_MEMBERS,
-                'txt'      => $this->plugin->txt('quantity_admin_role_members'),
-                'default'  => true,
+                'field' => self::COL_QUANTITY_ADMIN_ROLE_MEMBERS,
+                'txt' => $this->plugin->txt('quantity_admin_role_members'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             ),
 
             array(
-                'field'    => self::COL_IS_GLOBAL,
-                'txt'      => $this->plugin->txt('global_available'),
-                'default'  => true,
+                'field' => self::COL_IS_GLOBAL,
+                'txt' => $this->plugin->txt('global_available'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             ),
 
             array(
-                'field'    => self::COL_ACTION_DROPDOWN,
-                'txt'      => $this->plugin->txt('action'),
-                'default'  => true,
+                'field' => self::COL_ACTION_DROPDOWN,
+                'txt' => $this->plugin->txt('action'),
+                'default' => true,
                 'optional' => false,
                 'sortable' => false
             )

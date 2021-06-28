@@ -27,11 +27,13 @@ class QuitWizardPage extends BaseModalPagePresenter
         $link_proceed_wizard = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=" . $_GET['previousPage'];
         $js_code = $this->getJsPreviousPageMethod();
         $btn_proceed_wizard = $this->ui_factory->button()->standard('Go back to previous Page', '#')->withOnLoadCode(
-            function($id) use ($js_code, $replace_signal) {
-                return '$('.$id.').click('.$js_code.');';
-            });;
+            function ($id) use ($js_code, $replace_signal) {
+                return '$(' . $id . ').click(' . $js_code . ');';
+            }
+        );
+        ;
 
-//loadPreviousPage
+        //loadPreviousPage
         $link_quit_wizard = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_DISMISS_WIZARD);
         $btn_quit_wizard = $this->ui_factory->button()->primary('Quit Course Wizard', $link_quit_wizard);
 
@@ -55,9 +57,11 @@ class QuitWizardPage extends BaseModalPagePresenter
         $js_config = new JavaScriptPageConfig($this->state_machine);
 
         $base_page_replace_url = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=";
-        $this->js_creator->setPageSwitchURL($base_page_replace_url . $this->state_machine->getPageForPreviousState(),
+        $this->js_creator->setPageSwitchURL(
+            $base_page_replace_url . $this->state_machine->getPageForPreviousState(),
             $base_page_replace_url . $this->state_machine->getPageForCurrentState(),
-            $base_page_replace_url . $this->state_machine->getPageForNextState());
+            $base_page_replace_url . $this->state_machine->getPageForNextState()
+        );
 
         $this->js_creator->addCustomConfigElement('dismissModalUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_POSTPONE_WIZARD));
 

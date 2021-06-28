@@ -1,5 +1,4 @@
 <?php
-
 namespace CourseWizard\Modal\Page;
 
 class StateMachine
@@ -10,16 +9,9 @@ class StateMachine
     const SPECIFIC_SETTINGS_PAGE = "specific_settings";
     const QUIT_WIZARD_PAGE = "quit_wizard_page";
 
-    /** @var ilCtrl */
     protected $ctrl;
-
-    /** @var string */
     protected $current_page;
-
-    /** @var string */
     protected $next_page;
-
-    /** @var string */
     protected $previous_page;
 
     public function __construct(string $current_page, \ilCtrl $ctrl)
@@ -28,8 +20,7 @@ class StateMachine
 
         $this->current_page = $current_page;
 
-        switch($this->current_page)
-        {
+        switch ($this->current_page) {
             case self::INTRODUCTION_PAGE:
                 $this->setPreviousAndNextPage('', self::TEMPLATE_SELECTION_PAGE);
                 break;

@@ -4,7 +4,6 @@ namespace CourseWizard\Modal;
 
 class RoundtripWizardModalGUI implements WizardModalGUI
 {
-    /** @var ilCourseWizardModalPresenter */
     protected $presenter;
 
     /** @var \ILIAS\UI\Renderer */
@@ -20,7 +19,7 @@ class RoundtripWizardModalGUI implements WizardModalGUI
     {
         $modal = $this->presenter->getModalAsUIComponent();
 
-        if($immediate_opening) {
+        if ($immediate_opening) {
             $open_signal = $modal->getShowSignal();
             $modal = $modal->withOnLoad($open_signal);
         }

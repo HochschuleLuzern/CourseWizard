@@ -2,8 +2,8 @@
 
 class CourseImportController
 {
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
 
     private function importCourseSettings(CourseImportData $course_import_data)
@@ -28,7 +28,8 @@ class CourseImportController
         $copy_result = $this->importContent($course_import_data);
     }
 
-    private function importContent(CourseImportData $course_import_data) {
+    private function importContent(CourseImportData $course_import_data)
+    {
         $copy_result_for_objs = $this->importContentObjects($course_import_data);
         $copy_result_for_content_page = $this->importContentPage($course_import_data);
         $this->importCourseSettings($course_import_data);
@@ -54,7 +55,8 @@ class CourseImportController
         return array();
     }
 
-    private function importContentObjects(CourseImportData $course_import_data) {
+    private function importContentObjects(CourseImportData $course_import_data)
+    {
         $orig = ilObjectFactory::getInstanceByRefId($course_import_data->getTemplateCrsRefId());
         $result = $orig->cloneAllObject(
             $_COOKIE[session_name()],
@@ -70,6 +72,4 @@ class CourseImportController
         return $result;
         //$this->targets_copy_id[$a_target] = $result['copy_id'];
     }
-
-
 }
