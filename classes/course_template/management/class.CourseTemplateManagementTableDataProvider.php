@@ -96,11 +96,18 @@ class CourseTemplateManagementTableDataProvider
             $dropdown = $dropdown_and_modal['dropdown'];
             $modal = $dropdown_and_modal['modal'];
 
+            try {
+                $il_date_time = new \ilDateTime($model->getCreateDate(), IL_CAL_DATETIME);
+                $creation_date = \ilDatePresentation::formatDate($il_date_time);
+            } catch(\ilDateTimeException $e) {
+                $creation_date = '-';
+            }
+
+
             $table_data[] = array(
-                //               'ref_id' => $model->getCrsRefId(),
                 CourseTemplateManagementTableGUI::COL_TEMPLATE_TITLE => \ilObject::_lookupTitle($model->getCrsObjId()),
                 CourseTemplateManagementTableGUI::COL_TEMPLATE_DESCRIPTION => \ilObject::_lookupDescription($model->getCrsObjId()),
-                CourseTemplateManagementTableGUI::COL_PROPOSAL_DATE => 'not registered yet',
+                CourseTemplateManagementTableGUI::COL_PROPOSAL_DATE => $creation_date,
                 CourseTemplateManagementTableGUI::COL_STATUS => $this->plugin->txt($model->getStatusAsLanguageVariable()),
                 CourseTemplateManagementTableGUI::COL_ACTION_DROPDOWN => $dropdown,
                 'modal' => $modal

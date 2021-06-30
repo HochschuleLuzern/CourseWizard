@@ -35,7 +35,7 @@ class CourseTemplateRepository
     {
         $template_id = $this->db->nextId(self::TABLE_NAME);
 
-        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $template_container_ref_id, $editor_role_id);
+        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, date('Y-m-d H:i:s') ,$template_container_ref_id, $editor_role_id);
 
         $this->db->insert(self::TABLE_NAME, array(
             self::COL_TEMPLATE_ID => array('integer', $model->getTemplateId()),
@@ -44,7 +44,7 @@ class CourseTemplateRepository
             self::COL_TEMPLATE_TYPE => array('integer', $model->getTemplateTypeAsCode()),
             self::COL_STATUS_CODE => array('integer', $model->getStatusAsCode()),
             self::COL_CREATOR_USER_ID => array('integer', $model->getCreatorUserId()),
-            self::COL_CREATE_DATE => array('timestamp', time()),
+            self::COL_CREATE_DATE => array('timestamp', $model->getCreateDate()),
             self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId()),
             self::COL_EDITOR_ROLE_ID => array('integer', $model->getEditorRoleId())
         ));
@@ -218,14 +218,15 @@ class CourseTemplateRepository
     protected function buildModelFromAssocArray(array $row)
     {
         return new CourseTemplate(
-            $row['template_id'],
-            $row['crs_ref_id'],
-            $row['crs_obj_id'],
-            $row['template_type'],
-            $row['status_code'],
-            $row['creator_user_id'],
-            $row['template_container_ref_id'],
-            $row['editor_role_id']
+            $row[self::COL_TEMPLATE_ID],
+            $row[self::COL_CRS_REF_ID],
+            $row[self::COL_CRS_OBJ_ID],
+            $row[self::COL_TEMPLATE_TYPE],
+            $row[self::COL_STATUS_CODE],
+            $row[self::COL_CREATOR_USER_ID],
+            $row[self::COL_CREATE_DATE],
+            $row[self::COL_TEMPLATE_CONTAINER_REF_ID],
+            $row[self::COL_EDITOR_ROLE_ID]
         );
     }
 

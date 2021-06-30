@@ -33,13 +33,16 @@ class CourseTemplate
     /** @var int */
     protected $creator_user_id;
 
+    /** @var string|null */
+    protected $create_date;
+
     /** @var int */
     protected $template_container_ref_id;
 
     /** @var int */
     protected $editor_role_id;
 
-    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id)
+    public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, ?string $create_date, int $template_container_ref_id, int $editor_role_id)
     {
         $this->template_id = $template_id;
         $this->crs_ref_id = $crs_ref_id;
@@ -47,6 +50,7 @@ class CourseTemplate
         $this->template_type = $template_type;
         $this->status = $status;
         $this->creator_user_id = $creator_user_id;
+        $this->create_date = $create_date;
         $this->template_container_ref_id = $template_container_ref_id;
         $this->editor_role_id = $editor_role_id;
     }
@@ -108,6 +112,14 @@ class CourseTemplate
     public function getCreatorUserId() : int
     {
         return $this->creator_user_id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCreateDate() : ?string
+    {
+        return $this->create_date;
     }
 
     /**

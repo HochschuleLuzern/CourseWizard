@@ -77,7 +77,6 @@ class ilObjCourseWizardTemplateManagementGUI
 
         $table = new CourseWizard\CourseTemplate\CourseTemplateManagementTableGUI($this, self::CMD_MANAGE_PROPOSALS, $this->plugin);
 
-        $data = array(array('template_title' => "Titel 1", 'template_description' => "Description", 'proposal_date' => 'Heute', 'status' => 'Pending'));
         $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
         $data = $data_provider->getCourseTemplatesForManagementTable();
         $table->setData($data);
