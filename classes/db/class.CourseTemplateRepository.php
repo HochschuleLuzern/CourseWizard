@@ -46,7 +46,7 @@ class CourseTemplateRepository
             self::COL_CREATOR_USER_ID => array('integer', $model->getCreatorUserId()),
             self::COL_CREATE_DATE => array('timestamp', time()),
             self::COL_TEMPLATE_CONTAINER_REF_ID => array('integer', $model->getTemplateContainerRefId()),
-            self::COL_EDITOR_ROLE_ID => array('integer', $model->getTemplateContainerRefId())
+            self::COL_EDITOR_ROLE_ID => array('integer', $model->getEditorRoleId())
         ));
 
         return $model;

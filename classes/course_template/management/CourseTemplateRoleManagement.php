@@ -31,11 +31,31 @@ class CourseTemplateRoleManagement
 
     private function setPermissionsForRole(int $target_role_id, int $role_template_id, int $crs_template_ref)
     {
+        // If not done yet -> set role to use "Local Policy"
+        if(!$this->rbac_review->isRoleAssignedToObject($target_role_id, $crs_template_ref))
+        {
+            $this->rbac_admin->assignRoleToFolder(
+                $target_role_id,
+                $crs_template_ref,
+                'n'
+            );
+        }
+
+        // Copy permissions of role template to actual role
         $this->rbac_admin->copyRoleTemplatePermissions(
             $role_template_id,
             ROLE_FOLDER_ID,
             $crs_template_ref,
-            $target_role_id
+            $target_role_id,
+            true
+        );
+
+        // Set the permissions of all subobjects to the new given permissions
+        $role_obj = new \ilObjRole($target_role_id);
+        $role_obj->changeExistingObjects(
+            $crs_template_ref,
+            \ilObjRole::MODE_PROTECTED_DELETE_LOCAL_POLICIES,
+            array('all')
         );
     }
 

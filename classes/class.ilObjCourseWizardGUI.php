@@ -304,7 +304,6 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
         $collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
-        //$collector->checkAndAddNewlyCreatedCourses();
 
         $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId());
         $container_content = array();
@@ -317,8 +316,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $description = ilObject::_lookupDescription($crs_template->getCrsObjId());
                 $link = ilLink::_getLink($crs_template->getCrsRefId(), 'crs');
                 $title_as_link = $f->link()->standard($title, $link);
-                $image_path = ilObject::_getIcon($crs_template->getCrsObjId());
 
+                $image_path = $this->plugin->getDirectory() . '/templates/images/icon_crstemp.svg';
                 $icon = $f->symbol()->icon()->custom($image_path, 'Thumbnail', 'large');
                 $item = $f->item()->standard($title_as_link)
                                ->withDescription($description)

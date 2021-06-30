@@ -102,10 +102,11 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         $role_template->setTitle($rolt_definition->getTitle());
         $role_template->setDescription($rolt_definition->getDescription());
         $role_template->create();
-        ;
+
         $rbac_admin = $DIC->rbac()->admin();
         $rbac_admin->assignRoleToFolder($role_template->getId(), ROLE_FOLDER_ID, 'n');
-        $rbac_admin->setProtected($role_template->getRefId(), $role_template->getId(), 'y');
+        $is_protected = $rolt_definition->isProtected() ? 'y' : 'n';
+        $rbac_admin->setProtected($role_template->getRefId(), $role_template->getId(), $is_protected);
 
         return $role_template;
     }
