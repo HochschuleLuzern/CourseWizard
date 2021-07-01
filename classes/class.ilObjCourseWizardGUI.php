@@ -14,12 +14,13 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const CMD_PROPOSE_TEMPLATE_MODAL = 'propose_template_modal';
     public const CMD_PROPOSE_TEMPLATE_CONFIRM = 'confirm_propose_template';
     public const CMD_EDIT = 'edit';
+    public const CMD_UPDATE = 'update';
     public const CMD_CRS_TEMPLATE_CREATION_SITE = 'crs_template_creation';
     public const CMD_CREATE_NEW_CRS_TEMPLATE = 'create_crs_template';
 
     public const TAB_OVERVIEW = 'overview';
     public const TAB_MANAGE_PROPOSALS = 'manage_proposals';
-    public const TAB_EDIT = 'edit';
+    public const TAB_EDIT = 'settings';
 
     public const GET_DEP_ID = 'dep_id';
 
@@ -191,8 +192,11 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                         break;
 
                     case self::CMD_EDIT:
-                        $this->tabs->activateTab(self::TAB_EDIT);
                         $this->edit();
+                        break;
+
+                    case self::CMD_UPDATE:
+                        $this->update();
                         break;
 
                     case self::CMD_PROPOSE_TEMPLATE_MODAL:

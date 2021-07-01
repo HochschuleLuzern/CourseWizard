@@ -66,23 +66,14 @@ class ilObjCourseWizardTemplateManagementGUI
     public function showCourseTemplates()
     {
         global $DIC;
-        // TODO: Add language
-
-
-
-        $html = "Department Course Template Management GUI für folgende Department ID: " . $this->container_ref_id;
-
-        //$template_scanner = new CourseTemplateDirectoryScanner($this->dep_id, new CourseTemplateRepository($DIC->database()), $DIC->repositoryTree());
-        //$data = $template_scanner->fetchAvailableCourseTemplates();
 
         $table = new CourseWizard\CourseTemplate\CourseTemplateManagementTableGUI($this, self::CMD_MANAGE_PROPOSALS, $this->plugin);
 
         $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
         $data = $data_provider->getCourseTemplatesForManagementTable();
         $table->setData($data);
-        $html .= $table->getHTML();
 
-        $this->tpl->setContent($html);
+        $this->tpl->setContent($table->getHTML());
     }
 
     public function changeCourseStatus()
