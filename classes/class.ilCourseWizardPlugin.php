@@ -4,11 +4,9 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 {
     public const ID = 'xcwi';
 
-    /** @var string[][] */
-    private $role_template_list;
-
     /** @var \CourseWizard\DB\PluginConfigKeyValueStore  */
     private $plugin_config_repo;
+    private $role_folder_id;
 
     public function __construct()
     {
@@ -21,16 +19,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         }
 
         $this->plugin_config_repo = new \CourseWizard\DB\PluginConfigKeyValueStore($this->db);
-
-
-        $this->role_template_list = array(
-            array('title' => 'xcwi_container_admin',
-                  'description' => '',
-                  'conf_key' => 'rolt_container_admin'),
-            array('title' => 'xcwi_container_content_creator',
-                  'description' => '',
-                  'conf_key' => 'rolt_content_creator')
-        );
+        $this->role_folder_id = ROLE_FOLDER_ID;
     }
 
     private function removeDefinedRoleTemplates(array $rolt_definition_list)
@@ -87,11 +76,42 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     {
         /** @var \CourseWizard\role\RoleTemplatesDefinition $rolt_definition */
         foreach (\CourseWizard\role\RoleTemplatesDefinition::getRoleTemplateDefinitions() as $rolt_definition) {
-            $obj_role = $this->createRoleTemplate($rolt_definition);
+            $obj_role_template = $this->createRoleTemplate($rolt_definition);
 
-            $this->plugin_config_repo->set($rolt_definition->getConfKey(), "{$obj_role->getId()}");
+            $this->plugin_config_repo->set($rolt_definition->getConfKey(), "{$obj_role_template->getId()}");
+            $this->setRoleTemplatePermissions($obj_role_template, $rolt_definition);
 
-            ilUtil::sendSuccess($this->txt('plugin_rolt_created') . ' ' . $rolt_definition->getTitle(), true);
+            ilUtil::sendSuccess($this->txt('plugin_rolt_created') . ' ' . $rolt_definition->getTitle());
+        }
+
+    }
+
+    private function setRoleTemplatePermissions(ilObjRoleTemplate $role_template, \CourseWizard\role\RoleTemplatesDefinition $rolt_definition) {
+        global $DIC;
+
+        $rbac_review = $DIC->rbac()->review();
+
+        // For each subtype ...
+        $subs = ilObjRole::getSubObjects('root', false);
+        foreach($subs as $subtype => $def) {
+            $operations = $rbac_review->getOperationsByTypeAndClass($subtype, 'object');
+
+            $enabled_operations = array();
+            // ... check each possible operation (for this type, e.g. 'blog' -> 'read') ...
+            foreach($operations as $ops_id) {
+                $operation = $rbac_review->getOperation($ops_id);
+
+                // ... and check, if the operation should be used for the given role template
+                if($rolt_definition->checkDefaultPermissionByOperationName($subtype, $operation['operation'])) {
+                    // Collect operations in an array, since $rbac_admin->setRolePermission() only accepts an operation list
+                    $enabled_operations[] = $ops_id;
+                }
+            }
+
+            // If operations were selected, set those permissions for the given role template
+            if(count($enabled_operations) > 0) {
+                $DIC->rbac()->admin()->setRolePermission($role_template->getId(), $subtype, $enabled_operations, $this->role_folder_id);
+            }
         }
     }
 
@@ -104,7 +124,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         $role_template->create();
 
         $rbac_admin = $DIC->rbac()->admin();
-        $rbac_admin->assignRoleToFolder($role_template->getId(), ROLE_FOLDER_ID, 'n');
+        $rbac_admin->assignRoleToFolder($role_template->getId(), $this->role_folder_id, 'n');
         $is_protected = $rolt_definition->isProtected() ? 'y' : 'n';
         $rbac_admin->setProtected($role_template->getRefId(), $role_template->getId(), $is_protected);
 

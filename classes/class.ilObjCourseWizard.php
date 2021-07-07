@@ -48,6 +48,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $obj->create();
         $obj->createReference();
         $obj->putInTree($this->ref_id);
+        $obj->setParentRolePermissions($this->ref_id);
 
         $role = \ilObjRole::createDefaultRole(
             $this->plugin->txt(LocalRolesDefinition::ROLE_LNG_TITLE_CRS_EDITOR),
