@@ -28,7 +28,7 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
     /** @var \ilCourseWizardPlugin */
     protected $plugin;
 
-    public const JS_NAMESPACE = 'il.CourseWizardModalFunctions';
+    public const JS_NAMESPACE = 'il.CourseWizardFunctions';
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
@@ -149,8 +149,8 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
         $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
 
-        //return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
-        return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
+        //return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
+        return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
     }
 
     abstract public function getModalPageAsComponentArray() : array;

@@ -52,7 +52,7 @@ class RadioSelectionViewControlGUI
 
             // Create legacy component for mount instructions. Mount instructions text is wrapped in a <div>-tag
             $legacy = $this->ui_factory->legacy("<div id='$title' class='xcwi_content' $hidden>$text</div>")
-                        ->withCustomSignal($title, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$title');");
+                        ->withCustomSignal($title, "il.CourseWizardFunctions.switchViewControlContent(event, '$title');");
 
             // Add to the list of components to render
             $comps[] = $legacy;
@@ -97,7 +97,7 @@ class RadioSelectionViewControlGUI
             $radios_rendered = $DIC->ui()->renderer()->render($content);
 
             $subpage_div = $this->ui_factory->legacy("<div id='$subpage_div_id' class='$xcwi_vc_subpage_div' $hidden>" . $radios_rendered . "</div>")
-                                                  ->withCustomSignal($subpage_div_id, "il.CourseWizardModalFunctions.switchViewControlContent(event, '$subpage_div_id');");
+                                                  ->withCustomSignal($subpage_div_id, "il.CourseWizardFunctions.switchViewControlContent(event, '$subpage_div_id');");
             $components[] = $subpage_div;
 
             $vc_actions[$subpage_title] = $subpage_div->getCustomSignal($subpage_div_id);
@@ -118,7 +118,7 @@ class RadioSelectionViewControlGUI
     protected function getJsForSwitching($xcwi_vc_subpage_div, $xcwi_radio_selection_div)
     {
         $js = "<script>
-            il.CourseWizardModalFunctions.switchViewControlContent = function (e, id){
+            il.CourseWizardFunctions.switchViewControlContent = function (e, id){
                 // e['target'] is the id for the button which was clicked (e.g. 'button#il_ui_fw_1234')
                 obj = $(e['target']);
                 // Sets all buttons to the 'unclicked' state
@@ -134,7 +134,7 @@ class RadioSelectionViewControlGUI
             }
             
             
-            il.CourseWizardModalFunctions.switchSelectedTemplate = function(obj){
+            il.CourseWizardFunctions.switchSelectedTemplate = function(obj){
                 selected_obj = $(obj);
                 let container = selected_obj.closest('.$xcwi_radio_selection_div');
                 container.find('.crs_tmp_checked').removeClass('crs_tmp_checked');

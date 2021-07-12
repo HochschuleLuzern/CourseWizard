@@ -48,13 +48,13 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
     private function showWizardModal(int $ref_id)
     {
         $tpl = $this->dic->ui()->mainTemplate();
-        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/modal_functions.js');
+        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/xcwi_functions.js');
         $tpl->addCss($this->plugin->getDirectory() . '/templates/default/xcwi_modal_styles.css');
 
         $ctrl = $this->dic->ctrl();
         $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $link = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_ASYNC_BASE_MODAL, '', true);
-        $tpl->addOnLoadCode('$.get("' . $link . '", function(data){$("body").append(data);})');
+        $tpl->addOnLoadCode('$.get("' . $link . '", function(data){$("body").append(data);});');
     }
 
     public function isInterestedInContexts() : \ILIAS\GlobalScreen\ScreenContext\Stack\ContextCollection
@@ -80,13 +80,26 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         }
     }
 
+    private function insertInfoTextToScreenWithJavaScript($info_text, array $action_buttons = array())
+    {
+        $message_box = $this->dic->ui()->factory()->messageBox()->info($info_text);
+        if(count($action_buttons) > 0) {
+            $message_box = $message_box->withButtons($action_buttons);
+        }
+
+        $this->dic->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/xcwi_functions.js');
+        $html = $this->dic->ui()->renderer()->render($message_box);
+        $html = str_replace("\n", "", $html);
+        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$html');");
+    }
+
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
     {
         // TODO: Needs refactoring
         try {
             if ($screen_context_stack->current()->hasReferenceId()) {
                 $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
-
+                $this->insertInfoTextToScreenWithJavaScript('This is a test');
                 if ($this->checkIfWizardCouldBeDisplayed($ref_id)) {
                     $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($this->dic->database(), $this->dic->user());
                     $wizard_flow = $wizard_repo->getWizardFlowForCrs($ref_id);

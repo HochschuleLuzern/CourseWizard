@@ -71,7 +71,7 @@ class QuitWizardPage extends BaseModalPagePresenter
         //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
         $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
 
-        return $this->ui_factory->legacy("<script>il.CourseWizardModalFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
+        return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
         //return $this->ui_factory->legacy($js_config->getAsJSONString());
         // TODO: Implement getJSConfigsAsUILegacy() method.
     }

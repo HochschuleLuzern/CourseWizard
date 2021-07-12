@@ -1,4 +1,4 @@
-il.CourseWizardModalFunctions = (function (scope) {
+il.CourseWizardFunctions = (function (scope) {
 
 	let pub = {};
 	let priv = {};
@@ -131,6 +131,17 @@ il.CourseWizardModalFunctions = (function (scope) {
 		}
 
 		priv.isInitialized = true;
+	}
+
+	pub.addInfoMessageToPage = function(infoMessage) {
+		let adminRow = $("div.ilAdminRow");
+
+		if(adminRow.count > 0) {
+			adminRow.append(infoMessage);
+		} else {
+			let adminRow = '<div class="ilAdminRow">'+infoMessage+'</div>';
+			$('#ilSubTab').after(adminRow);
+		}
 	}
 
 	return pub;
