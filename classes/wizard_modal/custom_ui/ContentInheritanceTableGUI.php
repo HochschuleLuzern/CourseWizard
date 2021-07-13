@@ -2,6 +2,13 @@
 
 namespace CourseWizard\CustomUI;
 
+/**
+ * Class ContentInheritanceTableGUI
+ *
+ * This class is kind of a copy from ilObjectCopySelectionTableGUI
+ *
+ * @package CourseWizard\CustomUI
+ */
 class ContentInheritanceTableGUI extends \ilTable2GUI
 {
     /**
@@ -48,8 +55,6 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->access = $DIC->access();
         $lng = $DIC->language();
         $ilCtrl = $DIC->ctrl();
-        $ilUser = $DIC->user();
-        $objDefinition = $DIC["objDefinition"];
 
         parent::__construct($a_parent_class, $a_parent_cmd);
         $this->type = $a_type;
@@ -204,5 +209,10 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $this->tpl->setVariable('OMIT_CHECKED', 'checked="checked"');
         }
         $this->tpl->parseCurrentBlock();
+    }
+
+    public function getHTML()
+    {
+        return parent::getHTML() . "<script src='./Services/CopyWizard/js/ilContainer.js'></script>";
     }
 }
