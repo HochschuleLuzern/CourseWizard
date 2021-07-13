@@ -19,6 +19,7 @@ class ilCourseWizardApiGUI
     const CMD_DISMISS_WIZARD = 'dismissWizard';
     const CMD_POSTPONE_WIZARD = 'postponeWizard';
     const CMD_PROCEED_POSTPONED_WIZARD = 'proceedPostponedWizard';
+    const CMD_GET_REACTIVATE_WIZARD_MESSAGE = 'getReactivateWizardMessage';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -180,6 +181,15 @@ class ilCourseWizardApiGUI
                             $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
                         }
                         break;
+
+                    case self::CMD_GET_REACTIVATE_WIZARD_MESSAGE:
+                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+                        $this->ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $target_ref_id);
+                        $link_reactivate = $this->ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
+                        $btn_reactivate = $this->ui_factory->button()->standard($this->plugin->txt('reactivate_wizard'), $link_reactivate);
+                        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate]);
+                        echo $this->ui_renderer->renderAsync($message_box);
+                        exit;
 
 
                     default:

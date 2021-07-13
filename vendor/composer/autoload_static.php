@@ -76,6 +76,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'ilCourseWizardConfig' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardConfig.php',
         'ilCourseWizardConfigGUI' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardConfigGUI.php',
         'ilCourseWizardGlobalScreenModificationProvider' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardGlobalScreenModificationProvider.php',
+        'ilCourseWizardJavaScript' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardJavaScript.php',
         'ilCourseWizardPlugin' => __DIR__ . '/../..' . '/classes/class.ilCourseWizardPlugin.php',
         'ilObjCourseWizard' => __DIR__ . '/../..' . '/classes/class.ilObjCourseWizard.php',
         'ilObjCourseWizardAccess' => __DIR__ . '/../..' . '/classes/class.ilObjCourseWizardAccess.php',

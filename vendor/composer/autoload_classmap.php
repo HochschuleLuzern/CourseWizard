@@ -61,6 +61,7 @@ return array(
     'ilCourseWizardConfig' => $baseDir . '/classes/class.ilCourseWizardConfig.php',
     'ilCourseWizardConfigGUI' => $baseDir . '/classes/class.ilCourseWizardConfigGUI.php',
     'ilCourseWizardGlobalScreenModificationProvider' => $baseDir . '/classes/class.ilCourseWizardGlobalScreenModificationProvider.php',
+    'ilCourseWizardJavaScript' => $baseDir . '/classes/class.ilCourseWizardJavaScript.php',
     'ilCourseWizardPlugin' => $baseDir . '/classes/class.ilCourseWizardPlugin.php',
     'ilObjCourseWizard' => $baseDir . '/classes/class.ilObjCourseWizard.php',
     'ilObjCourseWizardAccess' => $baseDir . '/classes/class.ilObjCourseWizardAccess.php',

@@ -7,7 +7,7 @@ il.CourseWizardFunctions = (function (scope) {
 	let storageEngine = localStorage;
 	let currentWizardObj = null;
 
-	priv.config = {
+	priv.wizardModalConfig = {
 		saveConfigUrl: '',
 		currentPage: '',
 		nextPage: '',
@@ -17,7 +17,7 @@ il.CourseWizardFunctions = (function (scope) {
 	let executePostRequest = function(data, url) {
 		$.post(url, data.post_data).done(function(response)
 		{
-			$(document).trigger(priv.config['replaceSignal'], data.signal_data)
+			$(document).trigger(priv.wizardModalConfig['replaceSignal'], data.signal_data)
 		});
 	};
 
@@ -34,11 +34,11 @@ il.CourseWizardFunctions = (function (scope) {
 		let checked_id = $('#xcwi_template_selection_div_id').find('input:checked').val();
 
 		if(checked_id != null) {
-			let nextPageUrl = priv.config['nextPageUrl'] + '&template_ref_id=' + checked_id;
+			let nextPageUrl = priv.wizardModalConfig['nextPageUrl'] + '&template_ref_id=' + checked_id;
 			currentWizardObj['templateRefId'] = checked_id;
 			priv.storeCurrentWizardObj()
 
-			priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+			priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
 
 		} else {
 		}
@@ -47,8 +47,8 @@ il.CourseWizardFunctions = (function (scope) {
 	pub.introductionPageFinished = function(e) {
 		let skip_introduction = $('#xcwi_skip_introduction').is(":checked");
 
-		let nextPageUrl = priv.config['nextPageUrl'] + '&skip_intro=' + (skip_introduction ? '1' : '0');
-		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+		let nextPageUrl = priv.wizardModalConfig['nextPageUrl'] + '&skip_intro=' + (skip_introduction ? '1' : '0');
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
 
 	}
 
@@ -61,16 +61,16 @@ il.CourseWizardFunctions = (function (scope) {
 			};
 		 });
 		priv.storeCurrentWizardObj();
-		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: priv.config['nextPageUrl']});
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: priv.wizardModalConfig['nextPageUrl']});
 	};
 
 	pub.loadPreviousPage = function(e) {
 
-		let previousPageUrl = priv.config['previousPageUrl']
+		let previousPageUrl = priv.wizardModalConfig['previousPageUrl']
 		if(currentWizardObj['templateRefId']) {
 			previousPageUrl += '&template_ref_id=' + currentWizardObj['templateRefId'];
 		}
-		priv.triggerSignal(priv.config['replaceSignal'], 'click', $(e), {url: previousPageUrl});
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: previousPageUrl});
 	}
 
 	pub.executeImport = function(e) {
@@ -78,7 +78,7 @@ il.CourseWizardFunctions = (function (scope) {
 		priv.storeCurrentWizardObj();
 		let data = {obj: JSON.stringify(currentWizardObj)};
 
-		$.post(priv.config['executeImportUrl'], data).done(function(response)
+		$.post(priv.wizardModalConfig['executeImportUrl'], data).done(function(response)
 		{
 			console.log("Course imported!");
 
@@ -108,23 +108,23 @@ il.CourseWizardFunctions = (function (scope) {
 	}
 
 	pub.printCurrentConf = function() {
-		console.log(priv.config);
+		console.log(priv.wizardModalConfig);
 	}
 
 	priv.closeModalTriggered = function(event, signalData) {
 		console.log('Close Modal triggered');
 	}
 
-	pub.initNewModalPage = function (config) {
-		priv.config = config;
+	pub.initNewModalPage = function (wizardModalConfig) {
+		priv.wizardModalConfig = wizardModalConfig;
 
-		if(currentWizardObj === null || config.targetRefId !== currentWizardObj.targetRefId) {
-			priv.loadCurrentWizardObj(config.targetRefId);
+		if(currentWizardObj === null || wizardModalConfig.targetRefId !== currentWizardObj.targetRefId) {
+			priv.loadCurrentWizardObj(wizardModalConfig.targetRefId);
 		}
 
 		if(!priv.isInitialized) {
 			$("#coursewizard").parents('.modal.il-modal-roundtrip').on("hide.bs.modal", function(){
-				$.ajax(priv.config['dismissModalUrl']).done(function() {
+				$.ajax(priv.wizardModalConfig['dismissModalUrl']).done(function() {
 					location.reload();
 				});
 			});
@@ -133,15 +133,22 @@ il.CourseWizardFunctions = (function (scope) {
 		priv.isInitialized = true;
 	}
 
-	pub.addInfoMessageToPage = function(infoMessage) {
-		let adminRow = $("div.ilAdminRow");
+	pub.addInfoMessageToPage = function(messageUrl) {
 
-		if(adminRow.count > 0) {
-			adminRow.append(infoMessage);
-		} else {
-			let adminRow = '<div class="ilAdminRow">'+infoMessage+'</div>';
-			$('#ilSubTab').after(adminRow);
-		}
+		$.get(messageUrl, function(data, status)
+			{
+				console.log(data);
+				console.log(status);
+				let adminRow = $("div.ilAdminRow");
+
+				if(adminRow.count > 0) {
+					adminRow.append(data);
+				} else {
+					adminRow = '<div class="ilAdminRow">'+data+'</div>';
+					$('#ilSubTab').after(adminRow);
+				}
+			}
+		);
 	}
 
 	return pub;

@@ -40,21 +40,20 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         $ctrl = $this->dic->ctrl();
         $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $link = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
-        $btn = $this->dic->ui()->factory()->link()->standard("Reactivate Modal (Link btn)", $link);
+        $btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal (Button to Google)", "http://www.ilias.de");
+        //$btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal (Link btn)", $link);
+        //$btn = $this->dic->ui()->factory()->link()->standard("Reactivate Modal (Link btn)", $link);
         $btn_str = $this->dic->ui()->renderer()->render($btn);
-        ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
+        $this->insertInfoTextToScreenWithJavaScript($this->plugin->txt('wizard_postponed_info'), [$btn]);
+        //ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
     }
 
     private function showWizardModal(int $ref_id)
     {
-        $tpl = $this->dic->ui()->mainTemplate();
-        $tpl->addJavaScript($this->plugin->getDirectory() . '/js/xcwi_functions.js');
-        $tpl->addCss($this->plugin->getDirectory() . '/templates/default/xcwi_modal_styles.css');
-
         $ctrl = $this->dic->ctrl();
         $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $link = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_ASYNC_BASE_MODAL, '', true);
-        $tpl->addOnLoadCode('$.get("' . $link . '", function(data){$("body").append(data);});');
+        $this->dic->ui()->mainTemplate()->addOnLoadCode('$.get("' . $link . '", function(data){$("body").append(data);});');
     }
 
     public function isInterestedInContexts() : \ILIAS\GlobalScreen\ScreenContext\Stack\ContextCollection
@@ -70,7 +69,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         // Check for request on ilias.php
         if ($script_name == 'ilias.php' && isset($request->getQueryParams()['cmd'])) {
             return $request->getQueryParams()['cmd'] == 'view' || $request->getQueryParams()['cmd'] == 'render';
-        } elseif ($script_name == 'ilias.php' && $this->dic->ctrl()->getCmd == '') {
+        } elseif ($script_name == 'ilias.php' && $this->dic->ctrl()->getCmd() == '') {
             return true;
         }
 
@@ -82,15 +81,9 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
 
     private function insertInfoTextToScreenWithJavaScript($info_text, array $action_buttons = array())
     {
-        $message_box = $this->dic->ui()->factory()->messageBox()->info($info_text);
-        if(count($action_buttons) > 0) {
-            $message_box = $message_box->withButtons($action_buttons);
-        }
+        $msg_url = $this->dic->ctrl()->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_GET_REACTIVATE_WIZARD_MESSAGE);
 
-        $this->dic->ui()->mainTemplate()->addJavaScript($this->plugin->getDirectory() . '/js/xcwi_functions.js');
-        $html = $this->dic->ui()->renderer()->render($message_box);
-        $html = str_replace("\n", "", $html);
-        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$html');");
+        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$msg_url');");
     }
 
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
@@ -99,10 +92,11 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         try {
             if ($screen_context_stack->current()->hasReferenceId()) {
                 $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
-                $this->insertInfoTextToScreenWithJavaScript('This is a test');
                 if ($this->checkIfWizardCouldBeDisplayed($ref_id)) {
                     $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($this->dic->database(), $this->dic->user());
                     $wizard_flow = $wizard_repo->getWizardFlowForCrs($ref_id);
+
+                    ilCourseWizardJavaScript::addJsAndCssFileToGlobalTemplate();
 
                     switch ($wizard_flow->getCurrentStatus()) {
                         case \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS:
@@ -125,7 +119,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
             }
         } catch (Exception $e) {
             // If there is a bug in showing the wizard like access-checking because of unhandled ILIAS-Context or something else
-            // Do nothing. Do nothing means therefore -> do not show the wizard
+            // Do nothing. Do nothing means therefore -> do not show the wizard or any plugin-things
         }
         return parent::getContentModification($screen_context_stack); // TODO: Change the autogenerated stub
     }
