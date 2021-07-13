@@ -139,13 +139,22 @@ il.CourseWizardFunctions = (function (scope) {
 			{
 				console.log(data);
 				console.log(status);
-				let adminRow = $("div.ilAdminRow");
+				if(status == "success") {
+					let adminRow = $("div.ilAdminRow");
+					let msgBox;
 
-				if(adminRow.count > 0) {
-					adminRow.append(data);
-				} else {
-					adminRow = '<div class="ilAdminRow">'+data+'</div>';
-					$('#ilSubTab').after(adminRow);
+					if(adminRow.count > 0) {
+						msgBox = $(data)
+						msgBox.hide();
+						adminRow.append(msgBox);
+					} else {
+						adminRow = '<div class="ilAdminRow">'+data+'</div>';
+						msgBox = $(adminRow);
+						msgBox.hide();
+						$('#ilSubTab').after(msgBox);
+					}
+
+					msgBox.fadeIn(800);
 				}
 			}
 		);

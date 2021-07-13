@@ -121,8 +121,6 @@ class ilCourseWizardApiGUI
 
                     case self::CMD_EXECUTE_CRS_IMPORT:
 
-
-
                         $obj_str = $_POST['obj'];
                         $obj = json_decode($obj_str, true);
                         $template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
@@ -147,12 +145,6 @@ class ilCourseWizardApiGUI
                         if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
                             $wizard_flow = $wizard_flow->withPostponedStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
-
-                            $this->ctrl->setParameter($this, 'ref_id', $target_ref_id);
-                            $link = $this->ctrl->getLinkTarget($this, self::CMD_PROCEED_POSTPONED_WIZARD, '');
-                            $btn = $this->ui_factory->link()->standard("Reactivate Modal (Link btn)", $link);
-                            $btn_str = $this->ui_renderer->render($btn);
-                            ilUtil::sendInfo("Modal Postponed. Click here to reactivate it: $btn_str", true);
                         }
 
 
@@ -162,11 +154,13 @@ class ilCourseWizardApiGUI
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
                         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS ||
+                            $wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+
                             $wizard_flow = $wizard_flow->withQuitedStatus();
                             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
 
-                            ilUtil::sendInfo($this->plugin->txt('wizard_dismissed_info'), true);
+                            ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
                             $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
                         }
                         break;
@@ -185,9 +179,14 @@ class ilCourseWizardApiGUI
                     case self::CMD_GET_REACTIVATE_WIZARD_MESSAGE:
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
                         $this->ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $target_ref_id);
+
                         $link_reactivate = $this->ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
-                        $btn_reactivate = $this->ui_factory->button()->standard($this->plugin->txt('reactivate_wizard'), $link_reactivate);
-                        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate]);
+                        $btn_reactivate = $this->ui_factory->button()->standard($this->plugin->txt('btn_reactivate_wizard'), $link_reactivate);
+
+                        $link_quit_wizard = $this->ctrl->getLinkTargetByClass(self::API_CTRL_PATH, self::CMD_DISMISS_WIZARD);
+                        $btn_quit_wizard = $this->ui_factory->button()->standard($this->plugin->txt('btn_quit_wizard'), $link_quit_wizard);
+
+                        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate, $btn_quit_wizard]);
                         echo $this->ui_renderer->renderAsync($message_box);
                         exit;
 

@@ -101,7 +101,10 @@ class WizardFlow
 
     public function withQuitedStatus()
     {
-        if ($this->current_status == self::STATUS_IN_PROGRESS || $this->current_status == self::STATUS_QUIT) {
+        if ($this->current_status == self::STATUS_IN_PROGRESS
+            || $this->current_status == self::STATUS_QUIT
+            || $this->getCurrentStatus() == self::STATUS_POSTPONED) {
+
             $clone = clone $this;
             $clone->current_status = self::STATUS_QUIT;
             $clone->finished_import_ts = time();
