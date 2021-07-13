@@ -31,6 +31,7 @@ class IntroductionPage extends BaseModalPagePresenter
         $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p4') . '</p>');
         $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p5') . '</p>');
         $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p6') . '</p>');
+        $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p7') . '</p>');
 
         //$ui_components[] = $this->ui_factory->legacy($text);//'Willkommen im ILIAS Kurs Wizard!<br><br>Hier wird irgendwann mal eine kurze Einleitung stehen die erklärt, was das eigentlich ist und wie man es bedienen soll. Aber im Moment ist hier einfach dieser nutzlose Text.<br>');
         $ui_components[] = $this->ui_factory->divider()->horizontal();

@@ -26,16 +26,15 @@ class QuitWizardPage extends BaseModalPagePresenter
         global $DIC;
         $link_proceed_wizard = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=" . $_GET['previousPage'];
         $js_code = $this->getJsPreviousPageMethod();
-        $btn_proceed_wizard = $this->ui_factory->button()->standard('Go back to previous Page', '#')->withOnLoadCode(
+        $btn_proceed_wizard = $this->ui_factory->button()->standard($this->plugin->txt('btn_back'), '#')->withOnLoadCode(
             function ($id) use ($js_code, $replace_signal) {
                 return '$(' . $id . ').click(' . $js_code . ');';
             }
         );
-        ;
 
         //loadPreviousPage
         $link_quit_wizard = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_DISMISS_WIZARD);
-        $btn_quit_wizard = $this->ui_factory->button()->primary('Quit Course Wizard', $link_quit_wizard);
+        $btn_quit_wizard = $this->ui_factory->button()->primary($this->plugin->txt('btn_quit_wizard'), $link_quit_wizard);
 
         return array(
             $btn_proceed_wizard,
