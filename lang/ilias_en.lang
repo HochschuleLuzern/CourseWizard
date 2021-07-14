@@ -106,7 +106,7 @@ wizard_introduction_text_p4#:#<b>Step 3</b>: Based on the selection in the 2nd s
 wizard_introduction_text_p5#:#<b>Step 4</b>: The last page offers some more settings, which will be applied to your course. With a click on "Execute import" the selected template will be imported and applied to the current course.
 wizard_introduction_text_p6#:#<b>Arrange Course without Assistance</b>: If you want to set up the course without help, click the button below "Set up without wizard".
 
-wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. Click on the button "Open Wizard" to show it again. If you want to arrange your course without assistance, click on "Arrange Course Unassisted" or create an ilias-Object in this course.
+wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. Click on the button "Open Wizard" to show it again. If you want to arrange your course without assistance, open the Wizard and click on "Arrange Course Unassisted" or create an ILIAS-Object in this course.
 wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
 wizard_settings_text#:#Choose some additional settings that you want to apply to your course
 wizard_template_selection_text#:#Select the template on which you want to base your course

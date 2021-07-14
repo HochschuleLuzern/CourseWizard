@@ -183,10 +183,8 @@ class ilCourseWizardApiGUI
                         $link_reactivate = $this->ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
                         $btn_reactivate = $this->ui_factory->button()->standard($this->plugin->txt('btn_reactivate_wizard'), $link_reactivate);
 
-                        $link_quit_wizard = $this->ctrl->getLinkTargetByClass(self::API_CTRL_PATH, self::CMD_DISMISS_WIZARD);
-                        $btn_quit_wizard = $this->ui_factory->button()->standard($this->plugin->txt('btn_quit_wizard'), $link_quit_wizard);
 
-                        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate, $btn_quit_wizard]);
+                        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate]);
                         echo $this->ui_renderer->renderAsync($message_box);
                         exit;
 

@@ -105,7 +105,7 @@ wizard_introduction_text_p5#:#<b>Schritt 4</b>: Die letzte Seite bietet noch ein
 wizard_introduction_text_p6#:#<b>Kurs ohne Hilfe einrichten</b>: Möchten Sie den Kurs ohne Hilfe einrichten, so klicken Sie auf den Knopf unten "Ohne Wizard einrichten".
 wizard_introduction_text_p7#:#<b>Modal schliessen</b>: Wenn Sie auf "Modal schliessen", auf das Kreuz oben rechts oder irgendwo neben das Modal klicken, so schliesst sich dieses Fenster wieder. So können Sie den Wizard unterbrechen um ihn zu einem späteren Zeitpunkt auszuführen.
 
-wizard_postponed_info#:#Der Wizard wurde geschlossen. Klicken Sie unten auf "Wizard öffnen" um ihn wieder erneut anzuzeigen. Wenn Sie den Kurs ohne Hilfe einrichten möchten, klicken Sie unten auf "Ohne Hilfe einrichten" oder erstellen Sie ein ILIAS-Objekt in diesem Kurs.
+wizard_postponed_info#:#Der Wizard wurde geschlossen. Klicken Sie unten auf "Wizard öffnen" um ihn wieder erneut anzuzeigen. Wenn Sie den Kurs ohne Hilfe einrichten möchten, öffnen Sie den Wizard und klicken Sie unten auf "Ohne Wizard einrichten" oder erstellen Sie ein ILIAS-Objekt in diesem Kurs.
 wizard_quit_text#:#Sind Sie sicher, dass Sie den Kurs ohne Hilfe einrichten möchten? Wenn Sie auf "Wizard beenden" klicken, wird der Wizard für diesen Kurs deaktiviert.
 wizard_settings_text#:#Wählen Sie zusätzliche Einstellungen, welche Sie auf diesen Kurs anwenden möchten
 wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der ihr Kurs basieren soll
