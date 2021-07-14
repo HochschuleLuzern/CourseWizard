@@ -28,7 +28,7 @@ class ContentInheritancePage extends BaseModalPagePresenter
         $text = $this->plugin->txt('wizard_content_inheritance_text');
 
         $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy($text);
+        $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
 
         $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
         $table->parseSource($this->template_ref_id);

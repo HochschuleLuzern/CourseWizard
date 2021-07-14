@@ -50,7 +50,7 @@ class SettingsPage extends BaseModalPagePresenter
         $text = $this->plugin->txt('wizard_settings_text');
 
         $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy($text);
+        $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
 
         $settings = \CourseSettingsData::getSettings();
         foreach ($settings as $setting) {

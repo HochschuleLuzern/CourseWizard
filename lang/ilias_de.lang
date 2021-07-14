@@ -109,6 +109,7 @@ wizard_postponed_info#:#Der Wizard wurde geschlossen. Klicken Sie unten auf "Wiz
 wizard_quit_text#:#Sind Sie sicher, dass Sie den Kurs ohne Hilfe einrichten möchten? Wenn Sie auf "Wizard beenden" klicken, wird der Wizard für diesen Kurs deaktiviert.
 wizard_settings_text#:#Wählen Sie zusätzliche Einstellungen, welche Sie auf diesen Kurs anwenden möchten
 wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der ihr Kurs basieren soll
+wizard_template_selection_empty#:#Im ausgewählten Departement ist zurzeit noch keine Kursvorlage vorhanden.
 
 xcwi_add#:#Neuen Kursvorlage Container erstellen
 xcwi_duplicate#:#Kopiere bereits existierenden Kursvorlage Container

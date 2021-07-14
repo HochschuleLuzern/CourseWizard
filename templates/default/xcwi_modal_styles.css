@@ -36,7 +36,18 @@
 .xcwi_modal_checkbox_div {
 	text-align: center;
 }
+
 .xcwi_modal_checkbox_label {
 	margin-right: 1em;
-	font-family: italic;
+	font-family: italic, serif;
+}
+
+.xcwi_modal_no_tpl {
+	padding: 0.5em 2em;
+	font-family: italic, serif;
+}
+
+#xcwi_template_selection_div_id {
+	margin-top: 1em;
+	margin-bottom: 2em;
 }

@@ -31,7 +31,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
     public function getModalPageAsComponentArray() : array
     {
         $text = $this->plugin->txt('wizard_template_selection_text');
-        $container_div = [$this->ui_factory->legacy("$text<div id='xcwi_template_selection_div_id'>")];
+        $container_div = [$this->ui_factory->legacy("<p>$text</p><div id='xcwi_template_selection_div_id'>")];
         $container_content = $this->view_control->getAsComponentList();
         $container_end_div = [$this->ui_factory->legacy('</div>')];
         return array_merge($container_div, $container_content, $container_end_div);

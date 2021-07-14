@@ -21,14 +21,21 @@ class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
 
     public function getContent()
     {
+        global $DIC;
         $content = array();
 
-        /** @var TemplateSelectionRadioOptionGUI $option */
-        foreach ($this->options as $option) {
-            foreach ($option->getAsLegacyComponent() as $ui_component) {
-                $content[] = $ui_component;
+        if(count($this->options) > 0) {
+            /** @var TemplateSelectionRadioOptionGUI $option */
+            foreach ($this->options as $option) {
+                foreach ($option->getAsLegacyComponent() as $ui_component) {
+                    $content[] = $ui_component;
+                }
             }
+        } else {
+            $plugin = new \ilCourseWizardPlugin();
+            $content[] = $DIC->ui()->factory()->legacy('<div class="xcwi_modal_no_tpl"><em>'.$plugin->txt('wizard_template_selection_empty').'</em></div>');
         }
+
 
         return $content;
     }

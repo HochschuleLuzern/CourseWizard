@@ -71,17 +71,18 @@ class WizardModalFactory
             $view_control->addNewSubPage($department_subpage);
         }
 
-        global $DIC;
         $user = $DIC->user();
         $obj_ids_with_membership = \ilParticipants::_getMembershipByType($user->getId(), 'crs');
 
-        $inherit_subpage = new RadioGroupViewControlSubPageGUI('Inherit');
+        $inherit_subpage = new RadioGroupViewControlSubPageGUI($this->plugin->txt('tpl_selection_my_courses'));
 
         foreach ($obj_ids_with_membership as $obj_id) {
             $ref_ids_for_object = \ilObject::_getAllReferences($obj_id);
             foreach ($ref_ids_for_object as $ref_id) {
-                $crs = new \ilObjCourse($ref_id, true);
-                $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory));
+                if($DIC->rbac()->system()->checkAccessOfUser($user->getId(), 'write', $ref_id)) {
+                    $crs = new \ilObjCourse($ref_id, true);
+                    $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory));
+                }
             }
         }
 
