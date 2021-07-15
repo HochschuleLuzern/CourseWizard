@@ -25,6 +25,25 @@ class ilCourseWizardApiGUI
 
     const GET_TEMPLATE_REF_ID = 'template_ref_id';
 
+    /** @var ilCtrl */
+    protected $ctrl;
+
+    /** @var \Psr\Http\Message\RequestInterface|\Psr\Http\Message\ServerRequestInterface */
+    protected $request;
+
+    /** @var \ILIAS\UI\Factory */
+    protected $ui_factory;
+
+    /** @var \ILIAS\UI\Renderer */
+    protected $ui_renderer;
+
+    /** @var ilRbacSystem */
+    protected $rbac_system;
+
+    /** @var ilCourseWizardPlugin */
+    protected $plugin;
+
+
     public function __construct()
     {
         global $DIC;
@@ -33,6 +52,7 @@ class ilCourseWizardApiGUI
         $this->request = $DIC->http()->request();
         $this->ui_factory = $DIC->ui()->factory();
         $this->ui_renderer = $DIC->ui()->renderer();
+        $this->rbac_system = $DIC->rbac()->system();
         $this->plugin = new ilCourseWizardPlugin();
     }
 
@@ -51,73 +71,85 @@ class ilCourseWizardApiGUI
                     case self::CMD_ASYNC_BASE_MODAL:
                         $db = $DIC->database();
                         $user = $DIC->user();
+                        $query_params = $this->request->getQueryParams();
+                        $target_ref_id = $query_params['ref_id'] ?? 0;
 
-                        $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
-                        $user_preferences = $user_pref_repo->getUserPreferences($user, true);
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
+                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                            exit;
+                        } else {
+                            $user_pref_repo   = new \CourseWizard\DB\UserPreferencesRepository($db);
+                            $user_preferences = $user_pref_repo->getUserPreferences($user, true);
 
-                        $page = $this->request->getQueryParams()['page'];
-                        if ($page == null) {
-                            $page = $user_preferences->wasSkipIntroductionsClicked() ?
-                                Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE : Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                            $page = $query_params['page'];
+                            if ($page == null) {
+                                $page = $user_preferences->wasSkipIntroductionsClicked()
+                                    ? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE
+                                    : Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                            }
+
+                            $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($db, $user);
+                            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+
+                            $modal_factory = new Modal\WizardModalFactory(
+                                new \CourseWizard\DB\CourseTemplateRepository($db),
+                                $this->ctrl,
+                                $this->request,
+                                $this->ui_factory,
+                                $this->ui_renderer,
+                                $this->plugin
+                            );
+
+                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+
+                            $output = $modal->getRenderedModal(true);
+                            echo $output;
+                            exit;
                         }
-
-                        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
-                        $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
-
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($db, $user);
-                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-
-                        $modal_factory = new Modal\WizardModalFactory(
-                            new \CourseWizard\DB\CourseTemplateRepository($db),
-                            $this->ctrl,
-                            $this->request,
-                            $this->ui_factory,
-                            $this->ui_renderer,
-                            $this->plugin
-                        );
-
-                        $modal = $modal_factory->buildModalFromStateMachine($state_machine);
-
-                        $output = $modal->getRenderedModal(true);
-                        echo $output;
-                        die;
-                        break;
 
                     // Creates new modal page (used for async page replacement in Roundtrip Modal)
                     case self::CMD_ASYNC_MODAL:
                         $db = $DIC->database();
                         $user = $DIC->user();
-
                         $query_params = $this->request->getQueryParams();
-                        $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
+
                         $target_ref_id = $query_params['ref_id'] ?? 0;
-                        $skip_intro_value_set = isset($query_params['skip_intro']);
-                        $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
-                        if ($skip_intro_value_set) {
-                            $skip_intro_value = $query_params['skip_intro'] == '1';
-                            $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
-                            $user_preferences = $user_pref_repo->getUserPreferences($user, true);
-                            $user_preferences = $user_preferences->withSkipIntroChanged($skip_intro_value);
-                            $user_pref_repo->updateUserPreferences($user_preferences);
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
+                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                            exit;
+                        } else {
+                            $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
+                            $skip_intro_value_set = isset($query_params['skip_intro']);
+                            $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
+
+                            if ($skip_intro_value_set) {
+                                $skip_intro_value = $query_params['skip_intro'] == '1';
+                                $user_pref_repo = new \CourseWizard\DB\UserPreferencesRepository($db);
+                                $user_preferences = $user_pref_repo->getUserPreferences($user, true);
+                                $user_preferences = $user_preferences->withSkipIntroChanged($skip_intro_value);
+                                $user_pref_repo->updateUserPreferences($user_preferences);
+                            }
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                            $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+
+                            $modal_factory = new Modal\WizardModalFactory(
+                                new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
+                                $this->ctrl,
+                                $this->request,
+                                $this->ui_factory,
+                                $this->ui_renderer,
+                                $this->plugin
+                            );
+
+                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+
+                            echo $modal->getRenderedModalFromAsyncCall();
+                            exit;
                         }
-
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
-                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-
-                        $modal_factory = new Modal\WizardModalFactory(
-                            new \CourseWizard\DB\CourseTemplateRepository($DIC->database()),
-                            $this->ctrl,
-                            $this->request,
-                            $this->ui_factory,
-                            $this->ui_renderer,
-                            $this->plugin
-                        );
-
-                        $modal = $modal_factory->buildModalFromStateMachine($state_machine);
-
-                        echo $modal->getRenderedModalFromAsyncCall();
-                        exit;
 
                     case self::CMD_EXECUTE_CRS_IMPORT:
 
@@ -140,30 +172,42 @@ class ilCourseWizardApiGUI
 
                     case self::CMD_POSTPONE_WIZARD:
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
-                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
-                            $wizard_flow = $wizard_flow->withPostponedStatus();
-                            $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
+                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                            exit;
+                        } else {
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                            if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+                                $wizard_flow = $wizard_flow->withPostponedStatus();
+                                $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+                            }
                         }
 
-
-                        break;
+                        exit;
 
                     case self::CMD_DISMISS_WIZARD:
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
-                        $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
-                        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-                        if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS ||
-                            $wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
 
-                            $wizard_flow = $wizard_flow->withQuitedStatus();
-                            $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
+                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        } else {
 
-                            ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
-                            $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                            if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS ||
+                                $wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+
+                                $wizard_flow = $wizard_flow->withQuitedStatus();
+                                $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                                ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
+                                $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
+                            }
                         }
-                        break;
+
+                        exit;
 
                     case self::CMD_PROCEED_POSTPONED_WIZARD:
                         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
