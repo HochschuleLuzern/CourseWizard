@@ -6,6 +6,45 @@ class CourseImportController
     {
     }
 
+    private function importSelectedSpecificSettings(CourseImportData $course_import_data, int $target_obj_id)
+    {
+        foreach($course_import_data->getSpecificSettingsData() as $key => $value) {
+
+            switch ($key) {
+                case CourseSettingsData::FORM_SORT_POSTVAR:
+
+                    $sorting_changed = false;
+                    switch($value) {
+                        case 1: // Sort by title
+                            $sort_value = \ilContainer::SORT_TITLE;
+                            $sorting_changed = true;
+                            break;
+
+                        case 2: // Sort manually
+                            $sort_value =\ilContainer::SORT_MANUAL;
+                            $sorting_changed = true;
+                            break;
+
+                        case 3: // Sort by creation date
+                            $sort_value = \ilContainer::SORT_CREATION;
+                            $sorting_changed = true;
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    if($sorting_changed) {
+                        $sorting = new \ilContainerSortingSettings($target_obj_id);
+                        $sorting->setSortMode($sort_value);
+                        $sorting->update();
+                    }
+
+                    break;
+            }
+        }
+    }
+
     private function importCourseSettings(CourseImportData $course_import_data)
     {
         $source_obj_id = ilObject::_lookupObjId($course_import_data->getTemplateCrsRefId());
@@ -21,6 +60,8 @@ class CourseImportController
         foreach (ilContainer::_getContainerSettings($source_obj_id) as $keyword => $value) {
             ilContainer::_writeContainerSetting($target_obj_id, $keyword, $value);
         }
+
+        $this->importSelectedSpecificSettings($course_import_data, $target_obj_id);
     }
 
     public function executeImport(CourseImportData $course_import_data)

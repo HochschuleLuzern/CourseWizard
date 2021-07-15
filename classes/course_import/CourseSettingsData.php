@@ -8,12 +8,14 @@ class CourseSettingsData
     const FORM_SORT_BY_TITLE = 'sort_by_title';
     const FORM_SORT_BY_MANUALLY = 'sort_by_manually';
     const FORM_SORT_BY_DATE = 'sort_by_date';
+    const FORM_SORT_POSTVAR = 'xcwi_sort';
 
     public static function getSettings()
     {
         return array(
             self::SETTING_SORT => array(
                 'title' => self::FORM_SORT_DROPDOWN_TITLE,
+                'postvar' => self::FORM_SORT_POSTVAR,
                 'options' => array(
                     self::FORM_SORT_BY_TEMPLATE,
                     self::FORM_SORT_BY_TITLE,

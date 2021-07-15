@@ -23,24 +23,24 @@ class SettingsPage extends BaseModalPagePresenter
         );
     }
 
-    private function settingToUIComponent($setting)
+    private function settingToPropertyFormComponent($setting)
     {
-        $ui_component = null;
+        $form_item = null;
 
         switch ($setting['title']) {
             case \CourseSettingsData::FORM_SORT_DROPDOWN_TITLE:
-                $title = $this->plugin->txt($setting['title']);
+                $form_item = new \ilSelectInputGUI($this->plugin->txt($setting['title']), $setting['postvar']);
+
                 $options = array();
                 foreach ($setting['options'] as $option) {
                     $options[] = $this->plugin->txt($option);
                 }
-
-                $ui_component = $this->ui_factory->input()->field()->select($title, $options);
+                $form_item->setOptions($options);
 
                 break;
         }
 
-        return $ui_component;
+        return $form_item;
     }
 
     public function getModalPageAsComponentArray() : array
@@ -50,17 +50,23 @@ class SettingsPage extends BaseModalPagePresenter
         $text = $this->plugin->txt('wizard_settings_text');
 
         $ui_components = array();
+        $form_id = uniqid('xcwi_wizard_settings');
         $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
+        $form = new \ilPropertyFormGUI();
+        $form->setId($form_id);
 
         $settings = \CourseSettingsData::getSettings();
         foreach ($settings as $setting) {
-            $ui_component = $this->settingToUIComponent($setting);
-            if ($ui_component) {
-                $ui_components[] = $ui_component;
+            $form_item = $this->settingToPropertyFormComponent($setting);
+            if($form_item) {
+                $form->addItem($form_item);
             }
         }
 
+        $ui_components[] = $this->ui_factory->legacy($form->getHTML());
+
         // TODO: Find better place for this
+        $this->js_creator->addCustomConfigElement('settingsForm', $form->getId());
         $this->js_creator->addCustomConfigElement('executeImportUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_EXECUTE_CRS_IMPORT));
 
         return $ui_components;

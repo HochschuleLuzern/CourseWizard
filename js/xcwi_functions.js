@@ -74,15 +74,15 @@ il.CourseWizardFunctions = (function (scope) {
 	}
 
 	pub.executeImport = function(e) {
-		currentWizardObj["specificSettings"] = 'hello world';
+		currentWizardObj["specificSettings"] = {};
+		$('#form_'+priv.wizardModalConfig['settingsForm']+' :input').each(function() {
+			currentWizardObj["specificSettings"][this.name] = $(this).val()
+		});
 		priv.storeCurrentWizardObj();
 		let data = {obj: JSON.stringify(currentWizardObj)};
 
 		$.post(priv.wizardModalConfig['executeImportUrl'], data).done(function(response)
 		{
-			console.log("Course imported!");
-
-			console.log("Deleting obj with target ref: " + currentWizardObj.targetRefId);
 			storageEngine.removeItem(currentWizardObj.targetRefId);
 			location.reload();
 		});
