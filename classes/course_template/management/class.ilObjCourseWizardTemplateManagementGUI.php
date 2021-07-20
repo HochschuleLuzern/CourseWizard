@@ -89,11 +89,18 @@ class ilObjCourseWizardTemplateManagementGUI
                                 CourseTemplate::STATUS_DECLINED);
 
         if (!in_array($status_code, $allowed_status)) {
-            ilUtil::sendFailure("Invalid Status given: " . $status_code, true);
+
+            try {
+                $code_as_string = CourseTemplate::statusCodeToLanguageVariable($status_code);
+            } catch (InvalidArgumentException $e) {
+                $code_as_string = $status_code;
+            }
+
+            $failure_message = $this->plugin->txt('status_invalid_status_given') . ' ' . $this->plugin->txt($code_as_string);
+            ilUtil::sendFailure($failure_message, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         } else {
             $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
-            $model = $crs_repo->getCourseTemplateByTemplateId($template_id);
 
             $crs_template_status_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
                 $crs_repo,
@@ -102,9 +109,11 @@ class ilObjCourseWizardTemplateManagementGUI
                     $this->plugin->getGlobalCrsImporterRole()
                 )
             );
+
             $crs_template_status_manager->changeStatusOfCourseTemplateById($template_id, $status_code);
 
-            ilUtil::sendSuccess('Status changed to: ' . $status_code, true);
+            $success_message = $this->plugin->txt('status_crs_tpl_changed_to') . ' ' . $this->plugin->txt(CourseTemplate::statusCodeToLanguageVariable($status_code));
+            ilUtil::sendSuccess($success_message, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         }
     }

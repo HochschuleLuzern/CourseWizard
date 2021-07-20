@@ -83,6 +83,8 @@ status_pending#:#Pending
 status_change_requested#:#Change Requested
 status_declined#:#Declined
 status_approved#:#Approved
+status_crs_tpl_changed_to#:#Status dof course template changed to:
+status_invalid_status_given#:#Invalid status given:
 
 step_content_inheritance#:#Content Inheritance
 step_introduction#:#Introduction

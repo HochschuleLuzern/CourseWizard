@@ -83,6 +83,8 @@ status_pending#:#Ausstehend
 status_change_requested#:#Änderung Notwendig
 status_declined#:#Abgelehnt
 status_approved#:#Akzeptiert
+status_crs_tpl_changed_to#:#Status der Kursvorlage geändert zu:
+status_invalid_status_given#:#Ungültiger Status gegeben:
 
 step_content_inheritance#:#Inhalte Vererben
 step_introduction#:#Einleitung

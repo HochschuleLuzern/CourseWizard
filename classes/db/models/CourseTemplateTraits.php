@@ -6,7 +6,12 @@ trait CourseTemplateTraits
 {
     public function getStatusAsLanguageVariable() : string
     {
-        switch ($this->getStatusAsCode()) {
+        return self::statusCodeToLanguageVariable($this->getStatusAsCode());
+    }
+
+    public static function statusCodeToLanguageVariable(int $code) : string
+    {
+        switch ($code) {
             case CourseTemplate::STATUS_DRAFT:
                 return 'status_draft';
 
