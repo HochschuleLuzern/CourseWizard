@@ -94,6 +94,7 @@ step_template_selection#:#Vorlage Auswählen
 template_container#:#Vorlagen Container
 template_title#:#Vorlagen Titel
 template_description#:#Vorlagen Beschreibung
+tpl_selection_my_courses#:#Meine Kurse
 
 view_course_template#:#Kursvorlage ansehen
 
