@@ -2,6 +2,7 @@
 
 namespace CourseWizard\CourseTemplate;
 
+use CourseWizard\CourseTemplate\ui\MyTemplatesListOverviewGUI;
 use CourseWizard\DB\CourseTemplateRepository;
 use CourseWizard\DB\Models\CourseTemplate;
 use CourseWizard\DB\Models\CourseTemplateTraits;
@@ -30,7 +31,8 @@ class CourseTemplateCollector
         $approved_templates = $this->crs_repo->getAllApprovedCourseTemplates($this->container_ref_id);
         $user_templates = $this->crs_repo->getAllCourseTemplatesForUserByContainerRefId($user_id_of_viewer, $this->container_ref_id);
 
-        return array("overview_your_templates" => $user_templates, "overview_approved_templates" => $approved_templates);
+        return array("overview_your_templates" => $user_templates,
+                     "overview_approved_templates" => $approved_templates);
     }
 
     public function checkAndAddNewlyCreatedCourses()
