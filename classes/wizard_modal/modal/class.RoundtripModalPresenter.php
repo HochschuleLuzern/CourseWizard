@@ -95,7 +95,7 @@ class RoundtripModalPresenter implements ModalPresenter
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
 
         $pl = new \ilCourseWizardPlugin();
-        $modal = $modal->withContent(array_merge($header, $content))->withActionButtons($action_buttons)->withCancelButtonLabel($pl->txt('btn_close_modal'));
+        $modal = $modal->withContent(array_merge($header, $content))->withActionButtons($action_buttons)->withCancelButtonLabel($pl->langVarAsPluginLangVar('btn_close_modal'));
 
         return $modal;
     }

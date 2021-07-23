@@ -255,7 +255,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_PROPOSE_TEMPLATE_CONFIRM);
         $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text'), $form_action)
-            ->withActionButtonLabel($this->plugin->txt('propose'))
+            ->withActionButtonLabel($this->plugin->langVarAsPluginLangVar('propose'))
             ->withAffectedItems(array(
                 $f->modal()->interruptiveItem($template->getTemplateId(), $title, $icon, $description)
             ));

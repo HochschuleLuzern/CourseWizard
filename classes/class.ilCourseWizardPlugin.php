@@ -3,6 +3,7 @@
 class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 {
     public const ID = 'xcwi';
+    public const LANG_PREFIX = 'rep_robj_xcwi_';
 
     /** @var \CourseWizard\DB\PluginConfigKeyValueStore  */
     private $plugin_config_repo;
@@ -148,5 +149,10 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
     public function getGlobalCrsImporterRole()
     {
         return $this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_CRS_IMPORTER_ROLE_ID);
+    }
+
+    public function langVarAsPluginLangVar(string $lang_var) : string
+    {
+        return self::LANG_PREFIX . $lang_var;
     }
 }
