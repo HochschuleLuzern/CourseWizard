@@ -67,6 +67,7 @@ class CourseImportController
     public function executeImport(CourseImportData $course_import_data)
     {
         $copy_result = $this->importContent($course_import_data);
+        return $copy_result;
     }
 
     private function importContent(CourseImportData $course_import_data)
@@ -75,7 +76,7 @@ class CourseImportController
         $copy_result_for_content_page = $this->importContentPage($course_import_data);
         $this->importCourseSettings($course_import_data);
 
-        return array($copy_result_for_objs, $copy_result_for_content_page);
+        return array('copy_objects_result' => $copy_result_for_objs, 'copy_content_page_result' => $copy_result_for_content_page);
     }
 
     private function importContentPage(CourseImportData $course_import_data)

@@ -83,8 +83,8 @@ il.CourseWizardFunctions = (function (scope) {
 
 		$.post(priv.wizardModalConfig['executeImportUrl'], data).done(function(response)
 		{
+			$('#coursewizard').html(response);
 			storageEngine.removeItem(currentWizardObj.targetRefId);
-			location.reload();
 		});
 	}
 

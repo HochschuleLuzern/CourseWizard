@@ -20,6 +20,7 @@ class ilCourseWizardApiGUI
     const CMD_POSTPONE_WIZARD = 'postponeWizard';
     const CMD_PROCEED_POSTPONED_WIZARD = 'proceedPostponedWizard';
     const CMD_GET_REACTIVATE_WIZARD_MESSAGE = 'getReactivateWizardMessage';
+    const CMD_UPDATE_OBJECT_IMPORT_PROGRESS_BAR = 'updateProgress';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -165,9 +166,38 @@ class ilCourseWizardApiGUI
                             exit;
                         } else {
                             $controller = new CourseImportController();
-                            $controller->executeImport($course_import_data);
+                            $copy_results = $controller->executeImport($course_import_data);
+
+                            $progress = new ilObjectCopyProgressTableGUI(
+                                $this,
+                                self::CMD_ASYNC_MODAL,
+                                $course_import_data->getTargetCrsRefId()
+                            );
+                            $progress->setObjectInfo(array($course_import_data->getTargetCrsRefId() => $copy_results['copy_objects_result']['copy_id']));
+                            $progress->parse();
+                            $progress->init();
+                            $progress->setRedirectionUrl(ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs'));
+
+                            echo $progress->getHTML() . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script>";
+                            exit;
                         }
 
+                        break;
+
+                    case self::CMD_UPDATE_OBJECT_IMPORT_PROGRESS_BAR:
+                        $json = new stdClass();
+                        $json->percentage = null;
+                        $json->performed_steps = null;
+
+                        include_once './Services/CopyWizard/classes/class.ilCopyWizardOptions.php';
+                        $options = ilCopyWizardOptions::_getInstance((int) $_REQUEST['copy_id']);
+                        $json->required_steps = $options->getRequiredSteps();
+                        $json->id = (int) $_REQUEST['copy_id'];
+
+                        ilLoggerFactory::getLogger('obj')->debug('Update copy progress: ' . json_encode($json));
+
+                        echo json_encode($json);
+                        exit;
                         break;
 
                     case self::CMD_POSTPONE_WIZARD:
