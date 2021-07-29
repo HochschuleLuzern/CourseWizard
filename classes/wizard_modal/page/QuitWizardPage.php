@@ -43,6 +43,16 @@ class QuitWizardPage extends BaseModalPagePresenter
         // TODO: Implement getPageActionButtons() method.
     }
 
+    public function getStepInstructions() : string
+    {
+        return $this->plugin->txt('wizard_quit_text');
+    }
+
+    public function getStepContent() : string
+    {
+
+    }
+
     public function getJsNextPageMethod() : string
     {
         return '';

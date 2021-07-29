@@ -31,7 +31,7 @@ il.CourseWizardFunctions = (function (scope) {
 	}
 
 	pub.pushTemplateSelection = function (e) {
-		let checked_id = $('#xcwi_template_selection_div_id').find('input:checked').val();
+		let checked_id = $('#' + priv.wizardModalConfig['wizardStepContentDivId']).find('input:checked').val();
 
 		if(checked_id != null) {
 			let nextPageUrl = priv.wizardModalConfig['nextPageUrl'] + '&template_ref_id=' + checked_id;
@@ -54,7 +54,7 @@ il.CourseWizardFunctions = (function (scope) {
 
 	pub.pushContentInheritanceSelection = function (e) {
 		currentWizardObj.contentInheritance= {};
-		 $("#coursewizard").find('form input:checked').each(function(key, value) {
+		 $('#' + priv.wizardModalConfig['wizardStepContentDivId']).find('form input:checked').each(function(key, value) {
 			currentWizardObj.contentInheritance[value.name] = {
 				id: value.id,
 				value: value.value
@@ -83,7 +83,7 @@ il.CourseWizardFunctions = (function (scope) {
 
 		$.post(priv.wizardModalConfig['executeImportUrl'], data).done(function(response)
 		{
-			$('#coursewizard').html(response);
+			$('#' + priv.wizardModalConfig['wizardDivId']).html(response);
 			storageEngine.removeItem(currentWizardObj.targetRefId);
 		});
 	}

@@ -13,4 +13,14 @@ interface ModalPagePresenter
     public function getJSConfigsAsUILegacy($replace_signal, $close_signal) : \ILIAS\UI\Component\Legacy\Legacy;
 
     public function getCurrentNavigationStep() : string;
+
+    public function getStepInstructions() : string;
+
+    public function getStepContent() : string;
+
+    public function getHtmlWizardDivId() : string;
+
+    public function getHtmlWizardStepContainerDivId() : string;
+
+    public function getHtmlWizardStepContentContainerDivId() : string;
 }

@@ -30,19 +30,44 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
 
     public const JS_NAMESPACE = 'il.CourseWizardFunctions';
 
+    private $html_wizard_div_id = '';
+    private $html_wizard_step_container_div_id = '';
+    private $html_wizard_step_content_container_div_id = '';
+
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
         global $DIC;
 
-        $this->state_machine = $state_machine;
-        $this->ui_factory = $ui_factory;
-        $this->js_creator = new JavaScriptPageConfig($this->state_machine);
-        $this->plugin = new \ilCourseWizardPlugin();
+        $this->state_machine                             = $state_machine;
+        $this->ui_factory                                = $ui_factory;
+        $this->js_creator                                = new JavaScriptPageConfig($this->state_machine);
+        $this->plugin                                    = new \ilCourseWizardPlugin();
 
         $ref_id = $DIC->http()->request()->getQueryParams()['ref_id'];
         $DIC->ctrl()->setParameterByClass(\ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $this->modal_render_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_MODAL);
         $this->save_form_data_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_SAVE_FORM);
+
+
+
+        $this->html_wizard_div_id                        = uniqid('xcwi_id_');
+        $this->html_wizard_step_container_div_id         = uniqid('xcwi_id_');
+        $this->html_wizard_step_content_container_div_id = uniqid('xcwi_id_');
+    }
+
+    public function getHtmlWizardDivId() : string
+    {
+        return $this->html_wizard_div_id;
+    }
+
+    public function getHtmlWizardStepContainerDivId() : string
+    {
+        return $this->html_wizard_step_container_div_id;
+    }
+
+    public function getHtmlWizardStepContentContainerDivId() : string
+    {
+        return $this->html_wizard_step_content_container_div_id;
     }
 
     protected function getPreviousPageButton(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
@@ -153,5 +178,38 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
     }
 
-    abstract public function getModalPageAsComponentArray() : array;
+    public function getJSConfigsAsString($replace_signal, $close_signal) : string
+    {
+        global $DIC;
+
+        $base_page_replace_url = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=";
+        $this->js_creator->setPageSwitchURL(
+            $base_page_replace_url . $this->state_machine->getPageForPreviousState(),
+            $base_page_replace_url . $this->state_machine->getPageForCurrentState(),
+            $base_page_replace_url . $this->state_machine->getPageForNextState()
+        );
+
+        $this->js_creator->setHtmlDivIds(
+            $this->getHtmlWizardDivId(),
+            $this->getHtmlWizardStepContainerDivId(),
+            $this->getHtmlWizardStepContentContainerDivId()
+        );
+
+        $this->js_creator->addCustomConfigElement('dismissModalUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_POSTPONE_WIZARD));
+
+        $replace_url = $this->modal_render_base_url . "&page={$this->state_machine->getPageForNextState()}&replacesignal={$replace_signal->getId()}";
+        $this->js_creator->addCustomConfigElement('replaceSignal', $replace_signal->getId());
+        //$this->js_creator->addCustomConfigElement('closeSignal', $close_signal->getId());
+        //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
+        $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
+
+
+        //return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
+        return $this->js_creator->getAsJSONString();
+    }
+
+    public function getModalPageAsComponentArray() : array
+    {
+        die;
+    }
 }

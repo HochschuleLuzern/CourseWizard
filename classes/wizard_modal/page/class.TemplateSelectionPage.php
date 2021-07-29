@@ -37,6 +37,17 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         return array_merge($container_div, $container_content, $container_end_div);
     }
 
+    public function getStepInstructions() : string
+    {
+        return $this->plugin->txt('wizard_template_selection_text');
+    }
+
+    public function getStepContent() : string
+    {
+        global $DIC;
+        return $DIC->ui()->renderer()->renderAsync($this->view_control->getAsComponentList());
+    }
+
     public function getJsNextPageMethod() : string
     {
         return self::JS_POST_SELECTION_METHOD;

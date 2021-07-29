@@ -7,6 +7,7 @@ use ILIAS\UI\Implementation\Component\Input\Field\Checkbox;
 class IntroductionPage extends BaseModalPagePresenter
 {
     protected const JS_CONTINUE_AFTER_INTRODUCTION_PAGE = self::JS_NAMESPACE . '.' . 'introductionPageFinished';
+    const NUMBER_OF_INTRODUCTION_PARAGRAPHS = 7;
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
@@ -21,8 +22,6 @@ class IntroductionPage extends BaseModalPagePresenter
 
         // TODO: Implement getModalPageAsComponentArray() method.
         $ui_components = array();
-
-        $text = $this->plugin->txt('wizard_introduction_text');
 
         $ui_components = array();
         $ui_components[] = $this->ui_factory->legacy('<p>' . $this->plugin->txt('wizard_introduction_text_p1') . '</p>');
@@ -46,15 +45,28 @@ class IntroductionPage extends BaseModalPagePresenter
         return $ui_components;
     }
 
+    public function getStepInstructions() : string
+    {
+        return $this->plugin->txt('wizard_introduction_text_p1');
+    }
+
+    public function getStepContent() : string
+    {
+        $introductions = '';
+        for($i = 2; $i <= self::NUMBER_OF_INTRODUCTION_PARAGRAPHS; $i++) {
+            $introductions .= '<p>' . $this->plugin->txt("wizard_introduction_text_p$i") . '</p>';
+        }
+
+        $skip_text = $this->plugin->txt('form_skip_introduction');
+
+        // The checkbox is only shown when withValue(true) is used. So at the moment, this is useless
+        $introductions .= "<hr><div class='xcwi_modal_checkbox_div'><label class='xcwi_modal_checkbox_label'><em>$skip_text</em></label><input id='xcwi_skip_introduction' type='checkbox' /></div>";
+
+        return $introductions;
+    }
+
     public function getJsNextPageMethod() : string
     {
         return self::JS_CONTINUE_AFTER_INTRODUCTION_PAGE;
     }
-    /*
-        protected function getNextPageButton(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
-        {
-            $next_page_name = $this->state_machine->getPageForNextState();
-            $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
-            return $this->ui_factory->button()->primary($this->plugin->txt('btn_continue'), $replace_signal->withAsyncRenderUrl($url));
-        }*/
 }

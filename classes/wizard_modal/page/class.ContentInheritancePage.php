@@ -37,6 +37,18 @@ class ContentInheritancePage extends BaseModalPagePresenter
         return $ui_components;
     }
 
+    public function getStepInstructions() : string
+    {
+        return $this->plugin->txt('wizard_content_inheritance_text');
+    }
+
+    public function getStepContent() : string
+    {
+        $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
+        $table->parseSource($this->template_ref_id);
+        return $table->getHTML();
+    }
+
     public function getJsNextPageMethod() : string
     {
         return self::JS_POST_SELECTION_METHOD;
