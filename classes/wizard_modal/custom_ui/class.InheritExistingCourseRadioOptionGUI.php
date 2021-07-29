@@ -10,10 +10,14 @@ class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGU
     /** @var \ilObjCourse */
     private $crs;
 
-    public function __construct(\ilObjCourse $crs, Factory $ui_factory)
+    /** @var \ilCourseWizardPlugin */
+    private $plugin;
+
+    public function __construct(\ilObjCourse $crs, Factory $ui_factory, \ilCourseWizardPlugin $plugin)
     {
         $this->ui_factory = $ui_factory;
         $this->crs = $crs;
+        $this->plugin = $plugin;
     }
 
     public function getAsLegacyComponent()
@@ -24,13 +28,13 @@ class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGU
         $ref_id = $this->crs->getRefId();
         $image_path = \ilObject::_getIcon($obj_id);
         $preview_link = \ilLink::_getLink($ref_id, 'crs');
-        $btn_preview = $this->ui_factory->link()->standard("Preview", $preview_link)->withOpenInNewViewport(true);
+        $btn_preview = $this->ui_factory->link()->standard($this->plugin->txt('view_course'), $preview_link)->withOpenInNewViewport(true);
         $dropdown = $this->ui_factory->dropdown()->standard([$btn_preview]);
 
         $icon = $this->ui_factory->symbol()->icon()->custom($image_path, 'Thumbnail', 'large');
-        $item = $this->ui_factory->item()->standard($this->crs->getTitle())
+        $item = $this->ui_factory->item()->standard($this->crs->getTitle() ?? '')
                                  ->withActions($dropdown)
-                                 ->withDescription($this->crs->getDescription())
+                                 ->withDescription($this->crs->getDescription() ?? '')
                                  //->withProperties($this->crs_template->getPropertiesArray())
                                  ->withLeadIcon($icon);
 

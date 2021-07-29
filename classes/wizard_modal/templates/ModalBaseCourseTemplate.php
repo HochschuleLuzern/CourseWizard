@@ -35,12 +35,12 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
 
     public function getCourseTitle() : string
     {
-        return $this->course_object->getTitle();
+        return $this->course_object->getTitle() ?? '';
     }
 
     public function getCourseDescription() : string
     {
-        return $this->course_object->getDescription();
+        return $this->course_object->getDescription() ?? '';
     }
 
     public function generatePreviewLink() : string

@@ -65,7 +65,7 @@ class WizardModalFactory
             foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
                 foreach ($this->template_repository->getAllApprovedCourseTemplates($container_ref_id) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
-                    $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));
+                    $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory, $this->plugin));
                 }
             }
             $view_control->addNewSubPage($department_subpage);
@@ -81,7 +81,7 @@ class WizardModalFactory
             foreach ($ref_ids_for_object as $ref_id) {
                 if($DIC->rbac()->system()->checkAccessOfUser($user->getId(), 'write', $ref_id)) {
                     $crs = new \ilObjCourse($ref_id, true);
-                    $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory));
+                    $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory, $this->plugin));
                 }
             }
         }

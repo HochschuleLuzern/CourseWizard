@@ -96,6 +96,7 @@ template_title#:#Title of the new Template
 template_description#:#Description of the new Template
 tpl_selection_my_courses#:#My Courses
 
+view_course#:#View Course
 view_course_template#:#View Course Template
 
 wizard_content_inheritance_text#:#Select the content which you want to inherit into your course

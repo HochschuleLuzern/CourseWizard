@@ -96,6 +96,7 @@ template_title#:#Vorlagen Titel
 template_description#:#Vorlagen Beschreibung
 tpl_selection_my_courses#:#Meine Kurse
 
+view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen
 
 wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen

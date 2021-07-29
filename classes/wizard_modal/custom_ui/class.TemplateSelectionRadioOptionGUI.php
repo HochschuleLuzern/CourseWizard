@@ -8,14 +8,20 @@ use ILIAS\UI\Factory;
 
 class TemplateSelectionRadioOptionGUI
 {
+    /** @var ModalBaseCourseTemplate */
     private $crs_template;
 
+    /** @var Factory */
     protected $ui_factory;
 
-    public function __construct(ModalBaseCourseTemplate $crs_template, Factory $ui_factory)
+    /** @var \ilCourseWizardPlugin */
+    private $plugin;
+
+    public function __construct(ModalBaseCourseTemplate $crs_template, Factory $ui_factory, \ilCourseWizardPlugin $plugin)
     {
         $this->crs_template = $crs_template;
         $this->ui_factory = $ui_factory;
+        $this->plugin = $plugin;
     }
 
     public function getAsLegacyComponent()
@@ -24,7 +30,7 @@ class TemplateSelectionRadioOptionGUI
         $f = $DIC->ui()->factory();
         $obj_id = $this->crs_template->getObjId();
         $image_path = \ilObject::_getIcon($obj_id);
-        $btn_preview = $this->ui_factory->link()->standard("Preview", $this->crs_template->generatePreviewLink())->withOpenInNewViewport(true);
+        $btn_preview = $this->ui_factory->link()->standard($this->plugin->txt('view_course_template'), $this->crs_template->generatePreviewLink())->withOpenInNewViewport(true);
         $dropdown = $this->ui_factory->dropdown()->standard([$btn_preview]);
 
         $icon = $this->ui_factory->symbol()->icon()->custom($image_path, 'Thumbnail', 'large');
