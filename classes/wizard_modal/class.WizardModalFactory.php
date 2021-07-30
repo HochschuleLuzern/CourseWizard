@@ -126,10 +126,11 @@ class WizardModalFactory
         );
     }
 
-    public function buildModalFromStateMachine(StateMachine $state_machine)
+    public function buildModalFromStateMachine(string $modal_title, StateMachine $state_machine)
     {
         $modal = new RoundtripWizardModalGUI(
             new RoundtripModalPresenter(
+                $modal_title,
                 $this->buildModalPresenter($state_machine),
                 $this->ui_factory,
                 $this->plugin

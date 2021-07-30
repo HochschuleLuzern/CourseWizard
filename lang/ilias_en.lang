@@ -98,6 +98,7 @@ tpl_selection_my_courses#:#My Courses
 
 view_course_template#:#View Course Template
 
+wizard_title#:#Course Wizard for the Course:
 wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
 wizard_dismissed_info#:#Course Wizard successfully dismissed for this course
 wizard_introduction_text_p1#:#This is just a placeholder for the

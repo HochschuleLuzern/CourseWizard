@@ -43,33 +43,6 @@ class SettingsPage extends BaseModalPagePresenter
         return $form_item;
     }
 
-    public function getModalPageAsComponentArray() : array
-    {
-
-        $text = $this->plugin->txt('wizard_settings_text');
-
-        $ui_components = array();
-        $form_id = uniqid('xcwi_wizard_settings');
-        $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
-        $form = new \ilPropertyFormGUI();
-        $form->setId($form_id);
-
-        $settings = \CourseSettingsData::getSettings();
-        foreach ($settings as $setting) {
-            $form_item = $this->settingToPropertyFormComponent($setting);
-            if($form_item) {
-                $form->addItem($form_item);
-            }
-        }
-
-        $ui_components[] = $this->ui_factory->legacy($form->getHTML());
-
-        // TODO: Find better place for this
-
-
-        return $ui_components;
-    }
-
     public function getStepInstructions() : string
     {
         return $this->plugin->txt('wizard_settings_text');

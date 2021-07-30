@@ -48,8 +48,6 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         $this->modal_render_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_MODAL);
         $this->save_form_data_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_SAVE_FORM);
 
-
-
         $this->html_wizard_div_id                        = uniqid('xcwi_id_');
         $this->html_wizard_step_container_div_id         = uniqid('xcwi_id_');
         $this->html_wizard_step_content_container_div_id = uniqid('xcwi_id_');
@@ -105,10 +103,6 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         }
     }
 
-    protected function getAdditionalButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal)
-    {
-    }
-
     public function getCurrentNavigationStep() : string
     {
         return $this->current_navigation_step;
@@ -116,11 +110,7 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
 
     public function getPageActionButtons(\ILIAS\UI\Implementation\Component\ReplaceSignal $replace_signal) : array
     {
-        global $DIC;
-
         $buttons = array();
-        $glyph_factory = $this->ui_factory->symbol()->glyph();
-        $pl = new \ilCourseWizardPlugin();
 
         if ($btn = $this->getPreviousPageButton($replace_signal)) {
             $buttons[] = $btn;
@@ -129,14 +119,10 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         if ($btn = $this->getNextPageButton($replace_signal)) {
             $buttons[] = $btn;
         }
-        //$buttons[] = $this->getPreviousPageButton($replace_signal);
-        //$buttons[] = $this->getNextPageButton($replace_signal);
-
-        // TODO: Implement getPageActionButtons() method.
 
         $url_quit_wizard = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=" . $this->state_machine->getPageForQuittingWizard() . "&previousPage=" . $this->state_machine->getPageForCurrentState();
 
-        $buttons[] = $this->ui_factory->button()->standard($pl->txt('btn_arrange_crs_unassisted'), $replace_signal->withAsyncRenderUrl($url_quit_wizard));
+        $buttons[] = $this->ui_factory->button()->standard($this->plugin->txt('btn_arrange_crs_unassisted'), $replace_signal->withAsyncRenderUrl($url_quit_wizard));
 
         return $buttons;
     }
@@ -151,11 +137,7 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         return self::JS_NAMESPACE . '.loadPreviousPage';
     }
 
-    protected function getNextPageUrl() : string
-    {
-    }
-
-    public function getJSConfigsAsUILegacy($replace_signal, $close_signal) : Legacy
+    public function getJSConfigsAsUILegacy($replace_signal) : Legacy
     {
         global $DIC;
 
@@ -167,18 +149,13 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         );
 
         $this->js_creator->addCustomConfigElement('dismissModalUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_POSTPONE_WIZARD));
-
-        $replace_url = $this->modal_render_base_url . "&page={$this->state_machine->getPageForNextState()}&replacesignal={$replace_signal->getId()}";
         $this->js_creator->addCustomConfigElement('replaceSignal', $replace_signal->getId());
-        //$this->js_creator->addCustomConfigElement('closeSignal', $close_signal->getId());
-        //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
         $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
 
-        //return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
         return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.initNewModalPage({$this->js_creator->getAsJSONString()})</script>");
     }
 
-    public function getJSConfigsAsString($replace_signal, $close_signal) : string
+    public function getJSConfigsAsString($replace_signal) : string
     {
         global $DIC;
 
@@ -199,17 +176,8 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
 
         $replace_url = $this->modal_render_base_url . "&page={$this->state_machine->getPageForNextState()}&replacesignal={$replace_signal->getId()}";
         $this->js_creator->addCustomConfigElement('replaceSignal', $replace_signal->getId());
-        //$this->js_creator->addCustomConfigElement('closeSignal', $close_signal->getId());
-        //$this->js_creator->addCustomConfigElement('nextPageUrl', $replace_url);
         $this->js_creator->addCustomConfigElement('targetRefId', $_GET['ref_id']);
 
-
-        //return $this->ui_factory->legacy("<script>il.CourseWizardFunctions.config = ".$this->js_creator->getAsJSONString()."</script>");
         return $this->js_creator->getAsJSONString();
-    }
-
-    public function getModalPageAsComponentArray() : array
-    {
-        die;
     }
 }

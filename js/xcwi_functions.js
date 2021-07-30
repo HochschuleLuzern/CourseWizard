@@ -123,7 +123,7 @@ il.CourseWizardFunctions = (function (scope) {
 		}
 
 		if(!priv.isInitialized) {
-			$("#coursewizard").parents('.modal.il-modal-roundtrip').on("hide.bs.modal", function(){
+			$('#' + priv.wizardModalConfig['wizardDivId']).parents('.modal.il-modal-roundtrip').on("hide.bs.modal", function(){
 				$.ajax(priv.wizardModalConfig['dismissModalUrl']).done(function() {
 					location.reload();
 				});

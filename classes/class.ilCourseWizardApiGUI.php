@@ -44,6 +44,8 @@ class ilCourseWizardApiGUI
     /** @var ilCourseWizardPlugin */
     protected $plugin;
 
+    /** @var ilLogger */
+    protected $logger;
 
     public function __construct()
     {
@@ -55,6 +57,7 @@ class ilCourseWizardApiGUI
         $this->ui_renderer = $DIC->ui()->renderer();
         $this->rbac_system = $DIC->rbac()->system();
         $this->plugin = new ilCourseWizardPlugin();
+        $this->logger = $DIC->logger()->root();
     }
 
     public function executeCommand()
@@ -75,8 +78,15 @@ class ilCourseWizardApiGUI
                         $query_params = $this->request->getQueryParams();
                         $target_ref_id = $query_params['ref_id'] ?? 0;
 
-                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        try {
+                            $target_crs_object = $this->extractCrsObjFromQueryParams($query_params);
+                        } catch (Exception $exception) {
+                            $this->logger->error('Problem with given ref_id (either no ID given or object is no course)');
+                            exit;
+                        }
+
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_crs_object->getRefId())) {
+                            $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
                             $user_pref_repo   = new \CourseWizard\DB\UserPreferencesRepository($db);
@@ -103,10 +113,12 @@ class ilCourseWizardApiGUI
                                 $this->plugin
                             );
 
-                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+                            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+                            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
 
                             $output = $modal->getRenderedModal(true);
-                            echo $output;
+                            echo $output . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script><script src='./Services/CopyWizard/js/ilContainer.js'></script>";
                             exit;
                         }
 
@@ -116,10 +128,17 @@ class ilCourseWizardApiGUI
                         $user = $DIC->user();
                         $query_params = $this->request->getQueryParams();
 
-                        $target_ref_id = $query_params['ref_id'] ?? 0;
+                        $target_ref_id = (int)$query_params['ref_id'] ?? 0;
 
-                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        try {
+                            $target_crs_object = $this->extractCrsObjFromQueryParams($query_params);
+                        } catch (Exception $exception) {
+                            $this->logger->error('Problem with given ref_id (either no ID given or object is no course)');
+                            exit;
+                        }
+
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_crs_object->getRefId())) {
+                            $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
                             $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
@@ -146,7 +165,9 @@ class ilCourseWizardApiGUI
                                 $this->plugin
                             );
 
-                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+                            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+                            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
 
                             echo $modal->getRenderedModalFromAsyncCall();
                             exit;
@@ -162,12 +183,13 @@ class ilCourseWizardApiGUI
                         $course_import_data = $factory->createCourseImportDataObject();
 
                         if (!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                            $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
                             $controller = new CourseImportController();
                             $copy_results = $controller->executeImport($course_import_data);
 
+                            $redirect_url = ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs');
                             $progress = new ilObjectCopyProgressTableGUI(
                                 $this,
                                 self::CMD_ASYNC_MODAL,
@@ -176,9 +198,9 @@ class ilCourseWizardApiGUI
                             $progress->setObjectInfo(array($course_import_data->getTargetCrsRefId() => $copy_results['copy_objects_result']['copy_id']));
                             $progress->parse();
                             $progress->init();
-                            $progress->setRedirectionUrl(ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs'));
+                            $progress->setRedirectionUrl($redirect_url);
 
-                            echo $progress->getHTML() . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script>";
+                            echo $progress->getHTML() . "<script>il.CopyRedirection.setRedirectUrl('$redirect_url');il.CopyRedirection.checkDone();</script>";
                             exit;
                         }
 
@@ -270,5 +292,16 @@ class ilCourseWizardApiGUI
 
                 break;
         }
+    }
+
+    private function extractCrsObjFromQueryParams(array $query_params) : ilObjCourse
+    {
+        $target_ref_id = (int)$query_params['ref_id'] ?? 0;
+
+        if($target_ref_id == 0) {
+            throw new InvalidArgumentException('No valid ref_id given in query_params');
+        }
+
+        return new ilObjCourse($target_ref_id, true);
     }
 }

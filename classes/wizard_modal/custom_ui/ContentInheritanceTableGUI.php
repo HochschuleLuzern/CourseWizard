@@ -213,6 +213,6 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
 
     public function getHTML()
     {
-        return parent::getHTML() . "<script src='./Services/CopyWizard/js/ilContainer.js'></script>";
+        return parent::getHTML();
     }
 }
