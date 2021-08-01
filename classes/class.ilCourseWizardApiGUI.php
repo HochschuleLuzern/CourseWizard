@@ -200,6 +200,7 @@ class ilCourseWizardApiGUI
                             $controller = new CourseImportController();
                             $copy_results = $controller->executeImport($course_import_data, $wizard_flow_repo);
 
+                            $DIC->language()->loadLanguageModule('obj');
                             $redirect_url = ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs');
                             $progress = new ilObjectCopyProgressTableGUI(
                                 $this,
