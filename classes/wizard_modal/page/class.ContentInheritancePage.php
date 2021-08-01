@@ -21,20 +21,16 @@ class ContentInheritancePage extends BaseModalPagePresenter
         $this->current_navigation_step = 'step_content_inheritance';
     }
 
-    public function getModalPageAsComponentArray() : array
+    public function getStepInstructions() : string
     {
-        global $DIC;
+        return $this->plugin->txt('wizard_content_inheritance_text');
+    }
 
-        $text = $this->plugin->txt('wizard_content_inheritance_text');
-
-        $ui_components = array();
-        $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
-
+    public function getStepContent() : string
+    {
         $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
         $table->parseSource($this->template_ref_id);
-        $ui_components[] = $this->ui_factory->legacy($table->getHTML());
-
-        return $ui_components;
+        return $table->getHTML();
     }
 
     public function getJsNextPageMethod() : string

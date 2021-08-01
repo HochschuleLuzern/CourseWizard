@@ -28,13 +28,15 @@ class TemplateSelectionPage extends BaseModalPagePresenter
         return 'Course Wizard';
     }
 
-    public function getModalPageAsComponentArray() : array
+    public function getStepInstructions() : string
     {
-        $text = $this->plugin->txt('wizard_template_selection_text');
-        $container_div = [$this->ui_factory->legacy("<p>$text</p><div id='xcwi_template_selection_div_id'>")];
-        $container_content = $this->view_control->getAsComponentList();
-        $container_end_div = [$this->ui_factory->legacy('</div>')];
-        return array_merge($container_div, $container_content, $container_end_div);
+        return $this->plugin->txt('wizard_template_selection_text');
+    }
+
+    public function getStepContent() : string
+    {
+        global $DIC;
+        return $DIC->ui()->renderer()->renderAsync($this->view_control->getAsComponentList());
     }
 
     public function getJsNextPageMethod() : string

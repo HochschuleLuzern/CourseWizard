@@ -99,6 +99,7 @@ tpl_selection_my_courses#:#Meine Kurse
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen
 
+wizard_title#:#Kurs Wizard für den Kurs:
 wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
 wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs Aufgrund einer Vorlage einzurichten.

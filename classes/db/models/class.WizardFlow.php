@@ -99,6 +99,19 @@ class WizardFlow
         }
     }
 
+    public function withImportingStatus($selected_template)
+    {
+        if($this->current_status == self::STATUS_IN_PROGRESS) {
+            $clone = clone $this;
+            $clone->current_status = self::STATUS_IMPORTING;
+            $clone->selected_template = $selected_template;
+
+            return $clone;
+        } else {
+            throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to postponed Status');
+        }
+    }
+
     public function withQuitedStatus()
     {
         if ($this->current_status == self::STATUS_IN_PROGRESS
@@ -107,6 +120,18 @@ class WizardFlow
 
             $clone = clone $this;
             $clone->current_status = self::STATUS_QUIT;
+            $clone->finished_import_ts = time();
+            return $clone;
+        } else {
+            throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to quited Status');
+        }
+    }
+
+    public function withFinishedStatus()
+    {
+        if ($this->current_status == self::STATUS_IMPORTING) {
+            $clone = clone $this;
+            $clone->current_status = self::STATUS_FINISHED;
             $clone->finished_import_ts = time();
             return $clone;
         } else {
@@ -175,14 +200,29 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowFinished($crs_ref_id, $template_selection, $content_inheritance, $selected_settings)
+    public static function wizardFlowImporting($crs_ref_id, $executing_user, $first_open_ts, $selected_template_id)
     {
+
         return new self(
             $crs_ref_id,
-            $template_selection,
-            $content_inheritance,
-            $selected_settings,
-            self::STATUS_FINISHED
+            $executing_user,
+            self::STATUS_IMPORTING,
+            $first_open_ts,
+            $selected_template_id,
+            null
+        );
+    }
+
+    public static function wizardFlowFinished($crs_ref_id, $executing_user, $first_open_ts, $selected_template_id, $finished_import_ts)
+    {
+
+        return new self(
+            $crs_ref_id,
+            $executing_user,
+            self::STATUS_FINISHED,
+            $first_open_ts,
+            $selected_template_id,
+            $finished_import_ts
         );
     }
 }

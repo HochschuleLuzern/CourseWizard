@@ -34,7 +34,11 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const FORM_CRS_TEMPLATE_DESCRIPTION = 'xcwi_template_description';
     public const FORM_CRS_TEMPLATE_TYPE = 'xcwi_template_type';
 
+    /** @var ilCourseWizardPlugin */
+    protected $plugin;
 
+    /** @var ilObjCourseWizard */
+    public $object;
 
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
@@ -309,66 +313,34 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
         $collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
 
+        $crs_list_panels = array(
+            new \CourseWizard\CourseTemplate\ui\MyTemplatesListOverviewGUI(
+                $this,
+                'overview_your_templates',
+                $crs_repo->getAllCourseTemplatesForUserByContainerRefId($this->user->getId(), $this->ref_id),
+                $this->plugin,
+                $f,
+                $this->ctrl
+            ),
+            new \CourseWizard\CourseTemplate\ui\ApprovedTemplatesListOverviewGUI(
+                $this,
+                'overview_approved_templates',
+                $crs_repo->getAllApprovedCourseTemplates($this->ref_id),
+                $this->plugin,
+                $f,
+                $this->ctrl
+            )
+        );
+
         $crs_templates_for_overview = $collector->getCourseTemplatesForOverview($this->user->getId());
         $container_content = array();
         $group_views = array();
-        foreach ($crs_templates_for_overview as $category_name => $crs_list) {
-            $courses = array();
-            /** @var \CourseWizard\DB\Models\CourseTemplate $crs_template */
-            foreach ($crs_list as $crs_template) {
-                $title = ilObject::_lookupTitle($crs_template->getCrsObjId());
-                $description = ilObject::_lookupDescription($crs_template->getCrsObjId());
-                $link = ilLink::_getLink($crs_template->getCrsRefId(), 'crs');
-                $title_as_link = $f->link()->standard($title, $link);
-
-                $image_path = $this->plugin->getDirectory() . '/templates/images/icon_crstemp.svg';
-                $icon = $f->symbol()->icon()->custom($image_path, 'Thumbnail', 'large');
-                $item = $f->item()->standard($title_as_link)
-                               ->withDescription($description)
-                               ->withProperties([
-                                   $this->plugin->txt('author') => \ilObjUser::_lookupFullname($crs_template->getCreatorUserId()),
-                                   $this->plugin->txt('status') => $this->plugin->txt($crs_template->getStatusAsLanguageVariable())
-                               ])
-                               ->withLeadIcon($icon);
-
-                $actions_buttons = array();
-                if ($crs_template->getCreatorUserId() == $this->user->getId()
-                    && $crs_template->getStatusAsCode() == \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT) {
-                    $this->ctrl->setParameter($this, self::GET_DEP_ID, $crs_template->getCrsRefId());
-                    $link = $this->ctrl->getLinkTarget($this, self::CMD_PROPOSE_TEMPLATE_MODAL); //\ilLink::_getLink($this->ref_id, $this->getType(), array('dep_id' => $crs_template->getCrsRefId()));
-                    $this->ctrl->setParameter($this, self::GET_DEP_ID, '');
-
-                    $propose_modal = $DIC->ui()->factory()
-                                         ->modal()
-                                         ->interruptive(
-                                             'asdf',
-                                             '',
-                                             ''
-                                         )->withAsyncRenderUrl($link);
-
-                    $container_content[] = $propose_modal;
-                    $actions_buttons[] = $f->button()->shy($this->plugin->txt('btn_propose_crs_template'), $propose_modal->getShowSignal());
-                    $actions_buttons[] = $f->link()->standard($this->plugin->txt('view_course_template'), \ilLink::_getLink($crs_template->getCrsRefId()))->withOpenInNewViewport(true);
-                }
-
-                //$actions = $this->prepareActionsDropdownForOwner($crs_template, $f);
-                if (count($actions_buttons) > 0) {
-                    $item = $item->withActions($f->dropdown()->standard($actions_buttons));
-                }
-
-                $courses[] = $item;
-            }
-
-            $ctaegory_title = $this->plugin->txt($category_name);
-            if (count($courses) > 0) {
-                $group_views[] = $f->item()->group($ctaegory_title, $courses);
-            } else {
-                $group_views[] = $f->item()->group(
-                    $ctaegory_title,
-                    [
-                        $f->item()->standard($this->plugin->txt('overview_no_crs_templates'))
-                    ]
-                );
+        /** @var \CourseWizard\CourseTemplate\ui\TemplateListOverviewGUI $crs_list_panel */
+        foreach ($crs_list_panels as $crs_list_panel) {
+            $group_views[] = $crs_list_panel->buildOverviewAsGroupView();
+            $additional_ui_elements = $crs_list_panel->getAdditionalUIElements();
+            foreach($additional_ui_elements as $ui_element) {
+                $container_content[] = $ui_element;
             }
         }
         $container_content[] = $f->panel()->listing()->standard($this->plugin->txt('overview_crs_templates'), $group_views);

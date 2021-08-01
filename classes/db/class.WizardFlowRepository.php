@@ -52,10 +52,11 @@ class WizardFlowRepository
                 break;
 
             case WizardFlow::STATUS_IMPORTING:
-                return WizardFlow::wizardFlowWithContentInheritance(
+                return WizardFlow::wizardFlowImporting(
                     $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_SELECTED_TEMPLATE],
-                    null
+                    $row[self::COL_EXECUTING_USER],
+                    $row[self::COL_FIRST_OPEN_TS],
+                    $row[self::COL_SELECTED_TEMPLATE]
                 );
             case WizardFlow::STATUS_QUIT:
                 return WizardFlow::quitedWizardFlow(

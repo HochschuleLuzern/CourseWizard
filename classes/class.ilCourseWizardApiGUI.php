@@ -20,6 +20,7 @@ class ilCourseWizardApiGUI
     const CMD_POSTPONE_WIZARD = 'postponeWizard';
     const CMD_PROCEED_POSTPONED_WIZARD = 'proceedPostponedWizard';
     const CMD_GET_REACTIVATE_WIZARD_MESSAGE = 'getReactivateWizardMessage';
+    const CMD_UPDATE_OBJECT_IMPORT_PROGRESS_BAR = 'updateProgress';
 
     const API_CTRL_PATH = array(ilUIPluginRouterGUI::class, ilCourseWizardApiGUI::class);
 
@@ -43,6 +44,8 @@ class ilCourseWizardApiGUI
     /** @var ilCourseWizardPlugin */
     protected $plugin;
 
+    /** @var ilLogger */
+    protected $logger;
 
     public function __construct()
     {
@@ -54,6 +57,7 @@ class ilCourseWizardApiGUI
         $this->ui_renderer = $DIC->ui()->renderer();
         $this->rbac_system = $DIC->rbac()->system();
         $this->plugin = new ilCourseWizardPlugin();
+        $this->logger = $DIC->logger()->root();
     }
 
     public function executeCommand()
@@ -74,8 +78,15 @@ class ilCourseWizardApiGUI
                         $query_params = $this->request->getQueryParams();
                         $target_ref_id = $query_params['ref_id'] ?? 0;
 
-                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        try {
+                            $target_crs_object = $this->extractCrsObjFromQueryParams($query_params);
+                        } catch (Exception $exception) {
+                            $this->logger->error('Problem with given ref_id (either no ID given or object is no course)');
+                            exit;
+                        }
+
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_crs_object->getRefId())) {
+                            $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
                             $user_pref_repo   = new \CourseWizard\DB\UserPreferencesRepository($db);
@@ -102,10 +113,12 @@ class ilCourseWizardApiGUI
                                 $this->plugin
                             );
 
-                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+                            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+                            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
 
                             $output = $modal->getRenderedModal(true);
-                            echo $output;
+                            echo $output . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script><script src='./Services/CopyWizard/js/ilContainer.js'></script>";
                             exit;
                         }
 
@@ -115,10 +128,17 @@ class ilCourseWizardApiGUI
                         $user = $DIC->user();
                         $query_params = $this->request->getQueryParams();
 
-                        $target_ref_id = $query_params['ref_id'] ?? 0;
+                        $target_ref_id = (int)$query_params['ref_id'] ?? 0;
 
-                        if (!$DIC->rbac()->system()->checkAccess('write', $target_ref_id)) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        try {
+                            $target_crs_object = $this->extractCrsObjFromQueryParams($query_params);
+                        } catch (Exception $exception) {
+                            $this->logger->error('Problem with given ref_id (either no ID given or object is no course)');
+                            exit;
+                        }
+
+                        if (!$DIC->rbac()->system()->checkAccess('write', $target_crs_object->getRefId())) {
+                            $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
                             $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
@@ -145,7 +165,9 @@ class ilCourseWizardApiGUI
                                 $this->plugin
                             );
 
-                            $modal = $modal_factory->buildModalFromStateMachine($state_machine);
+                            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+                            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
 
                             echo $modal->getRenderedModalFromAsyncCall();
                             exit;
@@ -160,14 +182,69 @@ class ilCourseWizardApiGUI
                         $factory = new CourseImportObjectFactory($obj, $template_repo);
                         $course_import_data = $factory->createCourseImportDataObject();
 
-                        if (!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
-                            ilUtil::sendFailure('No permissions for the course wizard', true);
+                        $template_obj_type  = \ilObject::_lookupType($course_import_data->getTemplateCrsRefId(), true);
+                        $target_obj_type = \ilObject::_lookupType($course_import_data->getTargetCrsRefId(), true);
+
+                                                if($template_obj_type != 'crs' || $target_obj_type != 'crs') {
+                            $this->logger->error('Template or target object does not have the type "CRS"');
                             exit;
-                        } else {
-                            $controller = new CourseImportController();
-                            $controller->executeImport($course_import_data);
                         }
 
+                        if (!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
+                            $this->logger->error('No permissions for the course wizard');
+                            exit;
+                        } else {
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+
+                            $controller = new CourseImportController();
+                            $copy_results = $controller->executeImport($course_import_data, $wizard_flow_repo);
+
+                            $redirect_url = ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs');
+                            $progress = new ilObjectCopyProgressTableGUI(
+                                $this,
+                                self::CMD_ASYNC_MODAL,
+                                $course_import_data->getTargetCrsRefId()
+                            );
+                            $progress->setObjectInfo(array($course_import_data->getTargetCrsRefId() => $copy_results['copy_objects_result']['copy_id']));
+                            $progress->parse();
+                            $progress->init();
+                            $progress->setRedirectionUrl($redirect_url);
+
+                            echo $progress->getHTML() . "<script>il.CopyRedirection.setRedirectUrl('$redirect_url');il.CopyRedirection.checkDone();</script>";
+                            exit;
+
+
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                            if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS ||
+                                $wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+
+                                $wizard_flow = $wizard_flow->withQuitedStatus();
+                                $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                                ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
+                                $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
+                            }
+                        }
+
+                        break;
+
+                    case self::CMD_UPDATE_OBJECT_IMPORT_PROGRESS_BAR:
+                        $json = new stdClass();
+                        $json->percentage = null;
+                        $json->performed_steps = null;
+
+                        include_once './Services/CopyWizard/classes/class.ilCopyWizardOptions.php';
+                        $options = ilCopyWizardOptions::_getInstance((int) $_REQUEST['copy_id']);
+                        $json->required_steps = $options->getRequiredSteps();
+                        $json->id = (int) $_REQUEST['copy_id'];
+
+                        ilLoggerFactory::getLogger('obj')->debug('Update copy progress: ' . json_encode($json));
+
+                        echo json_encode($json);
+                        exit;
                         break;
 
                     case self::CMD_POSTPONE_WIZARD:
@@ -240,5 +317,16 @@ class ilCourseWizardApiGUI
 
                 break;
         }
+    }
+
+    private function extractCrsObjFromQueryParams(array $query_params) : ilObjCourse
+    {
+        $target_ref_id = (int)$query_params['ref_id'] ?? 0;
+
+        if($target_ref_id == 0) {
+            throw new InvalidArgumentException('No valid ref_id given in query_params');
+        }
+
+        return new ilObjCourse($target_ref_id, true);
     }
 }

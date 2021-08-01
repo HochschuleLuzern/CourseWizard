@@ -64,9 +64,26 @@ class CourseImportController
         $this->importSelectedSpecificSettings($course_import_data, $target_obj_id);
     }
 
-    public function executeImport(CourseImportData $course_import_data)
+    public function executeImport(CourseImportData $course_import_data, \CourseWizard\DB\WizardFlowRepository $wizard_flow_repo)
     {
+        // Check status of wizard
+        $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($course_import_data->getTargetCrsRefId());
+        if($wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+            throw new InvalidArgumentException('Invalid Status given: ' . $wizard_flow->getCurrentStatus());
+        }
+
+        // Set status to "importing"
+        $wizard_flow = $wizard_flow->withImportingStatus($course_import_data->getTemplateCrsRefId());
+        $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+        // Execute actual import of content
         $copy_result = $this->importContent($course_import_data);
+
+        // Set status to finished
+        $wizard_flow = $wizard_flow->withFinishedStatus();
+        $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+        return $copy_result;
     }
 
     private function importContent(CourseImportData $course_import_data)
@@ -75,7 +92,7 @@ class CourseImportController
         $copy_result_for_content_page = $this->importContentPage($course_import_data);
         $this->importCourseSettings($course_import_data);
 
-        return array($copy_result_for_objs, $copy_result_for_content_page);
+        return array('copy_objects_result' => $copy_result_for_objs, 'copy_content_page_result' => $copy_result_for_content_page);
     }
 
     private function importContentPage(CourseImportData $course_import_data)
@@ -111,6 +128,5 @@ class CourseImportController
         );
 
         return $result;
-        //$this->targets_copy_id[$a_target] = $result['copy_id'];
     }
 }

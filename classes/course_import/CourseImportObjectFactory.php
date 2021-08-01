@@ -23,12 +23,13 @@ class CourseImportObjectFactory
 
     private function readTemplateRefId()
     {
-        $template_id = (int) $this->crs_wizard_obj['templateRefId'];
-        if ($template_id <= 0) {
+        $template_ref_id = (int) $this->crs_wizard_obj['templateRefId'];
+
+        if ($template_ref_id <= 0) {
             throw new InvalidArgumentException('Unknown or missing Template ID');
         }
 
-        return $template_id;//$this->template_repo->getCourseTemplateByTemplateId($template_id)->getCrsRefId();
+        return $template_ref_id;//$this->template_repo->getCourseTemplateByTemplateId($template_id)->getCrsRefId();
     }
 
     private function readTargetRefId()

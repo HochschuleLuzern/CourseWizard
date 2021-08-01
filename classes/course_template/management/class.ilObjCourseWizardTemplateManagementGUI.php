@@ -23,8 +23,8 @@ class ilObjCourseWizardTemplateManagementGUI
     /** @var int */
     protected $container_ref_id;
 
-    /** @var CourseTemplateCollector */
-    protected $template_collector;
+    /** @var \CourseWizard\CourseTemplate\management\CourseTemplateManager */
+    protected $template_management;
 
     /** @var ilCourseWizardPlugin */
     protected $plugin;
@@ -32,11 +32,11 @@ class ilObjCourseWizardTemplateManagementGUI
     /** @var ilLanguage */
     protected $lng;
 
-    public function __construct(\CourseWizard\CourseTemplate\management\CourseTemplateManager $crs_tempalte_controller, ilObjCourseWizardGUI $parent_gui, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
+    public function __construct(\CourseWizard\CourseTemplate\management\CourseTemplateManager $crs_template_controller, ilObjCourseWizardGUI $parent_gui, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
     {
         global $DIC;
 
-        $this->template_management = $crs_tempalte_controller;
+        $this->template_management = $crs_template_controller;
         $this->parent_gui = $parent_gui;
         $this->container_ref_id = $this->parent_gui->object->getRefId();
         $this->plugin = $plugin;

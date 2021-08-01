@@ -43,15 +43,16 @@ class SettingsPage extends BaseModalPagePresenter
         return $form_item;
     }
 
-    public function getModalPageAsComponentArray() : array
+    public function getStepInstructions() : string
+    {
+        return $this->plugin->txt('wizard_settings_text');
+    }
+
+    public function getStepContent() : string
     {
         global $DIC;
 
-        $text = $this->plugin->txt('wizard_settings_text');
-
-        $ui_components = array();
         $form_id = uniqid('xcwi_wizard_settings');
-        $ui_components[] = $this->ui_factory->legacy("<p>$text</p>");
         $form = new \ilPropertyFormGUI();
         $form->setId($form_id);
 
@@ -63,13 +64,10 @@ class SettingsPage extends BaseModalPagePresenter
             }
         }
 
-        $ui_components[] = $this->ui_factory->legacy($form->getHTML());
-
-        // TODO: Find better place for this
         $this->js_creator->addCustomConfigElement('settingsForm', $form->getId());
         $this->js_creator->addCustomConfigElement('executeImportUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_EXECUTE_CRS_IMPORT));
 
-        return $ui_components;
+        return $form->getHTML();
     }
 
     public function getJsNextPageMethod() : string
