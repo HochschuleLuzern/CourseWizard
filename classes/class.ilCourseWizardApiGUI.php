@@ -182,12 +182,23 @@ class ilCourseWizardApiGUI
                         $factory = new CourseImportObjectFactory($obj, $template_repo);
                         $course_import_data = $factory->createCourseImportDataObject();
 
+                        $template_obj_type  = \ilObject::_lookupType($course_import_data->getTemplateCrsRefId(), true);
+                        $target_obj_type = \ilObject::_lookupType($course_import_data->getTargetCrsRefId(), true);
+
+                                                if($template_obj_type != 'crs' || $target_obj_type != 'crs') {
+                            $this->logger->error('Template or target object does not have the type "CRS"');
+                            exit;
+                        }
+
                         if (!$DIC->rbac()->system()->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
                             $this->logger->error('No permissions for the course wizard');
                             exit;
                         } else {
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+
                             $controller = new CourseImportController();
-                            $copy_results = $controller->executeImport($course_import_data);
+                            $copy_results = $controller->executeImport($course_import_data, $wizard_flow_repo);
 
                             $redirect_url = ilLink::_getLink($course_import_data->getTargetCrsRefId(), 'crs');
                             $progress = new ilObjectCopyProgressTableGUI(
@@ -202,6 +213,20 @@ class ilCourseWizardApiGUI
 
                             echo $progress->getHTML() . "<script>il.CopyRedirection.setRedirectUrl('$redirect_url');il.CopyRedirection.checkDone();</script>";
                             exit;
+
+
+
+                            $wizard_flow_repo = new \CourseWizard\DB\WizardFlowRepository($DIC->database(), $DIC->user());
+                            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+                            if ($wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS ||
+                                $wizard_flow->getCurrentStatus() == \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
+
+                                $wizard_flow = $wizard_flow->withQuitedStatus();
+                                $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
+
+                                ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
+                                $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
+                            }
                         }
 
                         break;

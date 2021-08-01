@@ -315,6 +315,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         $crs_list_panels = array(
             new \CourseWizard\CourseTemplate\ui\MyTemplatesListOverviewGUI(
+                $this,
                 'overview_your_templates',
                 $crs_repo->getAllCourseTemplatesForUserByContainerRefId($this->user->getId(), $this->ref_id),
                 $this->plugin,
@@ -322,6 +323,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $this->ctrl
             ),
             new \CourseWizard\CourseTemplate\ui\ApprovedTemplatesListOverviewGUI(
+                $this,
                 'overview_approved_templates',
                 $crs_repo->getAllApprovedCourseTemplates($this->ref_id),
                 $this->plugin,
@@ -335,9 +337,11 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $group_views = array();
         /** @var \CourseWizard\CourseTemplate\ui\TemplateListOverviewGUI $crs_list_panel */
         foreach ($crs_list_panels as $crs_list_panel) {
-            $courses = array();
             $group_views[] = $crs_list_panel->buildOverviewAsGroupView();
-
+            $additional_ui_elements = $crs_list_panel->getAdditionalUIElements();
+            foreach($additional_ui_elements as $ui_element) {
+                $container_content[] = $ui_element;
+            }
         }
         $container_content[] = $f->panel()->listing()->standard($this->plugin->txt('overview_crs_templates'), $group_views);
 

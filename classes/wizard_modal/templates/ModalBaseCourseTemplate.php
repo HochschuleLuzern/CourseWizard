@@ -50,11 +50,6 @@ class ModalBaseCourseTemplate implements ModalCourseTemplate
 
     public function getPropertiesArray() : array
     {
-        return array(
-                         'Author' => 'Raphael Heer',
-                         'Tests' => 'Ja',
-                         'Page Content' => 'Nein',
-                         'Modulunterlagenordner' => 'Nein'
-                     );
+        return array();
     }
 }

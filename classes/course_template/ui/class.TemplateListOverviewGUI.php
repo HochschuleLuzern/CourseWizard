@@ -9,6 +9,10 @@ use ILIAS\UI\Component\Link\Link;
 
 abstract class TemplateListOverviewGUI
 {
+    protected $additional_ui_elements;
+
+    protected $parent_gui_obj;
+
     /** @var string */
     protected $title;
 
@@ -24,13 +28,15 @@ abstract class TemplateListOverviewGUI
     /** @var \ilCtrl */
     protected $ctrl;
 
-    public function __construct(string $title, array $crs_list, \ilCourseWizardPlugin $plugin, \ILIAS\UI\Factory $ui_factory, \ilCtrl $ctrl)
+    public function __construct($parent_gui_obj, string $title, array $crs_list, \ilCourseWizardPlugin $plugin, \ILIAS\UI\Factory $ui_factory, \ilCtrl $ctrl)
     {
+        $this->parent_gui_obj = $parent_gui_obj;
         $this->title = $title;
         $this->crs_list = $crs_list;
         $this->plugin = $plugin;
         $this->ui_factory = $ui_factory;
         $this->ctrl = $ctrl;
+        $this->additional_ui_elements = array();
     }
 
     protected function getEmptyItem() : array
@@ -84,6 +90,11 @@ abstract class TemplateListOverviewGUI
         $category_title = $this->plugin->txt($this->getTitle());
         $group_items = count($courses) > 0 ? $courses : $this->getEmptyItem();
         return $this->ui_factory->item()->group($category_title, $group_items);
+    }
+
+    public function getAdditionalUIElements() : array
+    {
+        return $this->additional_ui_elements;
     }
 
     protected abstract function getCommandButtons(CourseTemplate $course_template) : array;
