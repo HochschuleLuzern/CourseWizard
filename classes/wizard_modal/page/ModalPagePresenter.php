@@ -21,4 +21,5 @@ interface ModalPagePresenter
     public function getHtmlWizardStepContainerDivId() : string;
 
     public function getHtmlWizardStepContentContainerDivId() : string;
+
 }

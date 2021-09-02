@@ -212,7 +212,12 @@ class ilCourseWizardApiGUI
                             $progress->init();
                             $progress->setRedirectionUrl($redirect_url);
 
-                            echo $progress->getHTML() . "<script>il.CopyRedirection.setRedirectUrl('$redirect_url');il.CopyRedirection.checkDone();</script>";
+                            $loading_gui = new \CourseWizard\CustomUI\CourseImportLoadingGUI(
+                                \CourseWizard\CustomUI\CourseImportLoadingStepUIComponents::getLoadingStepsWithCopyTable($progress, $this->plugin),
+                                $this->plugin
+                            );
+
+                            echo $loading_gui->getAsHTMLDiv() . "<script>il.CopyRedirection.setRedirectUrl('$redirect_url');il.CopyRedirection.checkDone();</script>";
                             exit;
 
 

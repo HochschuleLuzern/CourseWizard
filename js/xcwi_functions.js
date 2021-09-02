@@ -38,6 +38,7 @@ il.CourseWizardFunctions = (function (scope) {
 			currentWizardObj['templateRefId'] = checked_id;
 			priv.storeCurrentWizardObj()
 
+			priv.showLoadingAnimation(e.target.id);
 			priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
 
 		} else {
@@ -48,6 +49,7 @@ il.CourseWizardFunctions = (function (scope) {
 		let skip_introduction = $('#xcwi_skip_introduction').is(":checked");
 
 		let nextPageUrl = priv.wizardModalConfig['nextPageUrl'] + '&skip_intro=' + (skip_introduction ? '1' : '0');
+		priv.showLoadingAnimation(e.target.id);
 		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
 
 	}
@@ -61,6 +63,8 @@ il.CourseWizardFunctions = (function (scope) {
 			};
 		 });
 		priv.storeCurrentWizardObj();
+		priv.showLoadingAnimation(e.target.id);
+
 		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: priv.wizardModalConfig['nextPageUrl']});
 	};
 
@@ -70,8 +74,9 @@ il.CourseWizardFunctions = (function (scope) {
 		if(currentWizardObj['templateRefId']) {
 			previousPageUrl += '&template_ref_id=' + currentWizardObj['templateRefId'];
 		}
+		priv.showLoadingAnimation(e.target.id);
 		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: previousPageUrl});
-	}
+	};
 
 	pub.executeImport = function(e) {
 		currentWizardObj["specificSettings"] = {};
@@ -81,12 +86,26 @@ il.CourseWizardFunctions = (function (scope) {
 		priv.storeCurrentWizardObj();
 		let data = {obj: JSON.stringify(currentWizardObj)};
 
+		priv.showLoadingAnimation(e.target.id, true);
+
 		$.post(priv.wizardModalConfig['executeImportUrl'], data).done(function(response)
 		{
 			$('#' + priv.wizardModalConfig['wizardDivId']).html(response);
 			storageEngine.removeItem(currentWizardObj.targetRefId);
 		});
-	}
+	};
+
+	priv.showLoadingAnimation = function(button_id, show_spinner = false) {
+		il.UI.button.activateLoadingAnimation(button_id);
+		$('.modal-footer').children().each(function(number, element) {
+			console.log(element)
+			$( element ).addClass('disabled');
+		});
+		if(show_spinner) {
+			$('.xcwi_loading_container').show();
+			$('#' + priv.wizardModalConfig['wizardDivId']  + ' .xcwi_step_presentation').hide();
+		}
+	};
 
 	priv.loadCurrentWizardObj = function (ref_id) {
 		let obj = storageEngine.getItem(ref_id);
@@ -96,24 +115,24 @@ il.CourseWizardFunctions = (function (scope) {
 		} else {
 			currentWizardObj = JSON.parse(obj);
 		}
-	}
+	};
 
 	priv.storeCurrentWizardObj = function() {
 		let json_obj = JSON.stringify(currentWizardObj);
 		storageEngine.setItem(currentWizardObj.targetRefId, json_obj);
-	}
+	};
 
 	pub.printCurrentObj = function() {
 		console.log(currentWizardObj);
-	}
+	};
 
 	pub.printCurrentConf = function() {
 		console.log(priv.wizardModalConfig);
-	}
+	};
 
 	priv.closeModalTriggered = function(event, signalData) {
 		console.log('Close Modal triggered');
-	}
+	};
 
 	pub.initNewModalPage = function (wizardModalConfig) {
 		priv.wizardModalConfig = wizardModalConfig;
@@ -131,7 +150,7 @@ il.CourseWizardFunctions = (function (scope) {
 		}
 
 		priv.isInitialized = true;
-	}
+	};
 
 	pub.addInfoMessageToPage = function(messageUrl) {
 
@@ -158,7 +177,7 @@ il.CourseWizardFunctions = (function (scope) {
 				}
 			}
 		);
-	}
+	};
 
 	return pub;
 

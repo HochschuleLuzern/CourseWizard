@@ -1,21 +1,30 @@
 <div id="{WIZARD_MODAL_ID}" class="wizard_modal">
-	<div class="xcwi_modal_navigation_container">
-		<!-- BEGIN navigation_step -->
-		<div class="xcwi_modal_navigation_step{ACTIVE_STEP}" style="width: {WIDTH_IN_PERCENT}%;">{STEP_TITLE}</div>
-		<!-- END navigation_step -->
-	</div>
-	<hr>
-	<div id="{WIZARD_STEP_CONTAINER_ID}" class="xcwi_step_container">
-		<div class="xcwi_step_description">
-			{STEP_DESCRIPTION}
+	<div class="xcwi_step_presentation">
+		<div class="xcwi_modal_navigation_container">
+			<!-- BEGIN navigation_step -->
+			<div class="xcwi_modal_navigation_step{ACTIVE_STEP}" style="width: {WIDTH_IN_PERCENT}%;">{STEP_TITLE}</div>
+			<!-- END navigation_step -->
 		</div>
-		<div id="{WIZARD_STEP_CONTENT_ID}" class="xcwi_step_content">
-			{STEP_CONTENT}
+		<hr>
+		<div id="{WIZARD_STEP_CONTAINER_ID}" class="xcwi_step_container">
+			<div class="xcwi_step_description">
+				{STEP_DESCRIPTION}
+			</div>
+			<div id="{WIZARD_STEP_CONTENT_ID}" class="xcwi_step_content">
+				{STEP_CONTENT}
+			</div>
 		</div>
 	</div>
+	<!-- BEGIN loading_screen -->
+	<div id="{WIZARD_LOADING_CONTAINER_ID}" class="xcwi_loading_container" style="display: none;">
+		{LOADING_SCREEN}
+	</div>
+	<!-- END loading_screen -->
 	<script>
 		il.CourseWizardFunctions.initNewModalPage({STEP_CONFIG_JSON});
 	</script>
 </div>
+
+
 
 

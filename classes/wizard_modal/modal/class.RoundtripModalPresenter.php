@@ -2,6 +2,9 @@
 
 namespace CourseWizard\Modal;
 
+use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;
+use CourseWizard\Modal\Page\LoadingScreenForModalPage;
+
 class RoundtripModalPresenter implements ModalPresenter
 {
     const NAVIGATION_STEPS = array(
@@ -67,15 +70,28 @@ class RoundtripModalPresenter implements ModalPresenter
         $this->setNavigationStepsInTemplate($this->presenter->getCurrentNavigationStep());
 
         $this->modal_template->setVariable('WIZARD_STEP_CONTAINER_ID', $this->presenter->getHtmlWizardStepContainerDivId());
-
         $this->modal_template->setVariable('WIZARD_STEP_CONTENT_ID', $this->presenter->getHtmlWizardStepContentContainerDivId());
 
         $this->modal_template->setVariable('STEP_DESCRIPTION', $this->presenter->getStepInstructions());
-
         $this->modal_template->setVariable('STEP_CONTENT', $this->presenter->getStepContent());
 
         $json_config = $this->presenter->getJSConfigsAsString($replace_signal);
         $this->modal_template->setVariable('STEP_CONFIG_JSON', $json_config);
+
+        if($this->presenter instanceof LoadingScreenForModalPage) {
+            $this->modal_template->setCurrentBlock('loading_screen');
+            $this->modal_template->setVariable('WIZARD_LOADING_CONTAINER_ID', $this->presenter->getHtmlWizardLoadingContainerDivId());
+            $this->modal_template->setVariable('LOADING_SCREEN', $this->presenter->getLoadingScreen()->getAsHTMLDiv());
+            $this->modal_template->parseCurrentBlock();
+            /** @var CourseImportLoadingStepUIComponents $loading_step
+            foreach($this->presenter->getLoadingSteps() as $loading_step) {
+                $this->modal_template->setCurrentBlock('loading_step');
+                $this->modal_template->setVariable('LOADING_TITLE', $loading_step->getTitle());
+                $this->modal_template->setVariable('LOADING_CONTENT', $loading_step->getContent());
+                $this->modal_template->setVariable('ICON', $loading_step->getRenderedStatusIcon());
+                $this->modal_template->parseCurrentBlock();
+            }*/
+        }
 
         return $this->ui_factory->legacy($this->modal_template->get());
     }

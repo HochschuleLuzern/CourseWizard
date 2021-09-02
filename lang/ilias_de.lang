@@ -48,6 +48,10 @@ form_xcwi_container_scope#:#Gültigkeitsbereich
 form_xcwi_container_scope_info#:#Definiere den Gültigkeitsbereich dieses Kursvorlagen Containers
 
 global_available#:#Global verfügbar
+import_content_page_loading_title#:#Inhaltsseite
+import_content_page_loading_content#:#Kopiere Inhaltsseite von Vorlage...
+import_objects_loading_title#:#ILIAS Objekte
+import_object_loading_content#:#Importiere ILIAS Objekte von Vorlage...
 invalid_form_input#:#Ungültige Eingabe
 manage_proposals#:#Vorschläge verwalten
 no#:#Nein

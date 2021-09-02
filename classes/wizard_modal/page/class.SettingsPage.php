@@ -2,15 +2,21 @@
 
 namespace CourseWizard\Modal\Page;
 
-class SettingsPage extends BaseModalPagePresenter
+use CourseWizard\CustomUI\CourseImportLoadingGUI;
+use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;
+
+class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForModalPage
 {
     protected const JS_POST_SELECTION_METHOD = self::JS_NAMESPACE . '.' . 'executeImport';
+
+    private $html_wizard_spinner_container_div_id;
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
         parent::__construct($state_machine, $ui_factory);
 
         $this->current_navigation_step = 'step_settings';
+        $this->html_wizard_spinner_container_div_id = uniqid('xcwi_id_');
     }
 
     private function getSortingOptions()
@@ -68,6 +74,24 @@ class SettingsPage extends BaseModalPagePresenter
         $this->js_creator->addCustomConfigElement('executeImportUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_EXECUTE_CRS_IMPORT));
 
         return $form->getHTML();
+    }
+
+    public function getHtmlWizardLoadingContainerDivId() : string
+    {
+        return $this->html_wizard_spinner_container_div_id;
+    }
+
+    public function getLoadingSteps() : array
+    {
+        global $DIC;
+        $loading_icon = $DIC->ui()->renderer()->renderAsync($this->ui_factory->image()->standard('templates/default/images/loader.svg', 'loading'));
+
+        return CourseImportLoadingStepUIComponents::getLoadingSteps($this->plugin);
+    }
+
+    public function getLoadingScreen() : CourseImportLoadingGUI
+    {
+        return new CourseImportLoadingGUI(CourseImportLoadingStepUIComponents::getLoadingSteps($this->plugin), $this->plugin);
     }
 
     public function getJsNextPageMethod() : string

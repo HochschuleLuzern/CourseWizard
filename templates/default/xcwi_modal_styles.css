@@ -33,6 +33,9 @@
 	border: 3px #0b3e6f solid;
 }
 
+.xcwi_loading_container {
+}
+
 .xcwi_modal_checkbox_div {
 	text-align: center;
 }
@@ -50,4 +53,32 @@
 #xcwi_template_selection_div_id {
 	margin-top: 1em;
 	margin-bottom: 2em;
+}
+
+.xcwi_loading_title_container {
+}
+
+.xcwi_loading_title {
+
+}
+
+.xcwi_wizard_loading_step {
+	padding-bottom: 1em;
+	padding-left: 2em;
+	font-family: italic, serif;
+}
+
+li.xcwi_import_list {
+}
+
+li.xcwi_loading {
+	list-style-image: url("../../../../../../../../../templates/default/images/loader.svg");
+}
+
+li.xcwi_success {
+	list-style-image: url("../../../../../../../../../templates/default/images/icon_ok.svg");
+}
+
+li.xcwi_failure {
+	list-style-image: url("../../../../../../../../../templates/default/images/icon_not_ok.svg");
 }

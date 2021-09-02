@@ -33,6 +33,7 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
     private $html_wizard_div_id = '';
     private $html_wizard_step_container_div_id = '';
     private $html_wizard_step_content_container_div_id = '';
+    private $html_wizard_spinner_container_div_id = '';
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
@@ -73,7 +74,10 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         $previous_page_name = $this->state_machine->getPageForPreviousState();
         if ($previous_page_name != '') {
             $js_code = $this->getJsPreviousPageMethod();
-            return $this->ui_factory->button()->standard($this->plugin->txt('btn_back'), '#')->withOnLoadCode(
+            return $this->ui_factory
+                ->button()
+                ->standard($this->plugin->txt('btn_back'), '#')
+                ->withOnLoadCode(
                 function ($id) use ($js_code, $replace_signal) {
                     return '$(' . $id . ').click(' . $js_code . ');';
                 }
@@ -87,15 +91,21 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         if ($next_page_name != '') {
             $js_code = $this->getJsNextPageMethod();
             $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
-            return $this->ui_factory->button()->primary($this->plugin->txt('btn_continue'), '#')->withOnLoadCode(
-                function ($id) use ($js_code, $replace_signal) {
-                    return '$(' . $id . ').click(' . $js_code . ');';
-                }
-            );
+            return $this->ui_factory
+                ->button()
+                ->primary($this->plugin->txt('btn_continue'), '#')
+                ->withOnLoadCode(
+                    function ($id) use ($js_code, $replace_signal) {
+                        return '$(' . $id . ').click(' . $js_code . ');';
+                    }
+                );
         } else {
             $js_code = $this->getJsNextPageMethod();
             $url = $this->modal_render_base_url . "&page=$next_page_name&replacesignal={$replace_signal->getId()}";
-            return $this->ui_factory->button()->primary($this->plugin->txt('btn_execute_import'), '#')->withOnLoadCode(
+            return $this->ui_factory
+                ->button()
+                ->primary($this->plugin->txt('btn_execute_import'), '#')
+                ->withOnLoadCode(
                 function ($id) use ($js_code, $replace_signal) {
                     return '$(' . $id . ').click(' . $js_code . ');';
                 }
@@ -122,7 +132,9 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
 
         $url_quit_wizard = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=" . $this->state_machine->getPageForQuittingWizard() . "&previousPage=" . $this->state_machine->getPageForCurrentState();
 
-        $buttons[] = $this->ui_factory->button()->standard($this->plugin->txt('btn_arrange_crs_unassisted'), $replace_signal->withAsyncRenderUrl($url_quit_wizard));
+        $buttons[] = $this->ui_factory
+            ->button()
+            ->standard($this->plugin->txt('btn_arrange_crs_unassisted'), $replace_signal->withAsyncRenderUrl($url_quit_wizard));
 
         return $buttons;
     }
@@ -171,6 +183,11 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
             $this->getHtmlWizardStepContainerDivId(),
             $this->getHtmlWizardStepContentContainerDivId()
         );
+
+        if($this instanceof LoadingScreenForModalPage) {
+            $this->js_creator->addCustomConfigElement(JavaScriptPageConfig::JS_HTML_WIZARD_LOADING_CONTAINER_DIV_ID, $this->getHtmlWizardLoadingContainerDivId());
+            $this->js_creator->addCustomConfigElement(JavaScriptPageConfig::JS_HTML_WIZARD_COPY_OBJECTS_LOADING_DIV_ID, $this->getHtmlWizardLoadingContainerDivId());
+        }
 
         $this->js_creator->addCustomConfigElement('dismissModalUrl', $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::API_CTRL_PATH, \ilCourseWizardApiGUI::CMD_POSTPONE_WIZARD));
 

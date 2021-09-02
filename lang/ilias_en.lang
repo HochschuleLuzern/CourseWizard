@@ -48,6 +48,10 @@ form_xcwi_container_scope#:#Scope
 form_xcwi_container_scope_info#:#Define the scope for this Course Template Container
 
 global_available#:#Global Available
+import_content_page_loading_title#:#Content Page
+import_content_page_loading_content#:#Copying Content Page from template
+import_objects_loading_title#:#ILIAS Objects
+import_object_loading_content#:#Importing ILIAS Objects from Template
 invalid_form_input#:#Invalid from input
 manage_proposals#:#Manage Proposals
 no#:#No
