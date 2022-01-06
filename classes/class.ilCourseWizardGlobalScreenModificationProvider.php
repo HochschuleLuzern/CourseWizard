@@ -9,20 +9,48 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
             ilObject::_lookupType($ref_id, true) == 'crs'
 
             // ... and course should be empty ...
-            && count($this->dic->repositoryTree()->getChilds($ref_id)) <= 0
+            && $this->objectIsEmptyOrHasOnlyGroups($ref_id)
 
             // ... and parent object has to be a category (no course wizard container or anything else) ...
             && ilObject::_lookupType($this->dic->repositoryTree()->getParentId($ref_id), true) == 'cat'
 
             // ... and user has permissions to see the wizard ...
-            && $this->userHasWizardPermissions($this->dic->user(), $ref_id)
+            && $this->userHasWritePermissionsToObj($this->dic->user(), $ref_id)
 
             // ... and user is on the content-view-page
             && $this->isContentViewPage($this->dic->http()->request())
         );
     }
 
-    private function userHasWizardPermissions(ilObjUser $user, int $ref_id)
+    private function objectIsEmptyOrHasOnlyGroups(int $ref_id) : bool
+    {
+        $child_objects = $this->dic->repositoryTree()->getChilds($ref_id);
+        if(count($child_objects) <= 0) {
+            return true;
+        }
+
+        $obj_title = ilObject::_lookupTitle(ilObject::_lookupObjectId($ref_id));
+        foreach($child_objects as $child_node) {
+            if ($child_node['type'] != 'grp') {
+                return false;
+            } else if (count($this->dic->repositoryTree()->getChilds($child_node['ref_id'])) > 0) {
+                return false;
+            } else if (!$this->isSubGroupTitleOf($obj_title, $child_node['title'])) {
+                return false;
+            } else if (!$this->userHasWritePermissionsToObj($this->dic->user(), $child_node['ref_id'])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function isSubGroupTitleOf(string $crs_title, string $grp_title) : bool
+    {
+        return substr($grp_title, 0, strlen($grp_title) - 2) == $crs_title;
+    }
+
+    private function userHasWritePermissionsToObj(ilObjUser $user, int $ref_id)
     {
         return $this->dic->rbac()
                          ->system()
