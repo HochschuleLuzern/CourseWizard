@@ -299,11 +299,7 @@ class ilCourseWizardApiGUI
             $this->checkSkipIntroFlagAndSetPreferences($user_pref_repo, $this->user);
 
             $modal_factory = new Modal\WizardModalFactory(
-                $course_template_repo,
-                $this->ctrl,
-                $this->request,
-                $this->ui_factory,
-                $this->ui_renderer,
+                $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
                 $this->plugin
             );
 
@@ -360,11 +356,7 @@ class ilCourseWizardApiGUI
             $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
             $modal_factory = new Modal\WizardModalFactory(
-                $course_template_repo,
-                $this->ctrl,
-                $this->request,
-                $this->ui_factory,
-                $this->ui_renderer,
+                $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
                 $this->plugin
             );
 

@@ -38,14 +38,14 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
 
     private $type = '';
     private $selected_reference = null;
-
+    private $hide_subgroups;
     /**
      *
      * @param object $a_parent_class
      * @param string $a_parent_cmd
      * @return
      */
-    public function __construct($a_parent_class, $a_parent_cmd, $a_type, $a_back_cmd)
+    public function __construct($a_parent_class, $a_parent_cmd, $a_type, bool $hide_subgroups)
     {
         global $DIC;
 
@@ -55,6 +55,8 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->access = $DIC->access();
         $lng = $DIC->language();
         $ilCtrl = $DIC->ctrl();
+
+        $this->hide_subgroups = $hide_subgroups;
 
         parent::__construct($a_parent_class, $a_parent_cmd);
         $this->type = $a_type;
@@ -98,6 +100,10 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $ilAccess = $this->access;
 
         $first = true;
+
+        $is_in_subgroup = false;
+
+        $crs_title = \ilObject::_lookupTitle(\ilObject::_lookupObjectId($a_source));
         foreach ($tree->getSubTree($root = $tree->getNodeData($a_source)) as $node) {
             if ($node['type'] == 'rolf') {
                 continue;
@@ -106,12 +112,30 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
                 continue;
             }
 
+            $current_depth = $node['depth'] - $root['depth'];
+            if($this->hide_subgroups && !$first){
+
+                // Is object direct child of course
+                // and is it of the type group
+                // and has it a matching title to the course?
+                if ($current_depth == 1
+                    && $node['type'] == 'grp'
+                    && (substr($node['title'], 0, strlen($node['title']) - 2) == $crs_title)
+                ) {
+                    $is_in_subgroup = true;
+                    continue;
+                } else if ($is_in_subgroup && $current_depth > 1) {
+                    continue;
+                } else {
+                    $is_in_subgroup = false;
+                }
+            }
 
             $r = array();
             $r['last'] = false;
             $r['source'] = $first;
             $r['ref_id'] = $node['child'];
-            $r['depth'] = $node['depth'] - $root['depth'];
+            $r['depth'] = $current_depth;
             $r['type'] = $node['type'];
             $r['title'] = $node['title'];
             $r['copy'] = $objDefinition->allowCopy($node['type']);

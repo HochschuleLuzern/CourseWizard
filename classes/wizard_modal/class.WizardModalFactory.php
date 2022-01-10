@@ -21,6 +21,9 @@ use Psr\Http\Message\RequestInterface;
 
 class WizardModalFactory
 {
+    /** @var \ilObjCourse */
+    private $target_crs_obj;
+
     /** @var CourseTemplateRepository */
     private $template_repository;
 
@@ -42,8 +45,17 @@ class WizardModalFactory
     /** @var \ilCourseWizardPlugin */
     private $plugin;
 
-    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, \Psr\Http\Message\ServerRequestInterface $request, Factory $ui_factory, Renderer $ui_renderer, \ilCourseWizardPlugin $plugin)
+    public function __construct(
+        \ilObjCourse $target_crs_obj,
+        CourseTemplateRepository $template_repository,
+        \ilCtrl $ctrl,
+        \Psr\Http\Message\ServerRequestInterface $request,
+        Factory $ui_factory,
+        Renderer $ui_renderer,
+        \ilCourseWizardPlugin $plugin
+    )
     {
+        $this->target_crs_obj = $target_crs_obj;
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
         $this->request = $request;
@@ -51,6 +63,7 @@ class WizardModalFactory
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
         $this->plugin = $plugin;
+        $this->target_crs_obj = $target_crs_obj;
     }
 
     private function buildTemplateSelectionPage(StateMachine $state_machine)
@@ -114,11 +127,12 @@ class WizardModalFactory
         );
     }
 
-    private function buildContentInheritancePage($state_machine, $course_ref_id)
+    private function buildContentInheritancePage($state_machine, $course_ref_id, bool $is_target_multi_group)
     {
         return new Page\ContentInheritancePage(
             $course_ref_id,
             $this->template_repository->isGivenRefIdACrsTemplate($course_ref_id),
+            $is_target_multi_group,
             $state_machine,
             $this->ui_factory
         );
@@ -163,7 +177,19 @@ class WizardModalFactory
                     throw new \InvalidArgumentException('Given reference ID is not for object of type course');
                 }
 
-                $page_presenter = $this->buildContentInheritancePage($state_machine, $ref_id);
+                try {
+                    $wizard_access_checker = new \ilWizardAccessChecker();
+                    $target_ref_id = (int)$this->query_params['ref_id'];
+                    if($wizard_access_checker->objectHasOnlySubgroupsWithExtendedTitleAndIsNotEmpty($target_ref_id)) {
+                        $is_target_multi_group = true;
+                    } else {
+                        $is_target_multi_group = false;
+                    }
+                } catch (\Exception $e) {
+                    $is_target_multi_group = false;
+                }
+
+                $page_presenter = $this->buildContentInheritancePage($state_machine, $ref_id, $is_target_multi_group);
 
                 break;
 

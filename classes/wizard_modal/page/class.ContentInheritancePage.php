@@ -12,16 +12,33 @@ class ContentInheritancePage extends BaseModalPagePresenter
     /** @var bool */
     private $crs_is_template;
 
+    /** @var bool */
+    private $is_multi_group_target;
+
+    /** @var bool */
+    private $hide_subgroups;
+
     /**
      * ContentInheritancePage constructor.
-     * @param Modal\Page\StateMachine $state_machine
-     * @param \ILIAS\UI\Factory       $ui_factory
+     * @param int               $template_ref_id
+     * @param bool              $crs_is_template
+     * @param bool              $is_multi_group_target
+     * @param StateMachine      $state_machine
+     * @param \ILIAS\UI\Factory $ui_factory
      */
-    public function __construct(int $template_ref_id, bool $crs_is_template, \CourseWizard\Modal\Page\StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
+    public function __construct(int $template_ref_id, bool $crs_is_template, bool $is_multi_group_target, \CourseWizard\Modal\Page\StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
+        parent::__construct($state_machine, $ui_factory);
+
         $this->template_ref_id = $template_ref_id;
         $this->crs_is_template = $crs_is_template;
-        parent::__construct($state_machine, $ui_factory);
+        $this->is_multi_group_target = $is_multi_group_target;
+
+        if(!$this->crs_is_template && $this->is_multi_group_target) {
+            $this->hide_subgroups = true;
+        } else {
+            $this->hide_subgroups = false;
+        }
 
         $this->current_navigation_step = 'step_content_inheritance';
     }
@@ -33,7 +50,7 @@ class ContentInheritancePage extends BaseModalPagePresenter
 
     public function getStepContent() : string
     {
-        $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', '');
+        $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', $this->hide_subgroups);
         $table->parseSource($this->template_ref_id);
         return $table->getHTML();
     }
