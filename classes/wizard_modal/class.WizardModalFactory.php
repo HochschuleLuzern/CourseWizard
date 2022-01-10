@@ -24,13 +24,14 @@ class WizardModalFactory
     /** @var CourseTemplateRepository */
     private $template_repository;
 
-    /** @var WizardFlow */
-    private $wizard_flow;
-
     /** @var \ilCtrl */
     private $ctrl;
 
+    /** @var \Psr\Http\Message\ServerRequestInterface */
     private $request;
+
+    /** @var array */
+    private $query_params;
 
     /** @var Factory */
     private $ui_factory;
@@ -41,12 +42,12 @@ class WizardModalFactory
     /** @var \ilCourseWizardPlugin */
     private $plugin;
 
-    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, $request, Factory $ui_factory, Renderer $ui_renderer, \ilCourseWizardPlugin $plugin)
+    public function __construct(CourseTemplateRepository $template_repository, \ilCtrl $ctrl, \Psr\Http\Message\ServerRequestInterface $request, Factory $ui_factory, Renderer $ui_renderer, \ilCourseWizardPlugin $plugin)
     {
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
         $this->request = $request;
-        $this->query_params;
+        $this->query_params = $this->request->getQueryParams();
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
         $this->plugin = $plugin;
@@ -113,14 +114,11 @@ class WizardModalFactory
         );
     }
 
-    private function buildContentInheritancePage($state_machine, $template_id)
+    private function buildContentInheritancePage($state_machine, $course_ref_id)
     {
-        //$template_ref_id = $this->template_repository->getCourseTemplateByRefId($template_id);
-        $template_ref_id = $template_id;
-        //$template = $this->template_repository->getCourseTemplateByTemplateId($template_id);
-        //$template_ref_id = $template->getCrsRefId();
         return new Page\ContentInheritancePage(
-            $template_ref_id,
+            $course_ref_id,
+            $this->template_repository->isGivenRefIdACrsTemplate($course_ref_id),
             $state_machine,
             $this->ui_factory
         );
@@ -155,11 +153,18 @@ class WizardModalFactory
                 break;
 
             case Page\StateMachine::CONTENT_INHERITANCE_PAGE:
-                if (isset($_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID])) {
-                    $page_presenter = $this->buildContentInheritancePage($state_machine, $_GET[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID]);
-                } else {
+
+                if (!isset($this->query_params[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID])) {
                     throw new \InvalidArgumentException('Missing the argument template_id which is needed for the content inheritance page');
                 }
+
+                $ref_id = (int)$this->query_params[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID];
+                if (\ilObject::_lookupType($ref_id, true) !== 'crs') {
+                    throw new \InvalidArgumentException('Given reference ID is not for object of type course');
+                }
+
+                $page_presenter = $this->buildContentInheritancePage($state_machine, $ref_id);
+
                 break;
 
             case Page\StateMachine::SPECIFIC_SETTINGS_PAGE:

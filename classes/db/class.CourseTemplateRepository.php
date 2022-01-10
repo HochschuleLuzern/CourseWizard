@@ -102,6 +102,18 @@ class CourseTemplateRepository
         return null;
     }
 
+    public function isGivenRefIdACrsTemplate($ref_id) : bool
+    {
+        $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE crs_ref_id = " . $this->db->quote($ref_id, 'integer');
+        $result = $this->db->query($sql);
+
+        if ($row = $this->db->fetchAssoc($result)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getCourseTemplateByContainerRefWithStatus(array $allowed_status, int $container_ref_id) : array
     {
         if (count($allowed_status) <= 0) {

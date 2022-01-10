@@ -88,10 +88,10 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
 
     /**
      *
-     * @param object $a_source
+     * @param int $a_source
      * @return
      */
-    public function parseSource($a_source)
+    public function parseSource(int $a_source)
     {
         $tree = $this->tree;
         $objDefinition = $this->obj_definition;
