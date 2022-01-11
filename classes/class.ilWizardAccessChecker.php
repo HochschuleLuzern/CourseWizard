@@ -14,11 +14,16 @@ class ilWizardAccessChecker
     /** @var \Psr\Http\Message\ServerRequestInterface */
     private $request;
 
+    /** @var ilCtrl */
+    private $ctrl;
+
     public function __construct(
         ilTree $tree = null,
         ilObjUser $user = null,
         ilRbacSystem $rbac_review = null,
-        \Psr\Http\Message\ServerRequestInterface $request = null)
+        \Psr\Http\Message\ServerRequestInterface $request = null,
+        ilCtrl $ctrl = null
+    )
     {
         global $DIC;
 
@@ -26,6 +31,7 @@ class ilWizardAccessChecker
         $this->user = $user ?? $DIC->user();
         $this->rbac_system = $rbac_review ?? $DIC->rbac()->system();
         $this->request = $request ?? $DIC->http()->request();
+        $this->ctrl = $ctrl ?? $DIC->ctrl();
     }
 
     public function checkIfObjectCouldDisplayWizard(int $ref_id) : bool
@@ -104,7 +110,7 @@ class ilWizardAccessChecker
         // Check for request on ilias.php
         if ($script_name == 'ilias.php' && isset($query_params['cmd'])) {
             return $query_params['cmd'] == 'view' || $query_params['cmd'] == 'render';
-        } elseif ($script_name == 'ilias.php' && $this->dic->ctrl()->getCmd() == '') {
+        } elseif ($script_name == 'ilias.php' && $this->ctrl->getCmd() == '') {
             return true;
         }
 
