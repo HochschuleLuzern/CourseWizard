@@ -90,6 +90,7 @@ class ComposerStaticInit71f87bf9dc756d3f9fbef51b34a2eae1
         'ilObjCourseWizardGUI' => __DIR__ . '/../..' . '/classes/class.ilObjCourseWizardGUI.php',
         'ilObjCourseWizardListGUI' => __DIR__ . '/../..' . '/classes/class.ilObjCourseWizardListGUI.php',
         'ilObjCourseWizardTemplateManagementGUI' => __DIR__ . '/../..' . '/classes/course_template/management/class.ilObjCourseWizardTemplateManagementGUI.php',
+        'ilWizardAccessChecker' => __DIR__ . '/../..' . '/classes/class.ilWizardAccessChecker.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

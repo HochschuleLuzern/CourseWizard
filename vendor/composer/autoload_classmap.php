@@ -75,4 +75,5 @@ return array(
     'ilObjCourseWizardGUI' => $baseDir . '/classes/class.ilObjCourseWizardGUI.php',
     'ilObjCourseWizardListGUI' => $baseDir . '/classes/class.ilObjCourseWizardListGUI.php',
     'ilObjCourseWizardTemplateManagementGUI' => $baseDir . '/classes/course_template/management/class.ilObjCourseWizardTemplateManagementGUI.php',
+    'ilWizardAccessChecker' => $baseDir . '/classes/class.ilWizardAccessChecker.php',
 );
