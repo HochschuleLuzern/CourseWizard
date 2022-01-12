@@ -63,8 +63,6 @@ class ilWizardAccessChecker
                 return false;
             } else if (!$this->isSubGroupTitleOf($parent_obj_title, $child_node['title'])) {
                 return false;
-            } else if (!$this->rbac_system->checkAccessOfUser($this->user->getId(), 'write', $child_node['ref_id'])) {
-                return false;
             }
         }
 
