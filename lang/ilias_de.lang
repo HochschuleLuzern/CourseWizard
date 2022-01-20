@@ -42,7 +42,7 @@ form_root_location_ref#:#Ref ID der Stammverzeichnisses
 form_root_location_ref_info#:#Diese "Reference ID" gibt an, in welchem der Kursvorlagen Container mit seinen Vorlagen angezeigt wird. Alle Kurse, welche im Magazinbaum unterhalb der angegebenen "Referenz ID" liegen, werden diesen Kursvorlagen Container im Wizard ersichtlich haben. Bei als "Global" definierten Containern spielt diser Wert keine Rolle.
 form_role_title#:#Bezeichnung für Container Adminrolle
 form_role_title_info#:#Die Personen, welche in dieses Rolle eingetragen werde, Verwalten die vorgeschlagenen Kursvorlagen
-form_skip_introduction#:#Einleitung für die nächsten male Überspringen
+form_skip_introduction#:#Einleitung für die nächsten Male Überspringen
 form_skip_introduction_info#:#Wenn ausgewählt, öffnet der Wizard für die nächsten Monate direkt auf der "Template auswählen" Seite
 form_xcwi_container_scope#:#Gültigkeitsbereich
 form_xcwi_container_scope_info#:#Definiere den Gültigkeitsbereich dieses Kursvorlagen Containers
@@ -106,18 +106,18 @@ view_course_template#:#Kursvorlage ansehen
 wizard_title#:#Kurs Wizard für den Kurs:
 wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
-wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs Aufgrund einer Vorlage einzurichten.
-wizard_introduction_text_p2#:#<b>Schritt 1</b>: Lesen Sie diese Anleitung aufmerksam durch. Klicken Sie anschliessend auf "Weiter" am Ende der Seite um zum nächsten Schritt zu gelangen. Wenn Sie keine Hilfe beim Einrichten benötigen, klicken Sie auf den Knopf "Kurs ohne Hilfe Einrichten" am Ende der Seite.
-wizard_introduction_text_p3#:#<b>Schritt 2</b>: Auf der folgenden Seite können Sie eine der verfügbaren Kursvorlagen auswählen. Ihnen werden sowohl die Kursvorlagen Ihres Departementes, sowie auch die globalen Kursvorlagen der HSLU zur verfügung stehen. Alternativ können Sie auch einen Kurs auswählen, in welchem Sie als Kursadmin eingetragen sind.
+wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs mittels einer Vorlage einzurichten.
+wizard_introduction_text_p2#:#<b>Schritt 1</b>: Lesen Sie diese Anleitung aufmerksam durch. Klicken Sie anschliessend auf "Weiter" am Ende der Seite um zum nächsten Schritt zu gelangen. Wenn Sie keine Hilfe beim Einrichten benötigen, klicken Sie auf den Knopf "Kurs Ohne Wizard einrichten" am Ende der Seite.
+wizard_introduction_text_p3#:#<b>Schritt 2</b>: Auf der folgenden Seite können Sie eine der verfügbaren Kursvorlagen auswählen. Ihnen werden sowohl die Kursvorlagen Ihres Departementes, sowie auch die globalen Kursvorlagen der HSLU zur Verfügung stehen. Alternativ können Sie auch einen bestehenden Kurs auswählen, in welchem Sie als Kursadmin eingetragen sind.
 wizard_introduction_text_p4#:#<b>Schritt 3</b>: Aufgrund der Auswahl im 2. Schritt, können Sie auf dieser Seite auswählen welche Inhalte übernommen werden sollen.
-wizard_introduction_text_p5#:#<b>Schritt 4</b>: Die letzte Seite bietet noch einige Einstellungsmöglichkeiten an, welche auf Ihren kurs angewendet werden. Mit einem Klick auf "Import ausführen" wird die ausgewähle Vorlage importiert und auf den jetzigen Kurs angewendet werden.
+wizard_introduction_text_p5#:#<b>Schritt 4</b>: Die letzte Seite bietet noch einige Einstellungsmöglichkeiten an, welche auf Ihren Kurs angewendet werden. Mit einem Klick auf "Import ausführen" wird die ausgewähle Vorlage importiert und auf den jetzigen Kurs angewendet.
 wizard_introduction_text_p6#:#<b>Kurs ohne Hilfe einrichten</b>: Möchten Sie den Kurs ohne Hilfe einrichten, so klicken Sie auf den Knopf unten "Ohne Wizard einrichten".
 wizard_introduction_text_p7#:#<b>Modal schliessen</b>: Wenn Sie auf "Modal schliessen", auf das Kreuz oben rechts oder irgendwo neben das Modal klicken, so schliesst sich dieses Fenster wieder. So können Sie den Wizard unterbrechen um ihn zu einem späteren Zeitpunkt auszuführen.
 
 wizard_postponed_info#:#Der Wizard wurde geschlossen. Klicken Sie unten auf "Wizard öffnen" um ihn wieder erneut anzuzeigen. Wenn Sie den Kurs ohne Hilfe einrichten möchten, öffnen Sie den Wizard und klicken Sie unten auf "Ohne Wizard einrichten" oder erstellen Sie ein ILIAS-Objekt in diesem Kurs.
 wizard_quit_text#:#Sind Sie sicher, dass Sie den Kurs ohne Hilfe einrichten möchten? Wenn Sie auf "Wizard beenden" klicken, wird der Wizard für diesen Kurs deaktiviert.
 wizard_settings_text#:#Wählen Sie zusätzliche Einstellungen, welche Sie auf diesen Kurs anwenden möchten
-wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der ihr Kurs basieren soll
+wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der Ihr Kurs basieren soll
 wizard_template_selection_empty#:#Im ausgewählten Departement ist zurzeit noch keine Kursvorlage vorhanden.
 
 xcwi_add#:#Neuen Kursvorlage Container erstellen
