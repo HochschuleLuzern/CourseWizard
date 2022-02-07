@@ -53,10 +53,6 @@ class CourseImportController
         // clone settings
         ilContainerSortingSettings::_cloneSettings($source_obj_id, $target_obj_id);
 
-        // translation
-        $ot = ilObjectTranslation::getInstance($source_obj_id);
-        $ot->copy($target_obj_id);
-
         foreach (ilContainer::_getContainerSettings($source_obj_id) as $keyword => $value) {
             ilContainer::_writeContainerSetting($target_obj_id, $keyword, $value);
         }
