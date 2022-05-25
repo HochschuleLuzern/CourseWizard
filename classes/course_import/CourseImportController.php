@@ -84,8 +84,8 @@ class CourseImportController
 
     private function importContent(CourseImportData $course_import_data)
     {
-        $copy_result_for_objs = $this->importContentObjects($course_import_data);
         $copy_result_for_content_page = $this->importContentPage($course_import_data);
+        $copy_result_for_objs = $this->importContentObjects($course_import_data);
         $this->importCourseSettings($course_import_data);
 
         return array('copy_objects_result' => $copy_result_for_objs, 'copy_content_page_result' => $copy_result_for_content_page);
