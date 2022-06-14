@@ -133,18 +133,31 @@ class WizardFlowRepository
     
     public function updateWizardFlowStatus(WizardFlow $wizard_flow)
     {
-        $update = array();
         $where = array(self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()));
-
-        $update = array(
+        $update_fields = array(
             self::COL_SELECTED_TEMPLATE => array('integer', $wizard_flow->getTemplateSelection()),
-            self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus())
+            self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus()),
+
         );
+
+        if(!is_null($wizard_flow->getExecutingUser())) {
+            $update_fields[self::COL_EXECUTING_USER] = array('integer', $wizard_flow->getExecutingUser());
+        }
+
+        if(!is_null($wizard_flow->getFirstOpen())) {
+            $update_fields[self::COL_FIRST_OPEN_TS] = array('timestamp', $wizard_flow->getFirstOpen()->getTimestamp());
+        }
+
+        if(!is_null($wizard_flow->getFinishedImport())) {
+            $update_fields[self::COL_FINISHED_IMPORT_TS] = array('timestamp', $wizard_flow->getFinishedImport()->getTimestamp());
+        }
 
         $this->db->update(
             self::TABLE_NAME,
-            $update,
+            $update_fields,
             $where
         );
+
+        $this->cache[$wizard_flow->getCrsRefId()] = $wizard_flow;
     }
 }

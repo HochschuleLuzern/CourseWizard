@@ -14,18 +14,18 @@ class WizardFlow
     private $executing_user;
     private $selected_template;
     private $current_status;
-    private $first_open_ts;
-    private $finished_import_ts;
+    private ?\DateTimeInterface $first_open;
+    private ?\DateTimeInterface $finished_import;
 
 
-    private function __construct($crs_ref_id, $executing_user, $current_status, $first_open_ts, $selected_template, $finished_import_ts)
+    private function __construct($crs_ref_id, $executing_user, $current_status, ?\DateTimeInterface $first_open, $selected_template, ?\DateTimeInterface $finished_import)
     {
         $this->crs_ref_id = $crs_ref_id;
         $this->executing_user = $executing_user;
         $this->current_status = $current_status;
-        $this->first_open_ts = $first_open_ts;
+        $this->first_open = $first_open;
         $this->selected_template = $selected_template;
-        $this->finished_import_ts = $finished_import_ts;
+        $this->finished_import = $finished_import;
     }
 
 
@@ -35,8 +35,19 @@ class WizardFlow
             $target_crs_ref_id,
             $executing_user,
             self::STATUS_IN_PROGRESS,
-            time(),
+            new \DateTimeImmutable(),
             null,
+            null
+        );
+    }
+
+    public static function wizardFlowImporting($target_crs_ref_id, $executing_user, $first_open, $selected_template) {
+        return new self(
+            $target_crs_ref_id,
+            $executing_user,
+            self::STATUS_IMPORTING,
+            $first_open,
+            $selected_template,
             null
         );
     }
@@ -120,7 +131,7 @@ class WizardFlow
 
             $clone = clone $this;
             $clone->current_status = self::STATUS_QUIT;
-            $clone->finished_import_ts = time();
+            $clone->finished_import = new \DateTimeImmutable();
             return $clone;
         } else {
             throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to quited Status');
@@ -132,7 +143,7 @@ class WizardFlow
         if ($this->current_status == self::STATUS_IMPORTING) {
             $clone = clone $this;
             $clone->current_status = self::STATUS_FINISHED;
-            $clone->finished_import_ts = time();
+            $clone->finished_import = new \DateTimeImmutable();
             return $clone;
         } else {
             throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to quited Status');
@@ -170,59 +181,18 @@ class WizardFlow
         return $this->current_status;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCurrentStep()
+    public function getExecutingUser()
     {
-        return $this->current_step;
+        return $this->executing_user;
     }
 
-    public static function wizardFlowWithSelectedTemplate($crs_ref_id, $template_selection)
+    public function getFirstOpen() : ?\DateTimeInterface
     {
-        return new self(
-            $crs_ref_id,
-            $template_selection,
-            null,
-            null,
-            self::STATUS_IN_PROGRESS
-        );
+        return $this->first_open;
     }
 
-    public static function wizardFlowWithContentInheritance($crs_ref_id, $template_selection, $content_inheritance)
+    public function getFinishedImport() : ?\DateTimeInterface
     {
-        return new self(
-            $crs_ref_id,
-            $template_selection,
-            $content_inheritance,
-            null,
-            self::STATUS_IN_PROGRESS
-        );
-    }
-
-    public static function wizardFlowImporting($crs_ref_id, $executing_user, $first_open_ts, $selected_template_id)
-    {
-
-        return new self(
-            $crs_ref_id,
-            $executing_user,
-            self::STATUS_IMPORTING,
-            $first_open_ts,
-            $selected_template_id,
-            null
-        );
-    }
-
-    public static function wizardFlowFinished($crs_ref_id, $executing_user, $first_open_ts, $selected_template_id, $finished_import_ts)
-    {
-
-        return new self(
-            $crs_ref_id,
-            $executing_user,
-            self::STATUS_FINISHED,
-            $first_open_ts,
-            $selected_template_id,
-            $finished_import_ts
-        );
+        return $this->finished_import;
     }
 }
