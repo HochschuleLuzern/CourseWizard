@@ -22,7 +22,7 @@ use Psr\Http\Message\RequestInterface;
 class WizardModalFactory
 {
     /** @var \ilObjCourse */
-    private $target_crs_obj;
+    private $target_obj;
 
     /** @var CourseTemplateRepository */
     private $template_repository;
@@ -46,7 +46,7 @@ class WizardModalFactory
     private $plugin;
 
     public function __construct(
-        \ilObjCourse $target_crs_obj,
+        \ilObject $target_obj,
         CourseTemplateRepository $template_repository,
         \ilCtrl $ctrl,
         \Psr\Http\Message\ServerRequestInterface $request,
@@ -55,7 +55,7 @@ class WizardModalFactory
         \ilCourseWizardPlugin $plugin
     )
     {
-        $this->target_crs_obj = $target_crs_obj;
+        $this->target_obj = $target_obj;
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
         $this->request = $request;
@@ -63,7 +63,6 @@ class WizardModalFactory
         $this->ui_factory = $ui_factory;
         $this->ui_renderer = $ui_renderer;
         $this->plugin = $plugin;
-        $this->target_crs_obj = $target_crs_obj;
     }
 
     private function buildTemplateSelectionPage(StateMachine $state_machine)

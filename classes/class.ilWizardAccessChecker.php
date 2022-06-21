@@ -34,20 +34,28 @@ class ilWizardAccessChecker
         $this->ctrl = $ctrl ?? $DIC->ctrl();
     }
 
+    private function hasAllowedParentObjType(int $parent_ref_id)
+    {
+        $parent_type = ilObject::_lookupType($parent_ref_id, true);
+        return $parent_type == 'cat' || $parent_type == 'crs';
+    }
+
     public function checkIfObjectCouldDisplayWizard(int $ref_id) : bool
     {
+        $type = ilObject::_lookupType($ref_id, true);
+
         return (
             // Object type has to be a course
-            ilObject::_lookupType($ref_id, true) == 'crs'
+            ($type == 'crs' || $type == 'grp')
 
             // ... and user has permissions to see the wizard ...
             && $this->rbac_system->checkAccessOfUser($this->user->getId(), 'write', $ref_id)
 
-            // ... and course should be empty ...
+            // ... and course/grp should be empty ...
             && $this->objectIsEmptyOrHasOnlyGroupsWithExtendedTitle($ref_id)
 
             // ... and parent object has to be a category (no course wizard container or anything else) ...
-            && ilObject::_lookupType($this->tree->getParentId($ref_id), true) == 'cat'
+            && $this->hasAllowedParentObjType($this->tree->getParentId($ref_id))
 
             // ... and user is on the content-view-page
             && $this->isContentViewPage()

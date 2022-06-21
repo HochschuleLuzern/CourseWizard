@@ -222,7 +222,11 @@ class ilCourseWizardApiGUI
         $template_obj_type  = ilObject::_lookupType($course_import_data->getTemplateCrsRefId(), true);
         $target_obj_type = ilObject::_lookupType($course_import_data->getTargetCrsRefId(), true);
 
-        if($template_obj_type != 'crs' || $target_obj_type != 'crs') {
+        if(
+            ($template_obj_type != 'crs' && $template_obj_type != 'grp')
+            ||
+            ($target_obj_type != 'crs' && $target_obj_type != 'grp')
+        ) {
             $this->logger->error('Template or target object does not have the type "CRS"');
             exit;
         }
@@ -375,7 +379,7 @@ class ilCourseWizardApiGUI
 
     }
 
-    private function extractCrsObjFromQueryParams(array $query_params) : ilObjCourse
+    private function extractCrsObjFromQueryParams(array $query_params) : ilObject
     {
         $target_ref_id = (int)$query_params['ref_id'] ?? 0;
 
@@ -383,7 +387,15 @@ class ilCourseWizardApiGUI
             throw new InvalidArgumentException('No valid ref_id given in query_params');
         }
 
-        return new ilObjCourse($target_ref_id, true);
+        $type = ilObject::_lookupType($target_ref_id, true);
+
+        if($type == 'crs') {
+            return new ilObjCourse($target_ref_id, true);
+        } else if ($type == 'grp') {
+            return new ilObjGroup($target_ref_id, true);
+        }
+
+        throw new InvalidArgumentException('Given ref_id for target object is not of type crs or grp');
     }
 
     private function extractWizardPageFromQueryParams(array $query_params, bool $throw_exception_on_null = true) : ?string

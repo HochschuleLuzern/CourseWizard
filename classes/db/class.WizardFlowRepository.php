@@ -46,33 +46,32 @@ class WizardFlowRepository
                 return WizardFlow::unfinishedWizardFlow(
                     $row[self::COL_TARGET_REF_ID],
                     $row[self::COL_EXECUTING_USER],
-                    $row[self::COL_FIRST_OPEN_TS],
+                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
                     $row[self::COL_WIZARD_STATUS]
                 );
-                break;
 
             case WizardFlow::STATUS_IMPORTING:
                 return WizardFlow::wizardFlowImporting(
                     $row[self::COL_TARGET_REF_ID],
                     $row[self::COL_EXECUTING_USER],
-                    $row[self::COL_FIRST_OPEN_TS],
+                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
                     $row[self::COL_SELECTED_TEMPLATE]
                 );
             case WizardFlow::STATUS_QUIT:
                 return WizardFlow::quitedWizardFlow(
                     $row[self::COL_TARGET_REF_ID],
                     $row[self::COL_EXECUTING_USER],
-                    $row[self::COL_FIRST_OPEN_TS],
-                    $row[self::COL_FINISHED_IMPORT_TS]
+                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
+                    new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
                 );
 
             case WizardFlow::STATUS_FINISHED:
                 return WIzardFLow::finishedWizardFlow(
                     $row[self::COL_TARGET_REF_ID],
                     $row[self::COL_EXECUTING_USER],
-                    $row[self::COL_FIRST_OPEN_TS],
+                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
                     $row[self::COL_SELECTED_TEMPLATE],
-                    $row[self::COL_FINISHED_IMPORT_TS]
+                    new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
                 );
 
             default:
@@ -88,7 +87,8 @@ class WizardFlowRepository
             self::TABLE_NAME,
             array(
                 self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()),
-                self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus())
+                self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus()),
+                self::COL_FIRST_OPEN_TS => array('timestamp', $wizard_flow->getFirstOpen()->format('Y-m-d H:i:s'))
             )
         );
 
@@ -127,7 +127,7 @@ class WizardFlowRepository
                 return $this->queryWizardFlowByCrs($crs_ref_id);
             }
         } else {
-            return $this->createNewWizardFlow($crs_ref_id, $this->executing_user);
+            return $this->createNewWizardFlow($crs_ref_id, $this->executing_user->getId());
         }
     }
     
@@ -145,11 +145,11 @@ class WizardFlowRepository
         }
 
         if(!is_null($wizard_flow->getFirstOpen())) {
-            $update_fields[self::COL_FIRST_OPEN_TS] = array('timestamp', $wizard_flow->getFirstOpen()->getTimestamp());
+            $update_fields[self::COL_FIRST_OPEN_TS] = array('timestamp', $wizard_flow->getFirstOpen()->format('Y-m-d H:i:s'));
         }
 
         if(!is_null($wizard_flow->getFinishedImport())) {
-            $update_fields[self::COL_FINISHED_IMPORT_TS] = array('timestamp', $wizard_flow->getFinishedImport()->getTimestamp());
+            $update_fields[self::COL_FINISHED_IMPORT_TS] = array('timestamp', $wizard_flow->getFinishedImport()->format('Y-m-d H:i:s'));
         }
 
         $this->db->update(

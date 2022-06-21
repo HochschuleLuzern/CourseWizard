@@ -10,15 +10,15 @@ class WizardFlow
     public const STATUS_QUIT = 4;        // Status if user chooses to arrange to course by herself / himself (Final state)
     public const STATUS_FINISHED = 5;    // Status if the wizard has finished importing a course template (Final State)
 
-    private $crs_ref_id;
-    private $executing_user;
-    private $selected_template;
-    private $current_status;
+    private int $crs_ref_id;
+    private int $executing_user;
+    private ?int $selected_template;
+    private int $current_status;
     private ?\DateTimeInterface $first_open;
     private ?\DateTimeInterface $finished_import;
 
 
-    private function __construct($crs_ref_id, $executing_user, $current_status, ?\DateTimeInterface $first_open, $selected_template, ?\DateTimeInterface $finished_import)
+    private function __construct(int $crs_ref_id, int $executing_user, int $current_status, ?\DateTimeInterface $first_open, ?int $selected_template, ?\DateTimeInterface $finished_import)
     {
         $this->crs_ref_id = $crs_ref_id;
         $this->executing_user = $executing_user;
@@ -41,7 +41,7 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowImporting($target_crs_ref_id, $executing_user, $first_open, $selected_template) {
+    public static function wizardFlowImporting(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open, int $selected_template) {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -52,7 +52,7 @@ class WizardFlow
         );
     }
 
-    public static function unfinishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $current_status)
+    public static function unfinishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $current_status)
     {
         return new self(
             $target_crs_ref_id,
@@ -64,7 +64,7 @@ class WizardFlow
         );
     }
 
-    public static function finishedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $selected_template, $finished_import_ts)
+    public static function finishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $selected_template, \DateTimeImmutable $finished_import_ts)
     {
         return new self(
             $target_crs_ref_id,
@@ -76,7 +76,7 @@ class WizardFlow
         );
     }
 
-    public static function quitedWizardFlow($target_crs_ref_id, $executing_user, $first_open_ts, $finished_import_ts)
+    public static function quitedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, \DateTimeImmutable $finished_import_ts)
     {
         return new self(
             $target_crs_ref_id,
