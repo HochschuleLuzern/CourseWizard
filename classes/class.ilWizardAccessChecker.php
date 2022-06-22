@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 class ilWizardAccessChecker
 {
@@ -55,7 +55,7 @@ class ilWizardAccessChecker
             && $this->objectIsEmptyOrHasOnlyGroupsWithExtendedTitle($ref_id)
 
             // ... and parent object has to be a category (no course wizard container or anything else) ...
-            && $this->hasAllowedParentObjType($this->tree->getParentId($ref_id))
+            && $this->hasAllowedParentObjType((int) $this->tree->getParentId($ref_id))
 
             // ... and user is on the content-view-page
             && $this->isContentViewPage()

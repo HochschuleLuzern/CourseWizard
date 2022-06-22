@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen\Scope\Layout\Provider\AbstractModificationPluginProvider
 {

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\DB;
 
@@ -28,7 +28,7 @@ class UserPreferencesRepository
     private function buildPreferenceObjectWithDefaultValues(\ilObjUser $user)
     {
         return new UserPreferences(
-            $user->getId(),
+            (int) $user->getId(),
             false,
             null
         );
@@ -37,7 +37,7 @@ class UserPreferencesRepository
     private function buildPreferenceObjectFromDBRow($row) : UserPreferences
     {
         $user_pref = new UserPreferences(
-            $row[self::COL_USER_ID],
+            (int) $row[self::COL_USER_ID],
             $row[self::COL_SKIP_INTRO] == 1,
             $row[self::COL_SKIP_INTRO_DATE]
         );

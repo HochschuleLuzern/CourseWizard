@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\DB;
 
@@ -44,10 +44,10 @@ class WizardFlowRepository
             case WizardFlow::STATUS_IN_PROGRESS:
             case WizardFlow::STATUS_POSTPONED:
                 return WizardFlow::unfinishedWizardFlow(
-                    $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_EXECUTING_USER],
+                    (int)  $row[self::COL_TARGET_REF_ID],
+                    (int)  $row[self::COL_EXECUTING_USER],
                     new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
-                    $row[self::COL_WIZARD_STATUS]
+                    (int) $row[self::COL_WIZARD_STATUS]
                 );
 
             case WizardFlow::STATUS_IMPORTING:

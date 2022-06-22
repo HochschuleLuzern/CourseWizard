@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\CourseTemplate\management;
 
@@ -17,7 +17,7 @@ class CourseTemplateRoleManagement
     private $rolt_crs_admin;
     private $rolt_crs_non_member;
 
-    public function __construct($role_folder_id, $role_global_importer)
+    public function __construct(int $role_folder_id, int $role_global_importer)
     {
         global $DIC;
         $this->rbac_review = $DIC->rbac()->review();
@@ -83,7 +83,7 @@ class CourseTemplateRoleManagement
 
     public function setRolePermissionsForChangeRequestStatus($crs_template)
     {
-        $crs_ref_id = $crs_template->getCrsRefId();
+        $crs_ref_id = (int) $crs_template->getCrsRefId();
 
         // Set Permissions for Editor
         $this->setPermissionsForRole($crs_template->getEditorRoleId(), $this->rolt_crs_admin, $crs_ref_id);
@@ -92,7 +92,7 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForDeclinedStatus($crs_template)
+    public function setRolePermissionsForDeclinedStatus(CourseTemplate $crs_template)
     {
         $crs_ref_id = $crs_template->getCrsRefId();
 
@@ -103,7 +103,7 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForApprovedStatus($crs_template)
+    public function setRolePermissionsForApprovedStatus(CourseTemplate $crs_template)
     {
         $crs_ref_id = $crs_template->getCrsRefId();
         $rolt_importer_id = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::ROLE_TPL_TITLE_CRS_IMPORTER);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\DB;
 
@@ -33,7 +33,7 @@ class CourseTemplateRepository
 
     public function createAndAddNewCourseTemplate(int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, int $template_container_ref_id, int $editor_role_id) : CourseTemplate
     {
-        $template_id = $this->db->nextId(self::TABLE_NAME);
+        $template_id = (int) $this->db->nextId(self::TABLE_NAME);
 
         $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, date('Y-m-d H:i:s') ,$template_container_ref_id, $editor_role_id);
 
@@ -230,15 +230,15 @@ class CourseTemplateRepository
     protected function buildModelFromAssocArray(array $row)
     {
         return new CourseTemplate(
-            $row[self::COL_TEMPLATE_ID],
-            $row[self::COL_CRS_REF_ID],
-            $row[self::COL_CRS_OBJ_ID],
-            $row[self::COL_TEMPLATE_TYPE],
-            $row[self::COL_STATUS_CODE],
-            $row[self::COL_CREATOR_USER_ID],
+            (int) $row[self::COL_TEMPLATE_ID],
+            (int) $row[self::COL_CRS_REF_ID],
+            (int) $row[self::COL_CRS_OBJ_ID],
+            (int) $row[self::COL_TEMPLATE_TYPE],
+            (int) $row[self::COL_STATUS_CODE],
+            (int) $row[self::COL_CREATOR_USER_ID],
             $row[self::COL_CREATE_DATE],
-            $row[self::COL_TEMPLATE_CONTAINER_REF_ID],
-            $row[self::COL_EDITOR_ROLE_ID]
+            (int) $row[self::COL_TEMPLATE_CONTAINER_REF_ID],
+            (int) $row[self::COL_EDITOR_ROLE_ID]
         );
     }
 

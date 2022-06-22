@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\CourseTemplate\management;
 
@@ -7,11 +7,8 @@ use CourseWizard\DB\Models\CourseTemplate;
 
 class CourseTemplateStatusManager
 {
-    /** @var CourseTemplateRepository */
-    private $crs_template_repo;
-
-    /** @var CourseTemplateRoleManagement */
-    private $role_manager;
+    private CourseTemplateRepository $crs_template_repo;
+    private CourseTemplateRoleManagement $role_manager;
 
     public function __construct(CourseTemplateRepository $crs_template_repo, CourseTemplateRoleManagement $role_manager)
     {

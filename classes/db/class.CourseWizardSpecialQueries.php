@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\DB;
 
@@ -21,14 +21,14 @@ class CourseWizardSpecialQueries
         $obj_ids = array();
         while ($row = $db->fetchAssoc($result)) {
             if ($row['is_global'] == 1 || in_array($row['root_ref'], $path)) {
-                $obj_ids[] = $row['obj_id'];
+                $obj_ids[] = (int) $row['obj_id'];
             }
         }
 
         return $obj_ids;
     }
 
-    public static function lookupRoleIdForRoleTemplateName(string $role_template_name)
+    public static function lookupRoleIdForRoleTemplateName(string $role_template_name) : int
     {
         global $DIC;
 
@@ -43,6 +43,6 @@ class CourseWizardSpecialQueries
             $role_template_id = $row['obj_id'];
         }
 
-        return $role_template_id;
+        return (int) $role_template_id;
     }
 }

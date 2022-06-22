@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 {
@@ -146,9 +146,9 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         return false;
     }
 
-    public function getGlobalCrsImporterRole()
+    public function getGlobalCrsImporterRole() : int
     {
-        return $this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_CRS_IMPORTER_ROLE_ID);
+        return (int) $this->plugin_config_repo->get(\CourseWizard\DB\PluginConfigKeyValueStore::KEY_CRS_IMPORTER_ROLE_ID);
     }
 
     public function langVarAsPluginLangVar(string $lang_var) : string

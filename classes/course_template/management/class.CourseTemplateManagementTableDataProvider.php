@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\CourseTemplate;
 
@@ -8,20 +8,16 @@ use ILIAS\UI\Factory;
 
 class CourseTemplateManagementTableDataProvider
 {
-    /** @var CourseTemplateRepository */
-    protected $crs_repo;
-
-    /** @var \ilObjCourseWizard */
-    protected $container_obj;
-
-    /** @var int */
-    protected $container_ref_id;
+    private \ilCourseWizardPlugin $plugin;
+    protected CourseTemplateRepository$crs_repo;
+    protected \ilObjCourseWizard $container_obj;
+    protected int $container_ref_id;
 
     public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_repo)
     {
         $this->crs_repo = $crs_repo;
         $this->container_obj = $container_obj;
-        $this->container_ref_id = $this->container_obj->getRefId();
+        $this->container_ref_id = (int) $this->container_obj->getRefId();
         $this->plugin = new \ilCourseWizardPlugin();
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\DB\Models;
 
@@ -15,32 +15,15 @@ class CourseTemplate
     const TYPE_SINGLE_CLASS_COURSE = 0;
     const TYPE_MULTI_CLASS_COURSE = 1;
 
-    /** @var int */
-    protected $template_id;
-
-    /** @var int */
-    protected $crs_ref_id;
-
-    /** @var int */
-    protected $crs_obj_id;
-
-    /** @var int */
-    protected $template_type;
-
-    /** @var int */
-    protected $status;
-
-    /** @var int */
-    protected $creator_user_id;
-
-    /** @var string|null */
-    protected $create_date;
-
-    /** @var int */
-    protected $template_container_ref_id;
-
-    /** @var int */
-    protected $editor_role_id;
+    protected int $template_id;
+    protected int $crs_ref_id;
+    protected int $crs_obj_id;
+    protected int $template_type;
+    protected int $status;
+    protected int $creator_user_id;
+    protected ?string $create_date;
+    protected int $template_container_ref_id;
+    protected int $editor_role_id;
 
     public function __construct(int $template_id, int $crs_ref_id, int $crs_obj_id, int $template_type, int $status, int $creator_user_id, ?string $create_date, int $template_container_ref_id, int $editor_role_id)
     {

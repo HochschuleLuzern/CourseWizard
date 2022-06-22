@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use CourseWizard\role\LocalRolesDefinition;
 use CourseWizard\role\RoleTemplatesDefinition;
@@ -81,7 +81,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->xcwi_crs_template_repository = new \CourseWizard\DB\CourseTemplateRepository($this->db);
 
         // Configuration for template container
-        $this->xcwi_config = $this->xcwi_conf_repository->getContainerConfiguration($this->id);
+        $this->xcwi_config = $this->xcwi_conf_repository->getContainerConfiguration((int) $this->id);
     }
 
     /**

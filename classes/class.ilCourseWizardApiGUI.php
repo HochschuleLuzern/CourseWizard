@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use CourseWizard\CustomUI\CourseImportLoadingGUI;
 use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;

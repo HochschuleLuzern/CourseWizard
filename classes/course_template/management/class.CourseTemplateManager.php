@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\CourseTemplate\management;
 
@@ -28,13 +28,13 @@ class CourseTemplateManager
         global $DIC;
 
         $crs_template_obj = $this->crs_template_repo->createAndAddNewCourseTemplate(
-            $crs_obj->getRefId(),
-            $crs_obj->getId(),
+            (int) $crs_obj->getRefId(),
+            (int) $crs_obj->getId(),
             $template_type,
             \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
-            $DIC->user()->getId(),
-            $this->container_obj->getRefId(),
-            $editor_role->getId()
+            (int) $DIC->user()->getId(),
+            (int) $this->container_obj->getRefId(),
+            (int) $editor_role->getId()
         );
 
         $status_manager = new CourseTemplateStatusManager(

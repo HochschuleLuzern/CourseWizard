@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace CourseWizard\CourseTemplate;
 
@@ -9,19 +9,15 @@ use CourseWizard\DB\Models\CourseTemplateTraits;
 
 class CourseTemplateCollector
 {
-    /** @var int */
-    protected $container_ref_id;
+    protected \ilObjCourseWizard $container_obj;
+    protected int $container_ref_id;
+    protected CourseTemplateRepository $crs_repo;
+    protected \ilTree $tree;
 
-    /** @var CourseTemplateRepository */
-    protected $crs_repo;
-
-    /** @var \ilTree */
-    protected $tree;
-
-    public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_repo, \ilTree $tree)
+    public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_repo, $tree)
     {
         $this->container_obj = $container_obj;
-        $this->container_ref_id = $this->container_obj->getRefId();
+        $this->container_ref_id = (int) $this->container_obj->getRefId();
         $this->crs_repo = $crs_repo;
         $this->tree = $tree;
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use CourseWizard\CourseTemplate\CourseTemplateCollector;
 use CourseWizard\DB\Models\CourseTemplate;
@@ -105,7 +105,7 @@ class ilObjCourseWizardTemplateManagementGUI
             $crs_template_status_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
                 $crs_repo,
                 new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement(
-                    ROLE_FOLDER_ID,
+                    (int) ROLE_FOLDER_ID,
                     $this->plugin->getGlobalCrsImporterRole()
                 )
             );
