@@ -1,7 +1,5 @@
 <?php
 
-include_once './Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/vendor/autoload.php';
-
 use CourseWizard\DB\Models\WizardFlow;
 use CourseWizard\Modal\ModalDataController;
 use CourseWizard\Modal\Page\JavaScriptPageConfig;

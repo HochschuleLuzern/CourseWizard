@@ -14,7 +14,6 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
         parent::__construct();
 
         global $DIC;
-        require_once $this->getDirectory() . '/vendor/autoload.php';
         if ($DIC->isDependencyAvailable('globalScreen')) {
             $this->provider_collection->setModificationProvider(new ilCourseWizardGlobalScreenModificationProvider($DIC, $this));
         }
