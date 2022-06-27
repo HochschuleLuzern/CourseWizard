@@ -16,11 +16,8 @@ class JavaScriptPageConfig
     public const JS_HTML_WIZARD_LOADING_CONTAINER_DIV_ID = 'wizardLoadingContainerDivId';
     public const JS_HTML_WIZARD_COPY_OBJECTS_LOADING_DIV_ID = 'wizardCopyObjectsLoadingDivId';
 
-    /** @var StateMachine */
-    private $state_machine;
-
-    /** @var array */
-    private $config_fields;
+    private StateMachine $state_machine;
+    private array $config_fields;
 
     public function __construct(StateMachine $state_machine)
     {

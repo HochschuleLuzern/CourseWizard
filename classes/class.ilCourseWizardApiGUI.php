@@ -260,7 +260,7 @@ class ilCourseWizardApiGUI
         }
     }
 
-    public function postponeWizard($wizard_flow_repo)
+    public function postponeWizard(WizardFlowRepository $wizard_flow_repo)
     {
         $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
 

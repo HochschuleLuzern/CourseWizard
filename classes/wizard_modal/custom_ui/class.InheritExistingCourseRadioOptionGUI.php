@@ -7,11 +7,8 @@ use ILIAS\UI\Factory;
 
 class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGUI
 {
-    /** @var \ilObjCourse */
-    private $crs;
-
-    /** @var \ilCourseWizardPlugin */
-    private $plugin;
+    private \ilObjCourse $crs;
+    private \ilCourseWizardPlugin $plugin;
 
     public function __construct(\ilObjCourse $crs, Factory $ui_factory, \ilCourseWizardPlugin $plugin)
     {
@@ -20,7 +17,7 @@ class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGU
         $this->plugin = $plugin;
     }
 
-    public function getAsLegacyComponent()
+    public function getAsLegacyComponent() : array
     {
         global $DIC;
         $f = $DIC->ui()->factory();

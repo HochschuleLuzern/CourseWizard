@@ -8,14 +8,8 @@ use CourseWizard\role\LocalRolesDefinition;
 
 class CourseTemplateManager
 {
-    /** @var \ilObjCourseWizard */
-    private $container_obj;
-
-    /** @var CourseTemplateRepository */
-    private $crs_template_repo;
-
-    /** @var CourseTemplateRoleManagement */
-    private $role_manager;
+    private \ilObjCourseWizard $container_obj;
+    private CourseTemplateRepository $crs_template_repo;
 
     public function __construct(\ilObjCourseWizard $container_obj, CourseTemplateRepository $crs_template_repo)
     {
@@ -23,7 +17,7 @@ class CourseTemplateManager
         $this->crs_template_repo = $crs_template_repo;
     }
 
-    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, \ilObjRole $editor_role, int $global_importer_role_id, int $template_type = \CourseWizard\DB\Models\CourseTemplate::TYPE_SINGLE_CLASS_COURSE)
+    public function addNewlyCreatedCourseTemplateToDB(\ilObjCourse $crs_obj, \ilObjRole $editor_role, int $global_importer_role_id, int $template_type = CourseTemplate::TYPE_SINGLE_CLASS_COURSE) : void
     {
         global $DIC;
 
@@ -31,7 +25,7 @@ class CourseTemplateManager
             (int) $crs_obj->getRefId(),
             (int) $crs_obj->getId(),
             $template_type,
-            \CourseWizard\DB\Models\CourseTemplate::STATUS_DRAFT,
+            CourseTemplate::STATUS_DRAFT,
             (int) $DIC->user()->getId(),
             (int) $this->container_obj->getRefId(),
             (int) $editor_role->getId()

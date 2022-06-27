@@ -4,8 +4,8 @@ namespace CourseWizard\DB\Models;
 
 class UserPreferences
 {
-    private $user_id;
-    private $skip_introductions_clicked;
+    private int $user_id;
+    private bool $skip_introductions_clicked;
     private $skip_introductions_clicked_date;
 
     public function __construct(int $user_id, bool $skip_introductions_clicked, $skip_introductions_clicked_date)

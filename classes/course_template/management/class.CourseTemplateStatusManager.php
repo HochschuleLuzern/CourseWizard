@@ -16,7 +16,7 @@ class CourseTemplateStatusManager
         $this->role_manager = $role_manager;
     }
 
-    public function changeStatusOfCourseTemplate(CourseTemplate $crs_template, $new_status)
+    public function changeStatusOfCourseTemplate(CourseTemplate $crs_template, $new_status) : void
     {
         switch ($new_status) {
             case CourseTemplate::STATUS_DRAFT:
@@ -54,13 +54,13 @@ class CourseTemplateStatusManager
         }
     }
 
-    public function changeStatusOfCourseTemplateById(int $item_id, int $new_status)
+    public function changeStatusOfCourseTemplateById(int $item_id, int $new_status) : void
     {
         $course_template = $this->crs_template_repo->getCourseTemplateByTemplateId($item_id);
         $this->changeStatusOfCourseTemplate($course_template, $new_status);
     }
 
-    public function initStartStatusForCrsTemplate(CourseTemplate $crs_template_obj)
+    public function initStartStatusForCrsTemplate(CourseTemplate $crs_template_obj) : void
     {
         $this->role_manager->setRolePermissionsForChangeRequestStatus($crs_template_obj);
     }

@@ -4,7 +4,6 @@ use CourseWizard\DB\PluginConfigKeyValueStore;
 
 class ilCourseWizardConfig
 {
-    /** @var  */
     private PluginConfigKeyValueStore  $config_repo;
 
     private int $crs_importer_role_id;

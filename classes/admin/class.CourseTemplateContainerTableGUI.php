@@ -15,10 +15,11 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
     const COL_IS_GLOBAL = 'is_global';
     const COL_ACTION_DROPDOWN = 'action';
 
-    protected $change_status_modals;
+    protected array $change_status_modals;
 
-    /** @var \ilCourseWizardPlugin */
-    private $plugin;
+    private \ILIAS\UI\Factory $ui_factory;
+    private \ILIAS\UI\Renderer $ui_renderer;
+    private \ilCourseWizardPlugin $plugin;
 
     public function __construct($a_parent_obj, string $a_command, \ilCourseWizardPlugin $plugin)
     {
@@ -52,7 +53,7 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
         $this->change_status_modals = array();
     }
 
-    protected function getColumnDefinition()
+    protected function getColumnDefinition() : array
     {
         // TODO: Add language here
         return array(
@@ -106,9 +107,8 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
         );
     }
 
-    final protected function fillRow($row)
+    final protected function fillRow(array $row) : void
     {
-        global $DIC;
         foreach ($this->getColumnDefinition() as $index => $column) {
             switch ($column['field']) {
                 case self::COL_CONTAINER_TITLE:

@@ -9,7 +9,7 @@ class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForMod
 {
     protected const JS_POST_SELECTION_METHOD = self::JS_NAMESPACE . '.' . 'executeImport';
 
-    private $html_wizard_spinner_container_div_id;
+    private string $html_wizard_spinner_container_div_id;
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
@@ -29,7 +29,7 @@ class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForMod
         );
     }
 
-    private function settingToPropertyFormComponent($setting)
+    private function settingToPropertyFormComponent(array $setting)
     {
         $form_item = null;
 

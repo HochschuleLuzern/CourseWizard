@@ -38,20 +38,12 @@ class RoleTemplatesDefinition
     public const DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR = 'il_crs_admin';
     public const DEFAULT_ROLE_TPL_CRS_NO_MEMBER = 'il_crs_non_member';
 
-    private $title;
-    private $description;
-    private $conf_key;
-    private $is_protected;
-    private $default_permissions;
+    private string $title;
+    private string $description;
+    private string $conf_key;
+    private bool $is_protected;
+    private array $default_permissions;
 
-    /**
-     * RoleTemplateDefinition constructor.
-     * @param string $title
-     * @param string $description
-     * @param string $conf_key
-     * @param bool   $is_protected
-     * @param array  $default_permissions
-     */
     public function __construct(string $title, string $description, string $conf_key, bool $is_protected = false, array $default_permissions = array())
     {
         $this->title = $title;
@@ -103,7 +95,7 @@ class RoleTemplatesDefinition
         return $this->is_protected;
     }
 
-    public function checkDefaultPermissionByOperationName($type, $operation_name) : bool
+    public function checkDefaultPermissionByOperationName($type, string $operation_name) : bool
     {
         try {
             switch ($operation_name) {

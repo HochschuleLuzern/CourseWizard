@@ -4,6 +4,8 @@ namespace CourseWizard\Modal;
 
 use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;
 use CourseWizard\Modal\Page\LoadingScreenForModalPage;
+use ILIAS\UI\Implementation\Component\ReplaceSignal;
+use ILIAS\UI\Component\Modal\RoundTrip;
 
 class RoundtripModalPresenter implements ModalPresenter
 {
@@ -14,23 +16,11 @@ class RoundtripModalPresenter implements ModalPresenter
         'step_settings'
     );
 
-    /** @var string */
-    protected $wizard_title;
-
-    /** @var Page\ModalPagePresenter */
-    protected $presenter;
-
-    /** @var \ILIAS\UI\Factory */
-    protected $ui_factory;
-
-    /** @var string */
-    protected $navigation_step = '';
-
-    /** @var \ilCourseWizardPlugin */
-    protected $plugin;
-
-    /** @var \ilTemplate */
-    private $modal_template;
+    protected string $wizard_title;
+    protected Page\ModalPagePresenter $presenter;
+    protected \ILIAS\UI\Factory $ui_factory;
+    protected \ilCourseWizardPlugin $plugin;
+    private \ilTemplate $modal_template;
 
     public function __construct(string $wizard_title, Page\ModalPagePresenter $presenter, \ILIAS\UI\Factory $ui_factory, \ilCourseWizardPlugin $plugin)
     {
@@ -61,10 +51,8 @@ class RoundtripModalPresenter implements ModalPresenter
         }
     }
 
-    public function renderModalWithTemplate($replace_signal)
+    public function renderModalWithTemplate(ReplaceSignal $replace_signal)
     {
-        global $DIC;
-
         $this->modal_template->setVariable('WIZARD_MODAL_ID', $this->presenter->getHtmlWizardDivId());
 
         $this->setNavigationStepsInTemplate($this->presenter->getCurrentNavigationStep());
@@ -96,14 +84,14 @@ class RoundtripModalPresenter implements ModalPresenter
         return $this->ui_factory->legacy($this->modal_template->get());
     }
 
-    public function getModalAsUIComponent() : \ILIAS\UI\Component\Modal\RoundTrip
+    public function getModalAsUIComponent() : RoundTrip
     {
         global $DIC;
 
         $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), []);
 
         $replace_signal = $DIC->http()->request()->getQueryParams()['replacesignal']
-            ? new \ILIAS\UI\Implementation\Component\ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
+            ? new ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
             : $modal->getReplaceSignal();
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);

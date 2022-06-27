@@ -29,7 +29,7 @@ class WizardFlow
     }
 
 
-    public static function newlyCreatedWizardFlow($target_crs_ref_id, $executing_user)
+    public static function newlyCreatedWizardFlow(int $target_crs_ref_id, int $executing_user) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -41,7 +41,8 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowImporting(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open, int $selected_template) {
+    public static function wizardFlowImporting(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open, int $selected_template) : WizardFlow
+    {
         return new self(
             $target_crs_ref_id,
             $executing_user,
@@ -52,7 +53,7 @@ class WizardFlow
         );
     }
 
-    public static function unfinishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $current_status)
+    public static function unfinishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $current_status) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -64,7 +65,7 @@ class WizardFlow
         );
     }
 
-    public static function finishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $selected_template, \DateTimeImmutable $finished_import_ts)
+    public static function finishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $selected_template, \DateTimeImmutable $finished_import_ts) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -76,7 +77,7 @@ class WizardFlow
         );
     }
 
-    public static function quitedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, \DateTimeImmutable $finished_import_ts)
+    public static function quitedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, \DateTimeImmutable $finished_import_ts) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -88,7 +89,7 @@ class WizardFlow
         );
     }
 
-    public function withPostponedStatus()
+    public function withPostponedStatus() : WizardFlow
     {
         if ($this->current_status == self::STATUS_IN_PROGRESS) {
             $clone = clone $this;
@@ -99,7 +100,7 @@ class WizardFlow
         }
     }
 
-    public function withInProgressStatus()
+    public function withInProgressStatus() : WizardFlow
     {
         if ($this->current_status == self::STATUS_POSTPONED) {
             $clone = clone $this;
@@ -110,7 +111,7 @@ class WizardFlow
         }
     }
 
-    public function withImportingStatus($selected_template)
+    public function withImportingStatus($selected_template) : WizardFlow
     {
         if($this->current_status == self::STATUS_IN_PROGRESS) {
             $clone = clone $this;
@@ -123,7 +124,7 @@ class WizardFlow
         }
     }
 
-    public function withQuitedStatus()
+    public function withQuitedStatus() : WizardFlow
     {
         if ($this->current_status == self::STATUS_IN_PROGRESS
             || $this->current_status == self::STATUS_QUIT
@@ -138,7 +139,7 @@ class WizardFlow
         }
     }
 
-    public function withFinishedStatus()
+    public function withFinishedStatus() : WizardFlow
     {
         if ($this->current_status == self::STATUS_IMPORTING) {
             $clone = clone $this;
@@ -150,38 +151,29 @@ class WizardFlow
         }
     }
 
-    public function withNewStatus($new_status)
+    public function withNewStatus(int $new_status) : WizardFlow
     {
         $clone = clone $this;
         $clone->current_status = $new_status;
         return $clone;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCrsRefId()
+    public function getCrsRefId() : int
     {
         return $this->crs_ref_id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTemplateSelection()
+    public function getTemplateSelection() : ?int
     {
         return $this->selected_template;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCurrentStatus()
+    public function getCurrentStatus() : int
     {
         return $this->current_status;
     }
 
-    public function getExecutingUser()
+    public function getExecutingUser() : int
     {
         return $this->executing_user;
     }

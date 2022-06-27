@@ -2,6 +2,7 @@
 
 use CourseWizard\CourseTemplate\CourseTemplateCollector;
 use CourseWizard\DB\Models\CourseTemplate;
+use CourseWizard\CourseTemplate\management\CourseTemplateManager;
 
 /**
  * Class ilObjCourseWizardTemplateManagementGUI
@@ -11,41 +12,31 @@ use CourseWizard\DB\Models\CourseTemplate;
 class ilObjCourseWizardTemplateManagementGUI
 {
     const GET_PARAM_DEP_ID = 'dep_id';
-    // public const CMD_MANAGE_PROPOSALS = 'manage_proposals';
     const CMD_MANAGE_PROPOSALS = 'show_crs_templates';
     const CMD_CHANGE_COURSE_STATUS = 'approve_crs_template';
 
     const GET_PARAMETER_DEPARTMENT_ID = 'dep_id';
+    protected \ilObjCourseWizardGUI $parent_gui;
 
-    /** @var \ilObjCourseWizardGUI */
-    protected $parent_gui;
+    protected int $container_ref_id;
+    protected CourseTemplateManager $template_management;
+    protected ilCourseWizardPlugin $plugin;
+    private ilGlobalPageTemplate $tpl;
+    protected ilLanguage $lng;
 
-    /** @var int */
-    protected $container_ref_id;
-
-    /** @var \CourseWizard\CourseTemplate\management\CourseTemplateManager */
-    protected $template_management;
-
-    /** @var ilCourseWizardPlugin */
-    protected $plugin;
-
-    /** @var ilLanguage */
-    protected $lng;
-
-    public function __construct(\CourseWizard\CourseTemplate\management\CourseTemplateManager $crs_template_controller, ilObjCourseWizardGUI $parent_gui, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
+    public function __construct(CourseTemplateManager $crs_template_controller, ilObjCourseWizardGUI $parent_gui, ilCourseWizardPlugin $plugin, ilGlobalPageTemplate $tpl)
     {
         global $DIC;
 
         $this->template_management = $crs_template_controller;
         $this->parent_gui = $parent_gui;
-        $this->container_ref_id = $this->parent_gui->object->getRefId();
+        $this->container_ref_id = (int) $this->parent_gui->object->getRefId();
         $this->plugin = $plugin;
-        //$this->template_collector = $collector;
         $this->tpl = $tpl;
         $this->lng = $DIC->language();
     }
 
-    public function executeCommand()
+    public function executeCommand() : void
     {
         global $DIC;
 
@@ -63,7 +54,7 @@ class ilObjCourseWizardTemplateManagementGUI
         }
     }
 
-    public function showCourseTemplates()
+    public function showCourseTemplates() : void
     {
         global $DIC;
 
@@ -76,7 +67,7 @@ class ilObjCourseWizardTemplateManagementGUI
         $this->tpl->setContent($table->getHTML());
     }
 
-    public function changeCourseStatus()
+    public function changeCourseStatus() : void
     {
         global $DIC;
         $ctrl = $DIC->ctrl();

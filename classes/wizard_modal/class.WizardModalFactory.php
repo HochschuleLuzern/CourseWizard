@@ -18,38 +18,24 @@ use ILIAS\UI\Component\Modal\RoundTrip;
 use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class WizardModalFactory
 {
-    /** @var \ilObjCourse */
-    private $target_obj;
-
-    /** @var CourseTemplateRepository */
-    private $template_repository;
-
-    /** @var \ilCtrl */
-    private $ctrl;
-
-    /** @var \Psr\Http\Message\ServerRequestInterface */
-    private $request;
-
-    /** @var array */
-    private $query_params;
-
-    /** @var Factory */
-    private $ui_factory;
-
-    /** @var Renderer */
-    private $ui_renderer;
-
-    /** @var \ilCourseWizardPlugin */
-    private $plugin;
+    private \ilObject $target_obj;
+    private CourseTemplateRepository $template_repository;
+    private \ilCtrl $ctrl;
+    private ServerRequestInterface $request;
+    private array $query_params;
+    private Factory $ui_factory;
+    private Renderer $ui_renderer;
+    private \ilCourseWizardPlugin $plugin;
 
     public function __construct(
         \ilObject $target_obj,
         CourseTemplateRepository $template_repository,
         \ilCtrl $ctrl,
-        \Psr\Http\Message\ServerRequestInterface $request,
+        ServerRequestInterface $request,
         Factory $ui_factory,
         Renderer $ui_renderer,
         \ilCourseWizardPlugin $plugin
@@ -68,7 +54,6 @@ class WizardModalFactory
     private function buildTemplateSelectionPage(StateMachine $state_machine)
     {
         global $DIC;
-        $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
 
         $view_control = new RadioSelectionViewControlGUI($this->ui_factory);
 
@@ -137,9 +122,9 @@ class WizardModalFactory
         );
     }
 
-    public function buildModalFromStateMachine(string $modal_title, StateMachine $state_machine)
+    public function buildModalFromStateMachine(string $modal_title, StateMachine $state_machine) : RoundtripWizardModalGUI
     {
-        $modal = new RoundtripWizardModalGUI(
+        return new RoundtripWizardModalGUI(
             new RoundtripModalPresenter(
                 $modal_title,
                 $this->buildModalPresenter($state_machine),
@@ -148,8 +133,6 @@ class WizardModalFactory
             ),
             $this->ui_renderer
         );
-
-        return $modal;
     }
 
     private function buildModalPresenter(StateMachine $state_machine) : ModalPagePresenter
@@ -208,7 +191,6 @@ class WizardModalFactory
 
             default:
                 throw new \ILIAS\UI\NotImplementedException("Page '{$state_machine->getPageForCurrentState()}' not implemented");
-                break;
         }
 
 

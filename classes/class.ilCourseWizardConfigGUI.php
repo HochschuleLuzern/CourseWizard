@@ -11,19 +11,12 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     const FORM_GLOBAL_ROLE = 'global_role';
     const FORM_CONT_IS_GLOBAL = 'is_global';
 
-    /** @var ilTemplate */
-    private $tpl;
-
-    /** @var ilCtrl */
-    private $ctrl;
+    private ilGlobalTemplate $tpl;
+    private ilCtrl $ctrl;
 
     /** @var \Psr\Http\Message\RequestInterface|\Psr\Http\Message\ServerRequestInterface */
     private $request;
-
-    /** @var ilLanguage */
-    private $lng;
-
-    /**  */
+    private ilLanguage $lng;
     private $plugin_config;
 
     public function __construct()
@@ -109,12 +102,10 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
     private function saveConfig()
     {
-        global $DIC;
-
         $form = $this->initPluginConfForm($this->plugin_config);
 
         if ($form->checkInput()) {
-            $crs_importer_role_id = $form->getInput(self::FORM_GLOBAL_ROLE);
+            $crs_importer_role_id = (int) $form->getInput(self::FORM_GLOBAL_ROLE);
 
             try {
                 $this->plugin_config->setCrsImporterRoleId($crs_importer_role_id);
@@ -226,7 +217,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             if ($scope == ilObjCourseWizardGUI::FORM_GLOBAL_SCOPE) {
                 $conf = $conf->withGlobalScope();
             } else {
-                $root_location_ref_id = $form->getInput(ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
+                $root_location_ref_id = (int) $form->getInput(ilObjCourseWizardGUI::FORM_ROOT_LOCATION_REF);
                 $conf = $conf->withLimitedScope($root_location_ref_id);
             }
 

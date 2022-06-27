@@ -13,11 +13,8 @@ class UserPreferencesRepository
     const COL_SKIP_INTRO = 'skip_intro';
     const COL_SKIP_INTRO_DATE = 'skip_intro_clicked_date';
 
-    /** @var \ilDBInterface */
-    protected $db;
-
-    /** @var array */
-    protected $data_cache;
+    protected \ilDBInterface $db;
+    protected array $data_cache;
 
     public function __construct(\ilDBInterface $db)
     {

@@ -2,12 +2,14 @@
 
 namespace CourseWizard\CourseTemplate;
 
+use CourseWizard\DB\Models\CourseTemplate;
+
 class CourseTemplateObject
 {
-    protected $template_model;
-    protected $course_object;
+    protected CourseTemplate $template_model;
+    protected \ilObjCourse $course_object;
 
-    public function __construct(\CourseWizard\DB\Models\CourseTemplate $template_model, \ilObjCourse $course_object)
+    public function __construct(CourseTemplate $template_model, \ilObjCourse $course_object)
     {
         if ($course_object->getRefId() != $template_model->getCrsRefId()
             || $course_object->getId() != $template_model->getCrsObjId()) {
@@ -33,11 +35,6 @@ class CourseTemplateObject
         return $this->template_model->getCrsObjId();
     }
 
-    public function getRootLocationRefId() : int
-    {
-        return $this->template_model->getRootLocationRefId();
-    }
-
     public function getCourseTitle() : string
     {
         return $this->course_object->getTitle();
@@ -48,18 +45,10 @@ class CourseTemplateObject
         return $this->course_object->getDescription();
     }
 
-    public function generatePreviewLink() : string
-    {
-        return "";
-    }
-
     public function getPropertiesArray() : array
     {
         return array(
-            'Author' => 'Raphael Heer',
-            'Tests' => 'Ja',
-            'Page Content' => 'Nein',
-            'Modulunterlagenordner' => 'Nein'
+
         );
     }
 }

@@ -18,13 +18,10 @@ class WizardFlowRepository
     const COL_FIRST_OPEN_TS = 'first_open_ts';
     const COL_FINISHED_IMPORT_TS = 'finished_import_ts';
 
-    /** @var \ilDBInterface */
-    protected $db;
+    protected \ilDBInterface $db;
+    protected \ilObjUser $executing_user;
 
-    /** @var \ilObjUser */
-    protected $executing_user;
-
-    private $cache;
+    private array $cache;
 
     public function __construct(\ilDBInterface $db, \ilObjUser $executing_user)
     {
@@ -35,7 +32,7 @@ class WizardFlowRepository
             $db->createSequence(self::TABLE_NAME);
         }
 
-        $cache = array();
+        $this->cache = [];
     }
 
     private function buildWizardFlowFromRow($row) : WizardFlow
@@ -79,7 +76,7 @@ class WizardFlowRepository
         }
     }
 
-    public function createNewWizardFlow($crs_ref_id, $executing_user) : WizardFlow
+    public function createNewWizardFlow(int $crs_ref_id, int $executing_user) : WizardFlow
     {
         $wizard_flow = WizardFlow::newlyCreatedWizardFlow($crs_ref_id, $executing_user);
 
@@ -95,7 +92,7 @@ class WizardFlowRepository
         return $wizard_flow;
     }
 
-    private function queryWizardFlowByCrs($crs_ref_id) : ?WizardFlow
+    private function queryWizardFlowByCrs(int $crs_ref_id) : ?WizardFlow
     {
         $query = "SELECT * FROM " . self::TABLE_NAME . " WHERE " . self::COL_TARGET_REF_ID . " = " . $this->db->quote($crs_ref_id, 'integer');
         $result = $this->db->query($query);
@@ -107,7 +104,7 @@ class WizardFlowRepository
         return null;
     }
 
-    public function wizardFlowForCrsExists($crs_ref_id) : bool
+    public function wizardFlowForCrsExists(int $crs_ref_id) : bool
     {
         if (isset($this->cache[$crs_ref_id]) && $this->cache[$crs_ref_id] != null) {
             return true;
@@ -118,7 +115,7 @@ class WizardFlowRepository
         return false;
     }
 
-    public function getWizardFlowForCrs($crs_ref_id) : WizardFlow
+    public function getWizardFlowForCrs(int $crs_ref_id) : WizardFlow
     {
         if ($this->wizardFlowForCrsExists($crs_ref_id)) {
             if (isset($this->cache[$crs_ref_id])) {
@@ -131,7 +128,7 @@ class WizardFlowRepository
         }
     }
     
-    public function updateWizardFlowStatus(WizardFlow $wizard_flow)
+    public function updateWizardFlowStatus(WizardFlow $wizard_flow) : void
     {
         $where = array(self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()));
         $update_fields = array(

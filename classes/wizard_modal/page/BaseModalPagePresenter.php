@@ -7,33 +7,19 @@ use ILIAS\UI\Component\Symbol\Glyph\Glyph;
 
 abstract class BaseModalPagePresenter implements ModalPagePresenter
 {
-    /** @var StateMachine */
-    protected $state_machine;
-
-    /** @var \ILIAS\UI\Factory */
-    protected $ui_factory;
-
-    /** @var JavaScriptPageConfig */
-    protected $js_creator;
-
-    /** @var string */
-    protected $modal_render_base_url;
-
-    /** @var string */
-    protected $save_form_data_base_url;
-
-    /** @var string */
-    protected $current_navigation_step = '';
-
-    /** @var \ilCourseWizardPlugin */
-    protected $plugin;
+    protected StateMachine $state_machine;
+    protected \ILIAS\UI\Factory $ui_factory;
+    protected JavaScriptPageConfig $js_creator;
+    protected string $modal_render_base_url;
+    protected string $save_form_data_base_url;
+    protected string $current_navigation_step = '';
+    protected \ilCourseWizardPlugin $plugin;
 
     public const JS_NAMESPACE = 'il.CourseWizardFunctions';
 
-    private $html_wizard_div_id = '';
-    private $html_wizard_step_container_div_id = '';
-    private $html_wizard_step_content_container_div_id = '';
-    private $html_wizard_spinner_container_div_id = '';
+    private string $html_wizard_div_id = '';
+    private string $html_wizard_step_container_div_id = '';
+    private string $html_wizard_step_content_container_div_id = '';
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {

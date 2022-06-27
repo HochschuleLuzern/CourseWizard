@@ -21,7 +21,7 @@ class CourseImportObjectFactory
         return new CourseImportData($template_ref_id, $target_id, $content_inheritance, $specific_settings);
     }
 
-    private function readTemplateRefId()
+    private function readTemplateRefId() : int
     {
         $template_ref_id = (int) $this->crs_wizard_obj['templateRefId'];
 
@@ -29,10 +29,10 @@ class CourseImportObjectFactory
             throw new InvalidArgumentException('Unknown or missing Template ID');
         }
 
-        return $template_ref_id;//$this->template_repo->getCourseTemplateByTemplateId($template_id)->getCrsRefId();
+        return $template_ref_id;
     }
 
-    private function readTargetRefId()
+    private function readTargetRefId() : int
     {
         $target_id = (int) $this->crs_wizard_obj['targetRefId'];
         if ($target_id <= 0) {
@@ -42,7 +42,7 @@ class CourseImportObjectFactory
         return $target_id;
     }
 
-    private function readContentInheritance()
+    private function readContentInheritance() : array
     {
         $content_inheritance = $this->crs_wizard_obj['contentInheritance'];
         $parsed_content_inheritance = $this->parseContentInheritanceData($content_inheritance);
@@ -51,12 +51,12 @@ class CourseImportObjectFactory
     }
 
 
-    private function readSpecificSettings()
+    private function readSpecificSettings() : array
     {
         return $this->crs_wizard_obj['specificSettings'];
     }
 
-    private function parseContentInheritanceData($content_inheritance)
+    private function parseContentInheritanceData(array $content_inheritance) : array
     {
         $parsed_content_inheritance = array();
 

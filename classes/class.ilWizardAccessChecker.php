@@ -1,27 +1,20 @@
 <?php declare(strict_types = 1);
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class ilWizardAccessChecker
 {
-    /** @var ilTree */
-    private $tree;
-
-    /** @var ilObjUser */
-    private $user;
-
-    /** @var ilRbacSystem */
-    private $rbac_system;
-
-    /** @var \Psr\Http\Message\ServerRequestInterface */
-    private $request;
-
-    /** @var ilCtrl */
-    private $ctrl;
+    private ilTree $tree;
+    private ilObjUser $user;
+    private ilRbacSystem $rbac_system;
+    private ServerRequestInterface $request;
+    private ilCtrl $ctrl;
 
     public function __construct(
         ilTree $tree = null,
         ilObjUser $user = null,
         ilRbacSystem $rbac_review = null,
-        \Psr\Http\Message\ServerRequestInterface $request = null,
+        ServerRequestInterface $request = null,
         ilCtrl $ctrl = null
     )
     {

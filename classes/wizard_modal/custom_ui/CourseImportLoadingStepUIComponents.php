@@ -6,10 +6,10 @@ use ILIAS\UI\Component\Image\Image;
 
 class CourseImportLoadingStepUIComponents
 {
-    private $title;
-    private $content;
-    private $status_icon;
-    private $rendered_status_icon;
+    private string $title;
+    private string $content;
+    private ?Image $status_icon;
+    private ?string $rendered_status_icon;
 
     public function __construct(string $title, string $content, Image $status_icon = null)
     {
@@ -19,12 +19,12 @@ class CourseImportLoadingStepUIComponents
         $this->rendered_status_icon = null;
     }
 
-    public function getTitle()
+    public function getTitle() : string
     {
         return $this->title;
     }
 
-    public function getContent()
+    public function getContent() : string
     {
         return $this->content;
     }
@@ -48,7 +48,7 @@ class CourseImportLoadingStepUIComponents
         return $this->rendered_status_icon;
     }
 
-    public static function getLoadingSteps(\ilCourseWizardPlugin $plugin)
+    public static function getLoadingSteps(\ilCourseWizardPlugin $plugin) : array
     {
         global $DIC;
 
@@ -65,7 +65,7 @@ class CourseImportLoadingStepUIComponents
         );
     }
 
-    public static function getLoadingStepsWithCopyTable(\ilObjectCopyProgressTableGUI $progress, \ilCourseWizardPlugin $plugin)
+    public static function getLoadingStepsWithCopyTable(\ilObjectCopyProgressTableGUI $progress, \ilCourseWizardPlugin $plugin) : array
     {
         global $DIC;
 

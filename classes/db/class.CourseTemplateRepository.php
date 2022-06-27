@@ -19,8 +19,7 @@ class CourseTemplateRepository
     const COL_TEMPLATE_CONTAINER_REF_ID = 'template_container_ref_id';
     const COL_EDITOR_ROLE_ID = 'editor_role_id';
 
-    /** @var \ilDBInterface */
-    protected $db;
+    protected \ilDBInterface $db;
 
     public function __construct(\ilDBInterface $db)
     {
@@ -102,7 +101,7 @@ class CourseTemplateRepository
         return null;
     }
 
-    public function isGivenRefIdACrsTemplate($ref_id) : bool
+    public function isGivenRefIdACrsTemplate(int $ref_id) : bool
     {
         $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE crs_ref_id = " . $this->db->quote($ref_id, 'integer');
         $result = $this->db->query($sql);
@@ -183,7 +182,7 @@ class CourseTemplateRepository
         return $crs_ref_ids;
     }
 
-    public function updateTemplate(CourseTemplate $model)
+    public function updateTemplate(CourseTemplate $model) : void
     {
         $this->db->update(
             self::TABLE_NAME,
@@ -203,7 +202,7 @@ class CourseTemplateRepository
         );
     }
 
-    public function updateTemplateStatus(CourseTemplate $model, int $new_status)
+    public function updateTemplateStatus(CourseTemplate $model, int $new_status) : void
     {
         $this->db->update(
             self::TABLE_NAME,
@@ -215,19 +214,19 @@ class CourseTemplateRepository
         );
     }
 
-    public function deleteTemplate(CourseTemplate $model)
+    public function deleteTemplate(CourseTemplate $model) : void
     {
         $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_ID . "=" . $this->db->quote($model->getTemplateId(), 'integer');
         $this->db->manipulate($sql);
     }
 
-    public function deleteTemplateContainer(int $container_id)
+    public function deleteTemplateContainer(int $container_id) : void
     {
         $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_TEMPLATE_CONTAINER_REF_ID . "=" . $this->db->quote($container_id, 'integer');
         $this->db->manipulate($sql);
     }
 
-    protected function buildModelFromAssocArray(array $row)
+    protected function buildModelFromAssocArray(array $row) : CourseTemplate
     {
         return new CourseTemplate(
             (int) $row[self::COL_TEMPLATE_ID],

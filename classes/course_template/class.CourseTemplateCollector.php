@@ -31,28 +31,6 @@ class CourseTemplateCollector
                      "overview_approved_templates" => $approved_templates);
     }
 
-    public function checkAndAddNewlyCreatedCourses()
-    {
-        foreach ($this->crs_repo->getNewlyCreatedCourses($this->container_ref_id) as $crs_ref_id) {
-            $crs_obj_id = \ilObject::_lookupObjectId($crs_ref_id);
-            $template_type = $this->evaluateTemplateType($crs_ref_id);
-            $status = CourseTemplate::STATUS_DRAFT;
-            $creator_user_id = \ilObject::_lookupOwner($crs_obj_id);
-
-            try {
-                $this->crs_repo->createAndAddNewCourseTemplate($crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, $this->container_ref_id);
-            } catch (\Exception $e) {
-                \ilUtil::sendFailure("Error while adding model with ref_id '$crs_ref_id' to DB: " . $e->getMessage(), true);
-            }
-        }
-    }
-
-    public function evaluateTemplateType($crs_ref_id)
-    {
-        // TODO: Change this, if multi group functionality needs to be implemented
-        return CourseTemplate::TYPE_SINGLE_CLASS_COURSE;
-    }
-
     public function getCourseTemplatesForManagementTable()
     {
         $allowed_status = array(CourseTemplate::STATUS_APPROVED, CourseTemplate::STATUS_PENDING, CourseTemplate::STATUS_CHANGE_REQUESTED);

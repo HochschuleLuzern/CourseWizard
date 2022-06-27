@@ -2,18 +2,15 @@
 
 namespace CourseWizard\CustomUI;
 
+use ILIAS\UI\Factory;
+
 class RadioSelectionViewControlGUI
 {
-    /** @var \ILIAS\UI\Factory */
-    protected $ui_factory;
+    protected Factory $ui_factory;
+    protected array $content_list;
+    protected array $view_control_subpages;
 
-    /** @var array */
-    protected $content_list;
-
-    /** @var array */
-    protected $view_control_subpages;
-
-    public function __construct(\ILIAS\UI\Factory $ui_factory)
+    public function __construct(Factory $ui_factory)
     {
         $this->ui_factory = $ui_factory;
         $this->content_list = array();
@@ -25,12 +22,12 @@ class RadioSelectionViewControlGUI
      * @param        $content
      * @obsolete Delete after SubPage is completely implemented
      */
-    public function addNewContent(string $vc_title, $content)
+    public function addNewContent(string $vc_title, $content) : void
     {
         $this->content_list[$vc_title] = $content;
     }
 
-    public function addNewSubPage(RadioGroupViewControlSubPageGUI $subpage)
+    public function addNewSubPage(RadioGroupViewControlSubPageGUI $subpage) : void
     {
         $this->view_control_subpages[] = $subpage;
     }

@@ -2,9 +2,12 @@
 
 namespace CourseWizard\Modal;
 
+use ILIAS\UI\Implementation\Component\ReplaceSignal;
+use ILIAS\UI\Component\Modal\RoundTrip;
+
 interface ModalPresenter
 {
     public function getWizardTitle() : string;
-    public function getModalAsUIComponent() : \ILIAS\UI\Component\Modal\RoundTrip;
-    public function renderModalWithTemplate($replace_signal) ;
+    public function getModalAsUIComponent() : RoundTrip;
+    public function renderModalWithTemplate(ReplaceSignal $replace_signal) ;
 }

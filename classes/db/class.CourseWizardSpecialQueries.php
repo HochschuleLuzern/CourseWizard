@@ -4,7 +4,7 @@ namespace CourseWizard\DB;
 
 class CourseWizardSpecialQueries
 {
-    public static function fetchContainerObjectIdsForGivenRefId($ref_id)
+    public static function fetchContainerObjectIdsForGivenRefId($ref_id) : array
     {
         global $DIC;
 
@@ -18,7 +18,7 @@ class CourseWizardSpecialQueries
 
         $result = $db->query($query);
 
-        $obj_ids = array();
+        $obj_ids = [];
         while ($row = $db->fetchAssoc($result)) {
             if ($row['is_global'] == 1 || in_array($row['root_ref'], $path)) {
                 $obj_ids[] = (int) $row['obj_id'];

@@ -3,19 +3,18 @@
 namespace CourseWizard\CourseTemplate\management;
 
 use CourseWizard\DB\Models\CourseTemplate;
-use CourseWizard\DB\PluginConfigKeyValueStore;
-use CourseWizard\role\LocalRolesDefinition;
 use CourseWizard\role\RoleTemplatesDefinition;
+use CourseWizard\DB\CourseWizardSpecialQueries;
 
 class CourseTemplateRoleManagement
 {
-    private $rbac_review;
-    private $rbac_admin;
+    private \ilRbacReview $rbac_review;
+    private \ilRbacAdmin $rbac_admin;
 
-    private $role_folder_id;
-    private $role_global_importer;
-    private $rolt_crs_admin;
-    private $rolt_crs_non_member;
+    private int $role_folder_id;
+    private int $role_global_importer;
+    private int $rolt_crs_admin;
+    private int $rolt_crs_non_member;
 
     public function __construct(int $role_folder_id, int $role_global_importer)
     {
@@ -25,8 +24,8 @@ class CourseTemplateRoleManagement
 
         $this->role_folder_id = $role_folder_id;
         $this->role_global_importer = $role_global_importer;
-        $this->rolt_crs_admin = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR);
-        $this->rolt_crs_non_member = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_NO_MEMBER);
+        $this->rolt_crs_admin = CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_TEMPLATE_EDITOR);
+        $this->rolt_crs_non_member = CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::DEFAULT_ROLE_TPL_CRS_NO_MEMBER);
     }
 
     private function setPermissionsForRole(int $target_role_id, int $role_template_id, int $crs_template_ref)
@@ -59,7 +58,7 @@ class CourseTemplateRoleManagement
         );
     }
 
-    public function setRolePermissionsForDraftStatus(CourseTemplate $crs_template)
+    public function setRolePermissionsForDraftStatus(CourseTemplate $crs_template) : void
     {
         $crs_ref_id = $crs_template->getCrsRefId();
 
@@ -70,7 +69,7 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForPendingStatus($crs_template)
+    public function setRolePermissionsForPendingStatus(CourseTemplate $crs_template) : void
     {
         $crs_ref_id = $crs_template->getCrsRefId();
 
@@ -81,7 +80,7 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForChangeRequestStatus($crs_template)
+    public function setRolePermissionsForChangeRequestStatus(CourseTemplate $crs_template) : void
     {
         $crs_ref_id = (int) $crs_template->getCrsRefId();
 
@@ -92,7 +91,7 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForDeclinedStatus(CourseTemplate $crs_template)
+    public function setRolePermissionsForDeclinedStatus(CourseTemplate $crs_template) : void
     {
         $crs_ref_id = $crs_template->getCrsRefId();
 
@@ -103,10 +102,10 @@ class CourseTemplateRoleManagement
         $this->setPermissionsForRole($this->role_global_importer, $this->rolt_crs_non_member, $crs_ref_id);
     }
 
-    public function setRolePermissionsForApprovedStatus(CourseTemplate $crs_template)
+    public function setRolePermissionsForApprovedStatus(CourseTemplate $crs_template) : void
     {
         $crs_ref_id = $crs_template->getCrsRefId();
-        $rolt_importer_id = \CourseWizard\DB\CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::ROLE_TPL_TITLE_CRS_IMPORTER);
+        $rolt_importer_id = CourseWizardSpecialQueries::lookupRoleIdForRoleTemplateName(RoleTemplatesDefinition::ROLE_TPL_TITLE_CRS_IMPORTER);
 
         // Set Permissions for Editor
         $this->setPermissionsForRole($crs_template->getEditorRoleId(), $this->rolt_crs_non_member, $crs_ref_id);

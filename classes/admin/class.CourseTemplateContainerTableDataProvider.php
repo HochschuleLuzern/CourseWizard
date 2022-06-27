@@ -9,26 +9,13 @@ use ILIAS\DI\Exceptions\Exception;
 
 class CourseTemplateContainerTableDataProvider
 {
-    /** @var TemplateContainerConfigurationRepository */
-    private $conf_repo;
-
-    /** @var TemplateContainerConfigurationRepository */
-    private $template_repo;
-
-    /** @var \ilCourseWizardPlugin */
-    private $plugin;
-
-    /** @var \ilRbacReview */
-    private $rbac_review;
-
-    /** @var \ilCtrl */
-    private $ctrl;
-
-    /** @var \ILIAS\UI\Factory */
-    private $ui_factory;
-
-    /** @var \ILIAS\UI\Renderer */
-    private $ui_renderer;
+    private TemplateContainerConfigurationRepository $conf_repo;
+    private CourseTemplateRepository $template_repo;
+    private \ilCourseWizardPlugin $plugin;
+    private \ilRbacReview $rbac_review;
+    private \ilCtrl $ctrl;
+    private \ILIAS\UI\Factory $ui_factory;
+    private \ILIAS\UI\Renderer $ui_renderer;
 
     public function __construct(TemplateContainerConfigurationRepository $conf_repo, CourseTemplateRepository $template_repo, \ilCourseWizardPlugin $plugin)
     {
@@ -43,7 +30,7 @@ class CourseTemplateContainerTableDataProvider
         $this->ui_renderer = $DIC->ui()->renderer();
     }
 
-    private function getActionDropdown(TemplateContainerConfiguration $conf, $conf_link)
+    private function getActionDropdown(string $conf_link)
     {
         $actions = array(
             $this->ui_factory->button()->shy($this->plugin->txt('configure'), $conf_link)
@@ -53,7 +40,7 @@ class CourseTemplateContainerTableDataProvider
         return $this->ui_renderer->render($dropdown);
     }
 
-    private function getRootLocationAsLink($root_location_ref_id)
+    private function getRootLocationAsLink(int $root_location_ref_id) : string
     {
         $root_location_obj_id = \ilObject::_lookupObjectId($root_location_ref_id);
         $title = \ilObject::_lookupTitle($root_location_obj_id);
@@ -79,9 +66,9 @@ class CourseTemplateContainerTableDataProvider
             $this->ctrl->setParameterByClass(\ilPermissionGUI::class, 'ref_id', $ref_id);
             $link = $this->ctrl->getLinkTargetByClass([\ilObjPluginDispatchGUI::class, \ilObjCourseWizardGUI::class, \ilPermissionGUI::class], 'perm');
 
-            return $this->getAsRenderedLink($number_of_role_members, $link);
+            return $this->getAsRenderedLink((string)$number_of_role_members, $link);
         } catch (Exception $e) {
-            return $number_of_role_members;
+            return (string) $number_of_role_members;
         }
     }
 
@@ -94,7 +81,7 @@ class CourseTemplateContainerTableDataProvider
 
         $link = \ilLink::_getLink($ref_id, 'xcwi');
 
-        return $this->getAsRenderedLink($number_of_templates, $link);
+        return $this->getAsRenderedLink((string)$number_of_templates, $link);
     }
 
     public function prepareTableDataWithAllContainers() : array

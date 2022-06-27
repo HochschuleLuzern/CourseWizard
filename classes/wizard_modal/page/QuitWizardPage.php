@@ -4,12 +4,6 @@ namespace CourseWizard\Modal\Page;
 
 class QuitWizardPage extends BaseModalPagePresenter
 {
-
-    /**
-     * QuitWizardPage constructor.
-     * @param StateMachine $state_machine
-     * @param              $ui_factory
-     */
     public function __construct(\CourseWizard\Modal\Page\StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
         parent::__construct($state_machine, $ui_factory);

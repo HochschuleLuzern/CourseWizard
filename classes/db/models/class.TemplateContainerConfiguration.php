@@ -4,12 +4,12 @@ namespace CourseWizard\DB\Models;
 
 class TemplateContainerConfiguration
 {
-    private $obj_id;
-    private $root_location_ref_id;
-    private $responsible_role_id;
-    private $is_global;
+    private int $obj_id;
+    private int $root_location_ref_id;
+    private int $responsible_role_id;
+    private bool $is_global;
 
-    public function __construct($obj_id, $root_location_ref_id, $responsible_role_id, $is_global)
+    public function __construct(int $obj_id, int $root_location_ref_id, int $responsible_role_id, bool $is_global)
     {
         $this->obj_id = $obj_id;
         $this->root_location_ref_id = $root_location_ref_id;

@@ -14,18 +14,15 @@ class TemplateContainerConfigurationRepository
     const COL_RESPONSIBLE_ROLE_ID = 'responsible_role_id';
     const COL_IS_GLOBAL = 'is_global';
 
-    /** @var \ilDBInterface */
-    protected $db;
+    protected \ilDBInterface $db;
 
-    protected $data_cache;
+    protected array $data_cache;
 
     public function __construct(\ilDBInterface $db)
     {
         $this->db = $db;
 
-        if (!$db->sequenceExists(self::TABLE_NAME)) {
-            $db->createSequence(self::TABLE_NAME);
-        }
+        $this->data_cache = array();
     }
 
     public function getContainerConfiguration(int $obj_id) : ?TemplateContainerConfiguration
@@ -60,7 +57,7 @@ class TemplateContainerConfigurationRepository
         return $list;
     }
 
-    public function setContainerConfiguration(TemplateContainerConfiguration $conf)
+    public function setContainerConfiguration(TemplateContainerConfiguration $conf) : void
     {
         if ($this->getContainerConfiguration($conf->getObjId()) == null) {
             $this->createTemplateContainerConfiguration($conf);
@@ -69,13 +66,13 @@ class TemplateContainerConfigurationRepository
         }
     }
 
-    public function removeContainerConfiguration($container_obj_id)
+    public function removeContainerConfiguration($container_obj_id) : void
     {
         $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE " . self::COL_OBJ_ID . "=" . $this->db->quote($container_obj_id, 'integer');
         $this->db->manipulate($sql);
     }
 
-    public function createTemplateContainerConfiguration(TemplateContainerConfiguration $conf)
+    public function createTemplateContainerConfiguration(TemplateContainerConfiguration $conf) : void
     {
         $this->db->insert(
             self::TABLE_NAME,
@@ -88,7 +85,7 @@ class TemplateContainerConfigurationRepository
         );
     }
 
-    private function updateTemplateContainerConfiguration(TemplateContainerConfiguration $conf)
+    private function updateTemplateContainerConfiguration(TemplateContainerConfiguration $conf) : void
     {
         $this->db->update(
             self::TABLE_NAME,
@@ -103,13 +100,13 @@ class TemplateContainerConfigurationRepository
         );
     }
 
-    private function getObjFromRow(array $row)
+    private function getObjFromRow(array $row) : TemplateContainerConfiguration
     {
         return new TemplateContainerConfiguration(
-            $row[self::COL_OBJ_ID],
-            $row[self::COL_ROOT_LOCATION_REF_ID],
-            $row[self::COL_RESPONSIBLE_ROLE_ID],
-            $row[self::COL_IS_GLOBAL] != 0
+            (int) $row[self::COL_OBJ_ID],
+            (int) $row[self::COL_ROOT_LOCATION_REF_ID],
+            (int) $row[self::COL_RESPONSIBLE_ROLE_ID],
+            ((int) $row[self::COL_IS_GLOBAL]) != 0
         );
     }
 }

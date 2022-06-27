@@ -7,7 +7,7 @@ use ILIAS\UI\Implementation\Component\Input\Field\Checkbox;
 class IntroductionPage extends BaseModalPagePresenter
 {
     protected const JS_CONTINUE_AFTER_INTRODUCTION_PAGE = self::JS_NAMESPACE . '.' . 'introductionPageFinished';
-    const NUMBER_OF_INTRODUCTION_PARAGRAPHS = 7;
+    private const NUMBER_OF_INTRODUCTION_PARAGRAPHS = 7;
 
     public function __construct(StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {

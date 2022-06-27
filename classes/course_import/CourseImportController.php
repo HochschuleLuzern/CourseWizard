@@ -82,7 +82,7 @@ class CourseImportController
         return $copy_result;
     }
 
-    private function importContent(CourseImportData $course_import_data)
+    private function importContent(CourseImportData $course_import_data) : array
     {
         $copy_result_for_content_page = $this->importContentPage($course_import_data);
         $copy_result_for_objs = $this->importContentObjects($course_import_data);
@@ -91,7 +91,7 @@ class CourseImportController
         return array('copy_objects_result' => $copy_result_for_objs, 'copy_content_page_result' => $copy_result_for_content_page);
     }
 
-    private function importContentPage(CourseImportData $course_import_data)
+    private function importContentPage(CourseImportData $course_import_data) : array
     {
         $source_obj_id = ilObject::_lookupObjId($course_import_data->getTemplateCrsRefId());
         $target_obj_id = ilObject::_lookupObjId($course_import_data->getTargetCrsRefId());

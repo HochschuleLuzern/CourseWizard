@@ -10,10 +10,10 @@ class StateMachine
     const SPECIFIC_SETTINGS_PAGE = "specific_settings";
     const QUIT_WIZARD_PAGE = "quit_wizard_page";
 
-    protected $ctrl;
-    protected $current_page;
-    protected $next_page;
-    protected $previous_page;
+    protected \ilCtrl $ctrl;
+    protected string $current_page;
+    protected string $next_page;
+    protected string $previous_page;
 
     public function __construct(string $current_page, \ilCtrl $ctrl)
     {

@@ -21,7 +21,7 @@ class CourseTemplateManagementTableDataProvider
         $this->plugin = new \ilCourseWizardPlugin();
     }
 
-    private function createRenderedDropdownAndModal($template_id, $template_ref_id)
+    private function createRenderedDropdownAndModal(int $template_id, int $template_ref_id) : array
     {
         global $DIC;
         $f = $DIC->ui()->factory();
@@ -68,7 +68,7 @@ class CourseTemplateManagementTableDataProvider
         return array('dropdown' => $renderer->render($dropdown), 'modal' => $change_status_modal);
     }
 
-    public function getCourseTemplatesForManagementTable()
+    public function getCourseTemplatesForManagementTable() : array
     {
         $allowed_status = array(CourseTemplate::STATUS_APPROVED, CourseTemplate::STATUS_PENDING, CourseTemplate::STATUS_CHANGE_REQUESTED, CourseTemplate::STATUS_DECLINED);
 

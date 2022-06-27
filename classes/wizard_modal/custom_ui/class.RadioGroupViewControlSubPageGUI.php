@@ -4,9 +4,12 @@ namespace CourseWizard\CustomUI;
 
 class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
 {
-    protected $subpage_title;
+    protected string $subpage_title;
 
-    private $options;
+    /**
+     * @var TemplateSelectionRadioOptionGUI[]
+     */
+    private array $options;
 
     public function __construct(string $subpage_title)
     {
@@ -19,7 +22,7 @@ class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
         return $this->subpage_title;
     }
 
-    public function getContent()
+    public function getContent() : array
     {
         global $DIC;
         $content = array();

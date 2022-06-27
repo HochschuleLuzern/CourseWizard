@@ -4,6 +4,9 @@ namespace CourseWizard\CustomUI;
 
 class CourseImportLoadingGUI
 {
+    private array $loading_steps;
+    private \ilCourseWizardPlugin $plugin;
+
     public function __construct(array $loading_steps, \ilCourseWizardPlugin $plugin)
     {
         $this->loading_steps = $loading_steps;

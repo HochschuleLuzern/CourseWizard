@@ -5,23 +5,12 @@ use CourseWizard\role\RoleTemplatesDefinition;
 
 class ilObjCourseWizard extends ilObjectPlugin
 {
-    /** @var \CourseWizard\DB\TemplateContainerConfigurationRepository */
-    private $xcwi_conf_repository;
-
-    /** @var \CourseWizard\DB\CourseTemplateRepository */
-    private $crs_template_repo;
-
-    /** @var \CourseWizard\DB\Models\TemplateContainerConfiguration|null */
-    private $xcwi_config;
-
-    /** @var \CourseWizard\CourseTemplate\CourseTemplateCollector */
-    private $crs_template_collector;
-
-    /** @var \CourseWizard\CourseTemplate\management\CourseTemplateManager */
-    private $crs_template_manager;
-
-    /** @var ilCourseWizardConfig */
-    private $plugin_config;
+    private \CourseWizard\DB\TemplateContainerConfigurationRepository $xcwi_conf_repository;
+    private \CourseWizard\DB\CourseTemplateRepository $crs_template_repo;
+    private ?\CourseWizard\DB\Models\TemplateContainerConfiguration $xcwi_config;
+    private \CourseWizard\CourseTemplate\CourseTemplateCollector $crs_template_collector;
+    private \CourseWizard\CourseTemplate\management\CourseTemplateManager $crs_template_manager;
+    private ilCourseWizardConfig $plugin_config;
 
     public function __construct($a_ref_id = 0)
     {

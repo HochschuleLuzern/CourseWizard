@@ -11,41 +11,15 @@ namespace CourseWizard\CustomUI;
  */
 class ContentInheritanceTableGUI extends \ilTable2GUI
 {
-    /**
-     * @var \ilCtrl
-     */
-    protected $ctrl;
+    protected \ilObjUser $user;
+    protected \ilObjectDefinition $obj_definition;
+    protected \ilTree $tree;
+    protected \ilAccessHandler $access;
 
-    /**
-     * @var \ilObjUser
-     */
-    protected $user;
+    private string $type = '';
+    private bool $hide_subgroups;
 
-    /**
-     * @var \ilObjectDefinition
-     */
-    protected $obj_definition;
-
-    /**
-     * @var \ilTree
-     */
-    protected $tree;
-
-    /**
-     * @var \ilAccessHandler
-     */
-    protected $access;
-
-    private $type = '';
-    private $selected_reference = null;
-    private $hide_subgroups;
-    /**
-     *
-     * @param object $a_parent_class
-     * @param string $a_parent_cmd
-     * @return
-     */
-    public function __construct($a_parent_class, $a_parent_cmd, $a_type, bool $hide_subgroups)
+    public function __construct($a_parent_class, string $a_parent_cmd, string $a_type, bool $hide_subgroups)
     {
         global $DIC;
 
@@ -54,7 +28,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->tree = $DIC->repositoryTree();
         $this->access = $DIC->access();
         $lng = $DIC->language();
-        $ilCtrl = $DIC->ctrl();
+        $this->ctrl = $DIC->ctrl();
 
         $this->hide_subgroups = $hide_subgroups;
 
@@ -62,7 +36,6 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->type = $a_type;
 
         $this->lng = $lng;
-        $this->ctrl = $ilCtrl;
 
         $this->addColumn($this->lng->txt('title'), '', '55%');
         $this->addColumn($this->lng->txt('copy'), '', '15%');
@@ -70,7 +43,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->addColumn($this->lng->txt('omit'), '', '15%');
 
         $this->setEnableHeader(true);
-        $this->setFormAction($ilCtrl->getFormAction($this->getParentObject()));
+        $this->setFormAction($this->ctrl->getFormAction($this->getParentObject()));
         $this->setRowTemplate("tpl.obj_copy_selection_row.html", "Services/Object");
         $this->setEnableTitle(true);
         $this->setEnableNumInfo(true);
@@ -79,20 +52,11 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->setFormName('cmd');
     }
 
-    /**
-     * Get object type of source
-     * @return
-     */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     *
-     * @param int $a_source
-     * @return
-     */
     public function parseSource(int $a_source)
     {
         $tree = $this->tree;

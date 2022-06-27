@@ -12,7 +12,7 @@ class TemplateSelectionRadioGroupGUI
     const RENDER_CUSTOM = 'custom';
     const RENDER_ITEM_WITH_CUSTOM = 'item_with_custom';
 
-    protected $template_list;
+    protected array $template_list;
 
     public function __construct()
     {
@@ -24,7 +24,7 @@ class TemplateSelectionRadioGroupGUI
         $this->template_list[] = $crs_template;
     }
 
-    private function renderOptionAsPanel(ModalCourseTemplate $crs_template)
+    private function renderOptionAsPanel(ModalCourseTemplate $crs_template) : string
     {
         global $DIC;
         $f = $DIC->ui()->factory();
