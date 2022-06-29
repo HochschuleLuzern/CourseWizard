@@ -61,7 +61,7 @@ class WizardModalFactory
         foreach ($obj_ids as $container_obj_id) {
             $department_subpage = new RadioGroupViewControlSubPageGUI(\ilObject::_lookupTitle($container_obj_id));
             foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
-                foreach ($this->template_repository->getAllApprovedCourseTemplates($container_ref_id) as $crs_template) {
+                foreach ($this->template_repository->getAllApprovedCourseTemplates((int)$container_ref_id) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
                     $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory, $this->plugin));
                 }
