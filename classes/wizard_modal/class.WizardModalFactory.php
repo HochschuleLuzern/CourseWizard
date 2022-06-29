@@ -70,39 +70,27 @@ class WizardModalFactory
         }
 
         $user = $DIC->user();
-        $obj_ids_with_membership = \ilParticipants::_getMembershipByType($user->getId(), 'crs');
+        $obj_ids_with_membership = \ilParticipants::_getMembershipByType($user->getId(), ['crs', 'grp']);
 
         $inherit_subpage = new RadioGroupViewControlSubPageGUI($this->plugin->txt('tpl_selection_my_courses'));
 
         foreach ($obj_ids_with_membership as $obj_id) {
             $ref_ids_for_object = \ilObject::_getAllReferences($obj_id);
             foreach ($ref_ids_for_object as $ref_id) {
-                if($DIC->rbac()->system()->checkAccessOfUser($user->getId(), 'write', $ref_id)) {
-                    $crs = new \ilObjCourse($ref_id, true);
-                    $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory, $this->plugin));
+                if ($DIC->rbac()->system()->checkAccessOfUser($user->getId(), 'write', $ref_id)) {
+                    $type = \ilObject::_lookupType($ref_id, true);
+                    if ($type == 'crs') {
+                        $crs = new \ilObjCourse($ref_id, true);
+                        $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($crs, $this->ui_factory, $this->plugin));
+                    } else if ($type == 'grp') {
+                        $grp = new \ilObjGroup($ref_id, true);
+                        $inherit_subpage->addRadioOption(new InheritExistingCourseRadioOptionGUI($grp, $this->ui_factory, $this->plugin));
+                    }
                 }
             }
         }
 
         $view_control->addNewSubPage($inherit_subpage);
-
-
-
-        /** @var CourseTemplate $crs_template
-        foreach($this->template_repository->getAllApprovedCourseTemplates(193) as $crs_template) {
-            $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
-            $department_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));
-        }
-        $view_control->addNewSubPage($department_subpage);
-
-        $global_subpage = new RadioGroupViewControlSubPageGUI('Global');
-        /** @var CourseTemplate $crs_template
-        foreach($this->template_repository->getAllApprovedCourseTemplates(217) as $crs_template) {
-            $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
-            $global_subpage->addRadioOption(new TemplateSelectionRadioOptionGUI($obj, $this->ui_factory));
-        }
-        $view_control->addNewSubPage($global_subpage);
-         * */
 
         return new Page\TemplateSelectionPage(
             $view_control,
@@ -155,8 +143,9 @@ class WizardModalFactory
                 }
 
                 $ref_id = (int)$this->query_params[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID];
-                if (\ilObject::_lookupType($ref_id, true) !== 'crs') {
-                    throw new \InvalidArgumentException('Given reference ID is not for object of type course');
+                $type = \ilObject::_lookupType($ref_id, true);
+                if ($type !== 'crs' && $type !== 'grp') {
+                    throw new \InvalidArgumentException('Given reference ID is not for object of type course or group');
                 }
 
                 try {

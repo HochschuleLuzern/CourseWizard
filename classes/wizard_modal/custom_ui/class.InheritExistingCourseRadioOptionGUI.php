@@ -7,10 +7,10 @@ use ILIAS\UI\Factory;
 
 class InheritExistingCourseRadioOptionGUI extends TemplateSelectionRadioOptionGUI
 {
-    private \ilObjCourse $crs;
+    private \ilObject $crs;
     private \ilCourseWizardPlugin $plugin;
 
-    public function __construct(\ilObjCourse $crs, Factory $ui_factory, \ilCourseWizardPlugin $plugin)
+    public function __construct(\ilObject $crs, Factory $ui_factory, \ilCourseWizardPlugin $plugin)
     {
         $this->ui_factory = $ui_factory;
         $this->crs = $crs;
