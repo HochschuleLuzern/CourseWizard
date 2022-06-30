@@ -23,6 +23,8 @@ create_crs_template_form#:#Neue Kursvorlage erstellen
 create_crs_template_success#:#Kursvorlage wurde erstellt!
 create_template#:#Vorlage erstellen
 
+aria_tpl_selection_vc#:#Wechsle Vorlagen Container
+
 form_crs_importer_role_input#:#Importerrolle ID
 form_crs_importer_role_input_info#:#Rollen ID einer existierenden globalen Rolle für ILIAS benutzende, welche den "Course Wizard" bedienen dürfen
 form_crs_importer_role_title#:#Titel der angegebenen Rolle

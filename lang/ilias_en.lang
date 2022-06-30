@@ -23,6 +23,8 @@ create_crs_template_form#:#Create new Course Template
 create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
 
+aria_tpl_selection_vc#:#Change template container
+
 form_crs_importer_role_input#:#Importer Role ID
 form_crs_importer_role_input_info#:#Role ID of existing global role for users, which should be able to use the "Course Wizard" in their course
 form_crs_importer_role_title#:#Title of given Role

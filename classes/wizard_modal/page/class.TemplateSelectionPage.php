@@ -2,11 +2,7 @@
 
 namespace CourseWizard\Modal\Page;
 
-use CourseWizard\DB\Models\CourseTemplate;
-use CourseWizard\CustomUI\RadioSelectionViewControlGUI;
-use CourseWizard\CustomUI\TemplateSelectionRadioGroupGUI;
-use CourseWizard\Modal\CourseTemplates\ModalBaseCourseTemplate;
-use CourseWizard\Modal\CourseTemplates\ModalCourseTemplate;
+use CourseWizard\CustomUI\TemplateSelection\RadioGroupViewControlGUI;
 
 class TemplateSelectionPage extends BaseModalPagePresenter
 {
@@ -15,7 +11,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
 
     protected const JS_POST_SELECTION_METHOD = self::JS_NAMESPACE . '.' . 'pushTemplateSelection';
 
-    public function __construct(RadioSelectionViewControlGUI $view_control, StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
+    public function __construct(RadioGroupViewControlGUI $view_control, StateMachine $state_machine, \ILIAS\UI\Factory $ui_factory)
     {
         parent::__construct($state_machine, $ui_factory);
 
@@ -36,7 +32,7 @@ class TemplateSelectionPage extends BaseModalPagePresenter
     public function getStepContent() : string
     {
         global $DIC;
-        return $DIC->ui()->renderer()->renderAsync($this->view_control->getAsComponentList());
+        return $DIC->ui()->renderer()->renderAsync($this->view_control->getAsUIComponentList());
     }
 
     public function getJsNextPageMethod() : string

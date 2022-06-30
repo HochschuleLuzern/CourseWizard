@@ -19,6 +19,10 @@ use ILIAS\UI\Factory;
 use ILIAS\UI\Renderer;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use CourseWizard\CustomUI\TemplateSelection\RadioGroupViewControlGUI;
+use CourseWizard\CustomUI\TemplateSelection\ViewControlSubPage;
+use CourseWizard\CustomUI\TemplateSelection\RadioOptionGUI;
+use CourseWizard\Modal\CourseTemplates\ModalIliasObjectAsTemplate;
 
 class WizardModalFactory
 {
@@ -54,7 +58,7 @@ class WizardModalFactory
     private function buildTemplateSelectionPage(StateMachine $state_machine)
     {
         global $DIC;
-
+/*
         $view_control = new RadioSelectionViewControlGUI($this->ui_factory);
 
         $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId($_GET['ref_id']);
@@ -91,6 +95,56 @@ class WizardModalFactory
         }
 
         $view_control->addNewSubPage($inherit_subpage);
+*/
+
+
+        $view_control = new RadioGroupViewControlGUI($this->plugin);
+
+        $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId($_GET['ref_id']);
+        foreach ($obj_ids as $container_obj_id) {
+            $department_subpage = new ViewControlSubPage(\ilObject::_lookupTitle($container_obj_id), uniqid('xcwi'), false, $this->plugin);
+            foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
+                foreach ($this->template_repository->getAllApprovedCourseTemplates((int)$container_ref_id) as $crs_template) {
+                    $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
+                    $department_subpage->addRadioOption(new RadioOptionGUI($obj, $this->plugin));
+                }
+            }
+            $view_control->addSubPage($department_subpage);
+        }
+
+        $user = $DIC->user();
+        $obj_ids_with_membership = \ilParticipants::_getMembershipByType($user->getId(), ['crs', 'grp']);
+
+        $inherit_subpage = new ViewControlSubPage($this->plugin->txt('tpl_selection_my_courses'), uniqid('xcwi'), true, $this->plugin);
+
+        foreach ($obj_ids_with_membership as $obj_id) {
+            $ref_ids_for_object = \ilObject::_getAllReferences($obj_id);
+            foreach ($ref_ids_for_object as $ref_id) {
+                if ($DIC->rbac()->system()->checkAccessOfUser($user->getId(), 'write', $ref_id)) {
+                    $type = \ilObject::_lookupType($ref_id, true);
+
+                    if ($type == 'crs') {
+                        $crs = new \ilObjCourse($ref_id, true);
+                        $inherit_subpage->addRadioOption(
+                            new RadioOptionGUI(
+                                new ModalIliasObjectAsTemplate($crs),
+                                $this->plugin
+                            )
+                        );
+                    } else if ($type == 'grp') {
+                        $grp = new \ilObjGroup($ref_id, true);
+                        $inherit_subpage->addRadioOption(
+                            new RadioOptionGUI(
+                                new ModalIliasObjectAsTemplate($grp),
+                                $this->plugin
+                            )
+                        );
+                    }
+                }
+            }
+        }
+
+        $view_control->addSubPage($inherit_subpage);
 
         return new Page\TemplateSelectionPage(
             $view_control,

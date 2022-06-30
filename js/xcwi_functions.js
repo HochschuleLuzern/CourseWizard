@@ -152,6 +152,27 @@ il.CourseWizardFunctions = (function (scope) {
 		priv.isInitialized = true;
 	};
 
+	pub.switchViewControlContent = function(e, id) {
+		// e['target'] is the id for the button which was clicked (e.g. 'button#il_ui_fw_1234')
+		obj = $(e['target']);
+		// Sets all buttons to the 'unclicked' state
+		obj.siblings().removeClass('engaged disabled ilSubmitInactive').attr('aria-pressed', 'false');
+		obj.siblings().removeAttr('disabled');
+		// Sets the clicked button into the 'clicked' state
+		obj.addClass('engaged ilSubmitInactive').attr('aria-pressed', 'true');
+		// Hide all instruction divs at first
+		$('.xcwi-template-selection__subpage').hide();
+		// Show the div which is given as an argument
+		$('#'+id).show();
+	};
+
+	pub.switchSelectedTemplate = function(obj) {
+		selected_obj = $(obj);
+		let container = selected_obj.closest('.xcwi-template-selection__radio-group');
+		container.find('.crs_tmp_checked').removeClass('crs_tmp_checked');
+		selected_obj.parents('.crs_tmp_option').addClass('crs_tmp_checked');
+	};
+
 	pub.addInfoMessageToPage = function(messageUrl) {
 
 		$.get(messageUrl, function(data, status)

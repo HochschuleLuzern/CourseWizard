@@ -29,6 +29,8 @@ class RadioGroupViewControlSubPageGUI implements ViewControlSubpageGUI
 
         if(count($this->options) > 0) {
             /** @var TemplateSelectionRadioOptionGUI $option */
+            $content[] = $DIC->ui()->factory()->legacy('<input type="text" />');
+
             foreach ($this->options as $option) {
                 foreach ($option->getAsLegacyComponent() as $ui_component) {
                     $content[] = $ui_component;
