@@ -82,3 +82,13 @@ li.xcwi_success {
 li.xcwi_failure {
 	list-style-image: url("../../../../../../../../../templates/default/images/icon_not_ok.svg");
 }
+
+input.xcwi-template-selection__filter-input {
+	margin-top: 0.3em;
+}
+
+div.xcwi-template-selection__filter-input-help {
+	font-size: 90%;
+	margin-left: 1em;
+	margin-top: 0;
+}

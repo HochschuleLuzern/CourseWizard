@@ -49,6 +49,9 @@ form_skip_introduction_info#:#If selected, the introduction page will not be sho
 form_xcwi_container_scope#:#Scope
 form_xcwi_container_scope_info#:#Define the scope for this Course Template Container
 
+FILTER_CRS_INPUT_PLACEHOLDER#:#Filter Courses ...
+FILTER_CRS_INPUT_DESC#:#-> Fuzzy Filter. The input "<b>HBX25</b>" finds for example "<b>H</b>SLU.<b>B</b>A_<b>X</b>YZ.H<b>25</b>"
+
 global_available#:#Global Available
 import_content_page_loading_title#:#Content Page
 import_content_page_loading_content#:#Copying Content Page from template
@@ -100,7 +103,7 @@ step_template_selection#:#Template Selection
 template_container#:#Template Container
 template_title#:#Title of the new Template
 template_description#:#Description of the new Template
-tpl_selection_my_courses#:#My Courses
+tpl_selection_my_courses#:#My Courses and Groups
 
 view_course#:#View Course
 view_course_template#:#View Course Template

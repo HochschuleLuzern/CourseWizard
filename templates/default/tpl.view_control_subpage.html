@@ -1,21 +1,32 @@
 <!-- BEGIN sub_page_div -->
 <div id='{SUBPAGE_DIV_ID}' class='xcwi-template-selection__subpage' {HIDDEN}>
-    <!-- BEGIN radio_option -->
-    <div class='option crs_tmp_option'>
-        <div>
-            <input value='{OBJ_REF_ID}' style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id={RADIO_OPTION_ID} onclick='il.CourseWizardFunctions.switchSelectedTemplate(this)'/>
-        </div>
-        <div>
-            <label for='{RADIO_OPTION_ID}'>
-                <span></span>
 
-                {RENDERED_ITEM}
+    <!-- BEGIN filter_bar -->
+    <input type="text" class="form-control xcwi-template-selection__filter-input" placeholder="{FILTER_CRS_INPUT_PLACEHOLDER} ..." value="" name="queryString" id="{SEARCHBAR_ID}" />
+    <div class=" xcwi-template-selection__filter-input-help help-block" style="font-size: 90%; margin-left: 1em; margin-top: 0px;">{FILTER_CRS_INPUT_DESC}</div>
+    <script type="text/javascript" charset="utf-8">
+        var $combinedSearch = $('#{SEARCHBAR_ID}');
+        $combinedSearch.liveUpdate('{LIST}', '{LINE}').focus();
+    </script>
+    <!-- END filter_bar -->
 
-            </label>
+    <div id="{RADIO_CONTAINER_ID}">
+        <!-- BEGIN radio_option -->
+        <div class='option crs_tmp_option'>
+            <div>
+                <input value='{OBJ_REF_ID}' style='margin-right: 5em; vertical-align: middle' hidden class='' type='radio' name='card' id={RADIO_OPTION_ID} onclick='il.CourseWizardFunctions.switchSelectedTemplate(this)'/>
+            </div>
+            <div>
+                <label for='{RADIO_OPTION_ID}'>
+                    <span></span>
+
+                    {RENDERED_ITEM}
+
+                </label>
+            </div>
         </div>
+        <!-- END radio_option -->
     </div>
-    <!-- END radio_option -->
-
     <!-- BEGIN empty_subpage -->
     <div class="xcwi-template-selection__no-tpl"><em>{EMPTY_PAGE_TEXT}</em></div>
     <!-- END empty_subpage -->

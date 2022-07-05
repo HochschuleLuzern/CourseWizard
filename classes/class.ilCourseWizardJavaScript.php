@@ -11,14 +11,14 @@ class ilCourseWizardJavaScript
 
     private const PLUGIN_DIRECTORY_LOCATION = 'Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/';
 
-    private const JS_FILE_NAME = 'xcwi_functions.js';
-    private const JS_FILE_LOCATION = self::PLUGIN_DIRECTORY_LOCATION .'js/' . self::JS_FILE_NAME;
+    private const WIZARD_JS_FILE_NAME = 'xcwi_functions.js';
+    private const JS_FILES_LOCATION = self::PLUGIN_DIRECTORY_LOCATION .'js/';
 
-    private const CSS_FILE_NAME = 'xcwi_modal_styles.css';
-    private const CSS_FILE_LOCATION = self::PLUGIN_DIRECTORY_LOCATION . 'templates/default/' . self::CSS_FILE_NAME;
+    private const WIZARD_CSS_FILE_NAME = 'xcwi_modal_styles.css';
+    private const CSS_FILES_LOCATION = self::PLUGIN_DIRECTORY_LOCATION . 'templates/default/' ;
 
-    private static bool $js_file_added_to_template = false;
-    private static bool $css_file_added_to_template = false;
+    private static bool $js_files_added_to_template = false;
+    private static bool $css_files_added_to_template = false;
 
 
     public static function addJsAndCssFileToGlobalTemplate()
@@ -27,14 +27,16 @@ class ilCourseWizardJavaScript
 
         $tpl = $DIC->ui()->mainTemplate();
 
-        if(!self::$js_file_added_to_template) {
-            $tpl->addJavaScript(self::JS_FILE_LOCATION);
-            self::$js_file_added_to_template = true;
+        if(!self::$js_files_added_to_template) {
+            $tpl->addJavaScript(self::JS_FILES_LOCATION. self::WIZARD_JS_FILE_NAME);
+            $tpl->addJavaScript(self::JS_FILES_LOCATION . 'jquery.livesearch.js');
+            $tpl->addJavaScript(self::JS_FILES_LOCATION . 'quicksilver.js');
+            self::$js_files_added_to_template = true;
         }
 
-        if(!self::$css_file_added_to_template) {
-            $tpl->addCss(self::CSS_FILE_LOCATION);
-            self::$css_file_added_to_template = true;
+        if(!self::$css_files_added_to_template) {
+            $tpl->addCss(self::CSS_FILES_LOCATION . self::WIZARD_CSS_FILE_NAME);
+            self::$css_files_added_to_template = true;
         }
     }
 

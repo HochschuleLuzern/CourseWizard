@@ -49,6 +49,9 @@ form_skip_introduction_info#:#Wenn ausgewählt, öffnet der Wizard für die näc
 form_xcwi_container_scope#:#Gültigkeitsbereich
 form_xcwi_container_scope_info#:#Definiere den Gültigkeitsbereich dieses Kursvorlagen Containers
 
+filter_crs_input_placeholder#:#Kurse Filtern
+filter_crs_input_desc#:#-> Ungefährer Filter. Die Eingabe "<strong>HBX25</strong>" findet z.B.: "<strong>H</strong>SLU.<strong>B</strong>A_<strong>X</strong>YZ.H<strong>25</strong>03"
+
 global_available#:#Global verfügbar
 import_content_page_loading_title#:#Inhaltsseite
 import_content_page_loading_content#:#Kopiere Inhaltsseite von Vorlage...
@@ -100,7 +103,7 @@ step_template_selection#:#Vorlage Auswählen
 template_container#:#Vorlagen Container
 template_title#:#Vorlagen Titel
 template_description#:#Vorlagen Beschreibung
-tpl_selection_my_courses#:#Meine Kurse
+tpl_selection_my_courses#:#Meine Kurse und Gruppen
 
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen

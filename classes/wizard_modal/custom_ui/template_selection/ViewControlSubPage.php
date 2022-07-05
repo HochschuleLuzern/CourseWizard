@@ -39,20 +39,25 @@ class ViewControlSubPage
 
     public function renderSubpageInTemplate(\ilTemplate $tpl, bool $is_hidden) : string
     {
-
-
         if (count($this->radio_options) > 0) {
 
             $tpl->setCurrentBlock('sub_page_div');
 
-            /*
-            if($this->filter_enabled) {
-                $tpl->setVariable();
-            }
-            */
-
             $tpl->setVariable('SUBPAGE_DIV_ID', $this->unique_id);
             $tpl->setVariable('HIDDEN', $is_hidden ? 'style="display: none;"' : '');
+            $radio_container_id = uniqid('xcwi');
+            $tpl->setVariable('RADIO_CONTAINER_ID', $radio_container_id);
+
+            if($this->filter_enabled) {
+                $searchbar_id = uniqid('xcwi');
+                $tpl->setCurrentBlock('filter_bar');
+                $tpl->setVariable('FILTER_CRS_INPUT_PLACEHOLDER', $this->plugin->txt('filter_crs_input_placeholder'));
+                $tpl->setVariable('FILTER_CRS_INPUT_DESC', $this->plugin->txt('filter_crs_input_desc'));
+                $tpl->setVariable('SEARCHBAR_ID', "$searchbar_id");
+                $tpl->setVariable('LIST', "#$radio_container_id");
+                $tpl->setVariable('LINE', '.crs_tmp_option');
+                $tpl->parseCurrentBlock();
+            }
 
             foreach ($this->radio_options as $radio_option) {
                 $radio_option->renderRadioOptionToTemplate($tpl);
