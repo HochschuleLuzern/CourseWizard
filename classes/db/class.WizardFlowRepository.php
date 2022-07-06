@@ -43,7 +43,7 @@ class WizardFlowRepository
                 return WizardFlow::unfinishedWizardFlow(
                     (int) $row[self::COL_TARGET_REF_ID],
                     (int) $row[self::COL_EXECUTING_USER],
-                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FIRST_OPEN_TS]),
                     (int) $row[self::COL_WIZARD_STATUS]
                 );
 
@@ -51,29 +51,33 @@ class WizardFlowRepository
                 return WizardFlow::wizardFlowImporting(
                     (int) $row[self::COL_TARGET_REF_ID],
                     (int) $row[self::COL_EXECUTING_USER],
-                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FIRST_OPEN_TS]),
                     (int) $row[self::COL_SELECTED_TEMPLATE]
                 );
             case WizardFlow::STATUS_QUIT:
                 return WizardFlow::quitedWizardFlow(
                     (int) $row[self::COL_TARGET_REF_ID],
                     (int) $row[self::COL_EXECUTING_USER],
-                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
-                    new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FIRST_OPEN_TS]),
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FINISHED_IMPORT_TS])
                 );
 
             case WizardFlow::STATUS_FINISHED:
                 return WIzardFLow::finishedWizardFlow(
                     (int) $row[self::COL_TARGET_REF_ID],
                     (int) $row[self::COL_EXECUTING_USER],
-                    new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FIRST_OPEN_TS]),
                     (int) $row[self::COL_SELECTED_TEMPLATE],
-                    new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
+                    $this->getDateTimeImmutableOrNull($row[self::COL_FINISHED_IMPORT_TS])
                 );
 
             default:
                 throw new \InvalidArgumentException("Wizard step with nr {$row[self::COL_CURRENT_STEP]} does not exist");
         }
+    }
+
+    private function getDateTimeImmutableOrNull(?string $val) {
+        return is_null($val) ? null : new \DateTimeImmutable($val);
     }
 
     public function createNewWizardFlow(int $crs_ref_id, int $executing_user) : WizardFlow

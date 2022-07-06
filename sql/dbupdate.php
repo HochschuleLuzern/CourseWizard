@@ -182,3 +182,9 @@ if (!$ilDB->tableExists($current_table)) {
     $ilDB->addPrimaryKey($current_table, array(\CourseWizard\DB\UserPreferencesRepository::COL_USER_ID));
 }
 ?>
+<#6>
+<?php
+$current_table = \CourseWizard\DB\WizardFlowRepository::TABLE_NAME;
+$current_col = \CourseWizard\DB\WizardFlowRepository::COL_FIRST_OPEN_TS;
+$ilDB->modifyTableColumn($current_table, $current_col, ['notnull' => false]);
+?>

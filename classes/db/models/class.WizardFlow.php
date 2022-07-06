@@ -41,7 +41,7 @@ class WizardFlow
         );
     }
 
-    public static function wizardFlowImporting(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open, int $selected_template) : WizardFlow
+    public static function wizardFlowImporting(int $target_crs_ref_id, int $executing_user, ?\DateTimeImmutable $first_open, int $selected_template) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -53,7 +53,7 @@ class WizardFlow
         );
     }
 
-    public static function unfinishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $current_status) : WizardFlow
+    public static function unfinishedWizardFlow(int $target_crs_ref_id, int $executing_user, ?\DateTimeImmutable $first_open_ts, int $current_status) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
