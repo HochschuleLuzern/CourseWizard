@@ -41,33 +41,33 @@ class WizardFlowRepository
             case WizardFlow::STATUS_IN_PROGRESS:
             case WizardFlow::STATUS_POSTPONED:
                 return WizardFlow::unfinishedWizardFlow(
-                    (int)  $row[self::COL_TARGET_REF_ID],
-                    (int)  $row[self::COL_EXECUTING_USER],
+                    (int) $row[self::COL_TARGET_REF_ID],
+                    (int) $row[self::COL_EXECUTING_USER],
                     new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
                     (int) $row[self::COL_WIZARD_STATUS]
                 );
 
             case WizardFlow::STATUS_IMPORTING:
                 return WizardFlow::wizardFlowImporting(
-                    $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_EXECUTING_USER],
+                    (int) $row[self::COL_TARGET_REF_ID],
+                    (int) $row[self::COL_EXECUTING_USER],
                     new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
-                    $row[self::COL_SELECTED_TEMPLATE]
+                    (int) $row[self::COL_SELECTED_TEMPLATE]
                 );
             case WizardFlow::STATUS_QUIT:
                 return WizardFlow::quitedWizardFlow(
-                    $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_EXECUTING_USER],
+                    (int) $row[self::COL_TARGET_REF_ID],
+                    (int) $row[self::COL_EXECUTING_USER],
                     new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
                     new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
                 );
 
             case WizardFlow::STATUS_FINISHED:
                 return WIzardFLow::finishedWizardFlow(
-                    $row[self::COL_TARGET_REF_ID],
-                    $row[self::COL_EXECUTING_USER],
+                    (int) $row[self::COL_TARGET_REF_ID],
+                    (int) $row[self::COL_EXECUTING_USER],
                     new \DateTimeImmutable($row[self::COL_FIRST_OPEN_TS]),
-                    $row[self::COL_SELECTED_TEMPLATE],
+                    (int) $row[self::COL_SELECTED_TEMPLATE],
                     new \DateTimeImmutable($row[self::COL_FINISHED_IMPORT_TS])
                 );
 

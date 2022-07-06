@@ -17,7 +17,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
     protected \ilAccessHandler $access;
 
     private string $type = '';
-    private bool $hide_subgroups;
+    private bool $try_to_default_omit_subgroups;
 
     public function __construct($a_parent_class, string $a_parent_cmd, string $a_type, bool $hide_subgroups)
     {
@@ -30,7 +30,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $lng = $DIC->language();
         $this->ctrl = $DIC->ctrl();
 
-        $this->hide_subgroups = $hide_subgroups;
+        $this->try_to_default_omit_subgroups = true;
 
         parent::__construct($a_parent_class, $a_parent_cmd);
         $this->type = $a_type;
@@ -77,7 +77,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             }
 
             $current_depth = $node['depth'] - $root['depth'];
-            if($this->hide_subgroups && !$first){
+            if($this->try_to_default_omit_subgroups && !$first){
 
                 // Is object direct child of course
                 // and is it of the type group
@@ -87,9 +87,9 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
                     && (substr($node['title'], 0, strlen($node['title']) - 2) == $crs_title)
                 ) {
                     $is_in_subgroup = true;
-                    continue;
+                    //continue;
                 } else if ($is_in_subgroup && $current_depth > 1) {
-                    continue;
+                    //continue;
                 } else {
                     $is_in_subgroup = false;
                 }
@@ -106,6 +106,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $r['perm_copy'] = $ilAccess->checkAccess('copy', '', $node['child']);
             $r['link'] = $objDefinition->allowLink($node['type']);
             $r['perm_link'] = true;
+            $r['is_in_subgroup'] = $is_in_subgroup;
 
             // #11905
             if (!trim($r['title']) && $r['type'] == 'sess') {
@@ -161,7 +162,9 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $this->tpl->setVariable('NAME_COPY', 'cp_options[' . $s['ref_id'] . '][type]');
             $this->tpl->setVariable('VALUE_COPY', \ilCopyWizardOptions::COPY_WIZARD_COPY);
             $this->tpl->setVariable('ID_COPY', $s['depth'] . '_' . $s['type'] . '_' . $s['ref_id'] . '_copy');
-            $this->tpl->setVariable('COPY_CHECKED', 'checked="checked"');
+            if(!isset($s['is_in_subgroup']) || (!$s['is_in_subgroup'])) {
+                $this->tpl->setVariable('COPY_CHECKED', 'checked="checked"');
+            }
             $this->tpl->parseCurrentBlock();
         } elseif ($s['copy']) {
             $this->tpl->setCurrentBlock('missing_copy_perm');
@@ -193,7 +196,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->tpl->setVariable('NAME_OMIT', 'cp_options[' . $s['ref_id'] . '][type]');
         $this->tpl->setVariable('VALUE_OMIT', \ilCopyWizardOptions::COPY_WIZARD_OMIT);
         $this->tpl->setVariable('ID_OMIT', $s['depth'] . '_' . $s['type'] . '_' . $s['ref_id'] . '_omit');
-        if ((!$s['copy'] or !$s['perm_copy']) and (!$s['link'])) {
+        if (((!$s['copy'] || !$s['perm_copy']) && (!$s['link'])) || $s['is_in_subgroup']) {
             $this->tpl->setVariable('OMIT_CHECKED', 'checked="checked"');
         }
         $this->tpl->parseCurrentBlock();

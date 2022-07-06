@@ -65,7 +65,7 @@ class WizardFlow
         );
     }
 
-    public static function finishedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, int $selected_template, \DateTimeImmutable $finished_import_ts) : WizardFlow
+    public static function finishedWizardFlow(int $target_crs_ref_id, int $executing_user, ?\DateTimeImmutable $first_open_ts, int $selected_template, ?\DateTimeImmutable $finished_import_ts) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,
@@ -77,7 +77,7 @@ class WizardFlow
         );
     }
 
-    public static function quitedWizardFlow(int $target_crs_ref_id, int $executing_user, \DateTimeImmutable $first_open_ts, \DateTimeImmutable $finished_import_ts) : WizardFlow
+    public static function quitedWizardFlow(int $target_crs_ref_id, int $executing_user, ?\DateTimeImmutable $first_open_ts, ?\DateTimeImmutable $finished_import_ts) : WizardFlow
     {
         return new self(
             $target_crs_ref_id,

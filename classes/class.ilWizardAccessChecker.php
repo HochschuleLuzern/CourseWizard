@@ -45,7 +45,7 @@ class ilWizardAccessChecker
             && $this->rbac_system->checkAccessOfUser($this->user->getId(), 'write', $ref_id)
 
             // ... and course/grp should be empty ...
-            && $this->objectIsEmptyOrHasOnlyGroupsWithExtendedTitle($ref_id)
+            && $this->objectIsEmptyOrHasOnlyGroupsAsChildren($ref_id)
 
             // ... and parent object has to be a category (no course wizard container or anything else) ...
             && $this->hasAllowedParentObjType((int) $this->tree->getParentId($ref_id))
@@ -70,15 +70,20 @@ class ilWizardAccessChecker
         return true;
     }
 
-    public function objectIsEmptyOrHasOnlyGroupsWithExtendedTitle(int $ref_id) : bool
+    public function objectIsEmptyOrHasOnlyGroupsAsChildren(int $ref_id) : bool
     {
         $child_objects = $this->tree->getChilds($ref_id);
         if(count($child_objects) <= 0) {
             return true;
         }
 
-        $obj_title = ilObject::_lookupTitle(ilObject::_lookupObjectId($ref_id));
-        return $this->checkIfObjectHasOnlySubgroupsWithExtendedTitle($obj_title, $child_objects);
+        foreach($child_objects as $child_node) {
+            if ($child_node['type'] != 'grp') {
+                return false;
+            }
+        }
+
+        return true;
 
     }
 
