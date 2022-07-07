@@ -13,7 +13,7 @@ class ilWizardAccessChecker
     public function __construct(
         ilTree $tree = null,
         ilObjUser $user = null,
-        ilRbacSystem $rbac_review = null,
+        ilRbacSystem $rbac_system = null,
         ServerRequestInterface $request = null,
         ilCtrl $ctrl = null
     )
@@ -22,15 +22,20 @@ class ilWizardAccessChecker
 
         $this->tree = $tree ?? $DIC->repositoryTree();
         $this->user = $user ?? $DIC->user();
-        $this->rbac_system = $rbac_review ?? $DIC->rbac()->system();
+        $this->rbac_system = $rbac_system ?? $DIC->rbac()->system();
         $this->request = $request ?? $DIC->http()->request();
         $this->ctrl = $ctrl ?? $DIC->ctrl();
     }
 
-    private function hasAllowedParentObjType(int $parent_ref_id)
+    private function hasAllowedParentObjType(string $obj_type, int $parent_ref_id) : bool
     {
         $parent_type = ilObject::_lookupType($parent_ref_id, true);
-        return $parent_type == 'cat' || $parent_type == 'crs';
+
+        if(($obj_type == 'crs' && $parent_type == 'cat') || ($obj_type == 'grp' && $parent_type == 'crs')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function checkIfObjectCouldDisplayWizard(int $ref_id) : bool
@@ -47,11 +52,8 @@ class ilWizardAccessChecker
             // ... and course/grp should be empty ...
             && $this->objectIsEmptyOrHasOnlyGroupsAsChildren($ref_id)
 
-            // ... and parent object has to be a category (no course wizard container or anything else) ...
-            && $this->hasAllowedParentObjType((int) $this->tree->getParentId($ref_id))
-
-            // ... and user is on the content-view-page
-            && $this->isContentViewPage()
+            // ... and parent object has to be a category (no course wizard container or anything else)
+            && $this->hasAllowedParentObjType($type, (int) $this->tree->getParentId($ref_id))
         );
     }
 
@@ -103,7 +105,7 @@ class ilWizardAccessChecker
         return substr($grp_title, 0, strlen($grp_title) - 2) == $crs_title;
     }
 
-    private function isContentViewPage()
+    public function checkIfContentPageIsShown()
     {
         $query_params = $this->request->getQueryParams();
         $server_params = $this->request->getServerParams()['SCRIPT_NAME'];

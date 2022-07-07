@@ -54,7 +54,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
                     $this->wizard_acces_checker = new ilWizardAccessChecker();
                 }
 
-                if ($this->wizard_acces_checker->checkIfObjectCouldDisplayWizard($ref_id)) {
+                if ($this->wizard_acces_checker->checkIfObjectCouldDisplayWizard($ref_id) && $this->wizard_acces_checker->checkIfContentPageIsShown()) {
                     $wizard_repo = new \CourseWizard\DB\WizardFlowRepository($this->dic->database(), $this->dic->user());
                     $wizard_flow = $wizard_repo->getWizardFlowForCrs($ref_id);
 

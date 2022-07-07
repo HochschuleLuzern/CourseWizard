@@ -36,32 +36,17 @@ class ilCourseWizardApiGUI
 
     const GET_TEMPLATE_REF_ID = 'template_ref_id';
 
-    /** @var ilCtrl */
-    protected $ctrl;
+    protected ilCtrl $ctrl;
+    protected RequestInterface $request;
+    protected Factory $ui_factory;
+    protected Renderer $ui_renderer;
+    protected ilRbacSystem $rbac_system;
+    protected ilLanguage $language;
+    protected ilObjUser $user;
+    protected ilCourseWizardPlugin $plugin;
+    protected ilLogger $logger;
 
-    /** @var RequestInterface|ServerRequestInterface */
-    protected $request;
-
-    /** @var Factory */
-    protected $ui_factory;
-
-    /** @var Renderer */
-    protected $ui_renderer;
-
-    /** @var ilRbacSystem */
-    protected $rbac_system;
-
-    /** @var ilLanguage */
-    protected $language;
-
-    /** @var ilObjUser */
-    protected $user;
-
-    /** @var ilCourseWizardPlugin */
-    protected $plugin;
-
-    /** @var ilLogger */
-    protected $logger;
+    private ilWizardAccessChecker $wizard_access_checker;
 
     public function __construct()
     {
@@ -76,6 +61,13 @@ class ilCourseWizardApiGUI
         $this->user = $DIC->user();
         $this->plugin = new ilCourseWizardPlugin();
         $this->logger = $DIC->logger()->root();
+        $this->wizard_access_checker = new ilWizardAccessChecker(
+            $DIC->repositoryTree(),
+            $this->user,
+            $this->rbac_system,
+            $this->request,
+            $this->ctrl
+        );
     }
 
     public function executeCommand()
@@ -169,10 +161,10 @@ class ilCourseWizardApiGUI
 
     public function dismissWizard(WizardFlowRepository $wizard_flow_repo)
     {
-        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+        $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
 
         if (!$this->rbac_system->checkAccess('write', $target_ref_id)) {
-            ilUtil::sendFailure('No permissions for the course wizard', true);
+            $this->logger->error('No permissions to execute crs import for following target ref id: ' . $target_ref_id);
         } else {
 
             $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
@@ -190,7 +182,7 @@ class ilCourseWizardApiGUI
 
     public function proceedPostponedWizard(WizardFlowRepository $wizard_flow_repo)
     {
-        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+        $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
         if ($wizard_flow->getCurrentStatus() == WizardFlow::STATUS_POSTPONED) {
             $wizard_flow = $wizard_flow->withInProgressStatus();
@@ -200,7 +192,7 @@ class ilCourseWizardApiGUI
     }
     public function getReactivateWizardMessage()
     {
-        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+        $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
         $this->ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $target_ref_id);
 
         $link_reactivate = $this->ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
@@ -227,12 +219,15 @@ class ilCourseWizardApiGUI
             ||
             ($target_obj_type != 'crs' && $target_obj_type != 'grp')
         ) {
-            $this->logger->error('Template or target object does not have the type "CRS"');
+            $template_ref = $course_import_data->getTemplateCrsRefId();
+            $target_ref = $course_import_data->getTargetCrsRefId();
+            $this->logger->error("Template (ref_id=$template_ref) or target (ref_id=$target_ref) object does not have the type \"CRS\" or \"GRP\"");
             exit;
         }
 
         if (!$this->rbac_system->checkAccess('write', $course_import_data->getTargetCrsRefId())) {
-            $this->logger->error('No permissions for the course wizard');
+            $target_ref = $course_import_data->getTargetCrsRefId();
+            $this->logger->error('No permissions to execute crs import for following target ref id: ' . $target_ref);
             exit;
         } else {
             $controller = new CourseImportController();
@@ -262,10 +257,10 @@ class ilCourseWizardApiGUI
 
     public function postponeWizard(WizardFlowRepository $wizard_flow_repo)
     {
-        $target_ref_id = $this->request->getQueryParams()['ref_id'] ?? 0;
+        $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
 
         if (!$this->rbac_system->checkAccess('write', $target_ref_id)) {
-            ilUtil::sendFailure('No permissions for the course wizard', true);
+            $this->logger->error('No permissions for the course wizard with target_ref_id = ' . $target_ref_id);
             exit;
         } else {
             $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
@@ -294,26 +289,33 @@ class ilCourseWizardApiGUI
         }
 
         if (!$this->rbac_system->checkAccess('write', $target_crs_object->getRefId())) {
-            $this->logger->error('No permissions for the course wizard');
-            exit;
-        } else {
-            $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
-            $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
-
-            $this->checkSkipIntroFlagAndSetPreferences($user_pref_repo, $this->user);
-
-            $modal_factory = new Modal\WizardModalFactory(
-                $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
-                $this->plugin
-            );
-
-            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
-
-            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
-
-            echo $modal->getRenderedModalFromAsyncCall();
+            $ref_id = $target_crs_object->getRefId();
+            $this->logger->error('No permissions for the course wizard with target_ref_id = ' . $ref_id);
             exit;
         }
+
+        if (!$this->wizard_access_checker->checkIfObjectCouldDisplayWizard($target_crs_object->getRefId())) {
+            $ref_id = $target_crs_object->getRefId();
+            $this->logger->error("Object with ref_id=$ref_id does not fit the criteria to show the course wizard");
+            exit;
+        }
+
+        $page = $query_params['page'] ?? Modal\Page\StateMachine::INTRODUCTION_PAGE;
+        $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
+
+        $this->checkSkipIntroFlagAndSetPreferences($user_pref_repo, $this->user);
+
+        $modal_factory = new Modal\WizardModalFactory(
+            $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
+            $this->plugin
+        );
+
+        $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+        $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
+
+        echo $modal->getRenderedModalFromAsyncCall();
+        exit;
     }
 
     private function checkSkipIntroFlagAndSetPreferences(UserPreferencesRepository $user_pref_repo, ilObjUser $user)
@@ -345,33 +347,40 @@ class ilCourseWizardApiGUI
         }
 
         if (!$this->rbac_system->checkAccess('write', $target_crs_object->getRefId())) {
-            $this->logger->error('No permissions for the course wizard');
-            exit;
-        } else {
-            $user_preferences = $user_preferences_repo->getUserPreferences($this->user, true);
-
-            $page = $this->extractWizardPageFromQueryParams($query_params, false);
-            if ($page == null) {
-                $page = $user_preferences->wasSkipIntroductionsClicked()
-                    ? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE
-                    : Modal\Page\StateMachine::INTRODUCTION_PAGE;
-            }
-
-            $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
-
-            $modal_factory = new Modal\WizardModalFactory(
-                $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
-                $this->plugin
-            );
-
-            $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
-
-            $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
-
-            $output = $modal->getRenderedModal(true);
-            echo $output . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script><script src='./Services/CopyWizard/js/ilContainer.js'></script>";
+            $target_ref_id = $target_crs_object->getRefId();
+            $this->logger->error('No permissions for the course wizard with target_ref_id = ' . $target_ref_id);
             exit;
         }
+
+        if (!$this->wizard_access_checker->checkIfObjectCouldDisplayWizard($target_crs_object->getRefId())) {
+            $ref_id = $target_crs_object->getRefId();
+            $this->logger->error("Object with ref_id=$ref_id does not fit the criteria to show the course wizard");
+            exit;
+        }
+
+        $user_preferences = $user_preferences_repo->getUserPreferences($this->user, true);
+
+        $page = $this->extractWizardPageFromQueryParams($query_params, false);
+        if ($page == null) {
+            $page = $user_preferences->wasSkipIntroductionsClicked()
+                ? Modal\Page\StateMachine::TEMPLATE_SELECTION_PAGE
+                : Modal\Page\StateMachine::INTRODUCTION_PAGE;
+        }
+
+        $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
+
+        $modal_factory = new Modal\WizardModalFactory(
+            $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
+            $this->plugin
+        );
+
+        $title = $this->plugin->txt('wizard_title') . ' ' . $target_crs_object->getTitle();
+
+        $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
+
+        $output = $modal->getRenderedModal(true);
+        echo $output . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script><script src='./Services/CopyWizard/js/ilContainer.js'></script>";
+        exit;
     }
 
     public function asyncSaveForm()
