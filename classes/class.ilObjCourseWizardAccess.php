@@ -24,6 +24,8 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
         if ($a_user_id == "") {
             $a_user_id = $this->user->getId();
         }
+        
+        $a_obj_id = (int) $a_obj_id;
 
         switch ($a_cmd) {
             case ilObjCourseWizardGUI::CMD_SHOW_MAIN:
