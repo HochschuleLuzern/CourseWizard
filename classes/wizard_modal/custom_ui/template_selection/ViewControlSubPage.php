@@ -39,16 +39,16 @@ class ViewControlSubPage
 
     public function renderSubpageInTemplate(\ilTemplate $tpl, bool $is_hidden) : string
     {
+        $tpl->setCurrentBlock('sub_page_div');
+
+        $tpl->setVariable('SUBPAGE_DIV_ID', $this->unique_id);
+        $tpl->setVariable('HIDDEN', $is_hidden ? 'style="display: none;"' : '');
+        $radio_container_id = uniqid('xcwi');
+        $tpl->setVariable('RADIO_CONTAINER_ID', $radio_container_id);
+
         if (count($this->radio_options) > 0) {
 
-            $tpl->setCurrentBlock('sub_page_div');
-
-            $tpl->setVariable('SUBPAGE_DIV_ID', $this->unique_id);
-            $tpl->setVariable('HIDDEN', $is_hidden ? 'style="display: none;"' : '');
-            $radio_container_id = uniqid('xcwi');
-            $tpl->setVariable('RADIO_CONTAINER_ID', $radio_container_id);
-
-            if($this->filter_enabled) {
+            if ($this->filter_enabled) {
                 $searchbar_id = uniqid('xcwi');
                 $tpl->setCurrentBlock('filter_bar');
                 $tpl->setVariable('FILTER_CRS_INPUT_PLACEHOLDER', $this->plugin->txt('filter_crs_input_placeholder'));
