@@ -34,7 +34,7 @@ class CourseTemplateManager
         $status_manager = new CourseTemplateStatusManager(
             $this->crs_template_repo,
             new CourseTemplateRoleManagement(
-                ROLE_FOLDER_ID,
+                (int) ROLE_FOLDER_ID,
                 $global_importer_role_id
             )
         );

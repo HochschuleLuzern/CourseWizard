@@ -118,7 +118,7 @@ class ilObjCourseWizard extends ilObjectPlugin
     private function createConfObj(int $root_location_ref, int $role_id, bool $is_global)
     {
         $this->xcwi_conf_repository = new \CourseWizard\DB\TemplateContainerConfigurationRepository($this->db);
-        $conf = new \CourseWizard\DB\Models\TemplateContainerConfiguration($this->id, $root_location_ref, $role_id, $is_global);
+        $conf = new \CourseWizard\DB\Models\TemplateContainerConfiguration((int) $this->id, $root_location_ref, $role_id, $is_global);
         $this->xcwi_conf_repository->createTemplateContainerConfiguration($conf);
     }
 

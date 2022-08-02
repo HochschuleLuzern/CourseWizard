@@ -56,7 +56,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                 $scope = $form->getInput(self::FORM_CONTAINER_SCOPE);
 
                 if ($scope == self::FORM_LIMITED_SCOPE) {
-                    $root_location_ref = $form->getInput(self::FORM_ROOT_LOCATION_REF);
+                    $root_location_ref = (int) $form->getInput(self::FORM_ROOT_LOCATION_REF);
                     $is_global = false;
                 } elseif ($scope == self::FORM_GLOBAL_SCOPE) {
                     $root_location_ref = 1;
@@ -86,7 +86,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         return 'xcwi_' . $parent_title . '_template_admin';
     }
 
-    private function estimateRootLocationRefId()
+    private function estimateRootLocationRefId() : ?int
     {
         $params = $this->request->getQueryParams();
 
@@ -94,9 +94,9 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $given_ref_id = $params['ref_id'];
             $given_type = ilObject::_lookupType($given_ref_id, true);
             if ($given_type == 'cat') {
-                return $given_ref_id;
+                return (int) $given_ref_id;
             } elseif ($given_type == 'xcwi') {
-                return $this->tree->getParentId($given_ref_id);
+                return (int) $this->tree->getParentId($given_ref_id);
             } else {
                 return null;
             }
@@ -279,7 +279,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
                 $crs_template_repo,
                 new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement(
-                    ROLE_FOLDER_ID,
+                    (int) ROLE_FOLDER_ID,
                     $plugin_config->getCrsImporterRoleId()
                 )
             );

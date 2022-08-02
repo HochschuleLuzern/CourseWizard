@@ -2,6 +2,10 @@
 
 class ilObjCourseWizardAccess extends ilObjectPluginAccess
 {
+    private \CourseWizard\DB\TemplateContainerConfigurationRepository $config_repo;
+    private ilDBInterface $db;
+    private ilRbacReview $rbac;
+
     public function __construct()
     {
         global $DIC;
@@ -34,11 +38,11 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
             case ilObjCourseWizardTemplateManagementGUI::CMD_MANAGE_PROPOSALS:
             case ilObjCourseWizardTemplateManagementGUI::CMD_CHANGE_COURSE_STATUS:
 
-                $responsible_role_id = $this->getResponsibleRoleId($a_obj_id);
+                $responsible_role_id = $this->getResponsibleRoleId((int) $a_obj_id);
                 return $this->rbac->isAssigned($a_user_id, $responsible_role_id);
                 break;
         }
-        $configs = $this->config_repo->getContainerConfiguration($a_obj_id);
+        $configs = $this->config_repo->getContainerConfiguration((int)$a_obj_id);
 
         //$configs->getResponsibleRoleId();
 
