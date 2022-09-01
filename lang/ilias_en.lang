@@ -1,8 +1,12 @@
+/**
+/ English Language File for Course-Wizard-Plugin
+**/
+<!-- language file start -->
+FILTER_CRS_INPUT_DESC#:#-> Fuzzy Filter. The input "<b>HBX25</b>" finds for example "<b>H</b>SLU.<b>B</b>A_<b>X</b>YZ.H<b>25</b>"
+FILTER_CRS_INPUT_PLACEHOLDER#:#Filter Courses ...
 action#:#Action
+aria_tpl_selection_vc#:#Change template container
 author#:#Author
-obj_xcwi#:#Course wizard
-objs_xcwi#:#Course templates
-
 btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 btn_back#:#Back
 btn_close_modal#:#Close Modal
@@ -13,18 +17,15 @@ btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
 btn_quit_wizard#:#Quit Wizard
 btn_reactivate_wizard#:#Open Wizard
-conf_container_table_title#:#Overview of Available Template Containers Objects
 cancel#:#cancel
 change_status#:#Change Status
-configure#:#Configure
+conf_container_table_title#:#Overview of Available Template Containers Objects
 configuration_saved#:#Configuration saved
+configure#:#Configure
 create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
 create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
-
-aria_tpl_selection_vc#:#Change template container
-
 form_crs_importer_role_input#:#Importer Role ID
 form_crs_importer_role_input_info#:#Role ID of existing global role for users, which should be able to use the "Course Wizard" in their course
 form_crs_importer_role_title#:#Title of given Role
@@ -39,27 +40,25 @@ form_global#:#Global
 form_global_info#:#As global defined Course Template Containers are available at all locations in the Course Wizard
 form_limited_scope#:#Limited Scope
 form_limited_scope_info#:#Course Templates will only be shown in the Course Wizard if it is in the specified location
-form_title_container_config#:#Configuration of Course Template Container: 
-form_root_location_ref#:#Ref ID of Root Location
-form_root_location_ref_info#:#This reference ID determines the scope, on which the course templates well be shown in the Wizard (usually the category in which this container is in will be the root location). Is not used for global Course Template Containers
 form_role_title#:#Title for Container Admin Role
 form_role_title_info#:#The admins of this container manage the proposed Course Templates
+form_root_location_ref#:#Ref ID of Root Location
+form_root_location_ref_info#:#This reference ID determines the scope, on which the course templates well be shown in the Wizard (usually the category in which this container is in will be the root location). Is not used for global Course Template Containers
 form_skip_introduction#:#Skip Introductions for next Wizards
 form_skip_introduction_info#:#If selected, the introduction page will not be shown for the next 6 months
+form_title_container_config#:#Configuration of Course Template Container: 
 form_xcwi_container_scope#:#Scope
 form_xcwi_container_scope_info#:#Define the scope for this Course Template Container
-
-FILTER_CRS_INPUT_PLACEHOLDER#:#Filter Courses ...
-FILTER_CRS_INPUT_DESC#:#-> Fuzzy Filter. The input "<b>HBX25</b>" finds for example "<b>H</b>SLU.<b>B</b>A_<b>X</b>YZ.H<b>25</b>"
-
 global_available#:#Global Available
-import_content_page_loading_title#:#Content Page
 import_content_page_loading_content#:#Copying Content Page from template
-import_objects_loading_title#:#ILIAS Objects
+import_content_page_loading_title#:#Content Page
 import_object_loading_content#:#Importing ILIAS Objects from Template
+import_objects_loading_title#:#ILIAS Objects
 invalid_form_input#:#Invalid from input
 manage_proposals#:#Manage Proposals
 no#:#No
+obj_xcwi#:#Course wizard
+objs_xcwi#:#Course templates
 overview#:#Overview
 overview_approved_templates#:#Approved
 overview_crs_templates#:#Course Templates Overview
@@ -70,45 +69,36 @@ propose_template#:#Propose Template
 propose_template_text#:#Do you want to propose following template:
 quantity_admin_role_members#:#Quantity of Admin Role Members
 quantity_crs_templates#:#Quantity of Crs-Templates
-
 role_description_container_admin#:#Admin role for course template container with reference id:
 role_description_crs_template_editor#:#Admin role for editors of course template with reference id:
 role_title_container_admin#:#Course Template Container Admin
 role_title_crs_template_editor#:#Course Template Editor
-
 root_location_of_wizard#:#Root Location of Wizard
 save#:#Save
 settings#:#Settings
-
-sort_object#:#Sort of course objects
+sort_by_date#:#By Creation Date
+sort_by_manually#:#Manually
 sort_by_template#:#Like in the Selected Template
 sort_by_title#:#By Object Title
-sort_by_manually#:#Manually
-sort_by_date#:#By Creation Date
-
+sort_object#:#Sort of course objects
 status#:#Status
-status_draft#:#Draft
-status_pending#:#Pending
-status_change_requested#:#Change Requested
-status_declined#:#Declined
 status_approved#:#Approved
+status_change_requested#:#Change Requested
 status_crs_tpl_changed_to#:#Status dof course template changed to:
+status_declined#:#Declined
+status_draft#:#Draft
 status_invalid_status_given#:#Invalid status given:
-
+status_pending#:#Pending
 step_content_inheritance#:#Content Inheritance
 step_introduction#:#Introduction
 step_settings#:#Settings
 step_template_selection#:#Template Selection
-
 template_container#:#Template Container
-template_title#:#Title of the new Template
 template_description#:#Description of the new Template
+template_title#:#Title of the new Template
 tpl_selection_my_courses#:#My Courses and Groups
-
 view_course#:#View Course
 view_course_template#:#View Course Template
-
-wizard_title#:#Course Wizard for the Course:
 wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
 wizard_dismissed_info#:#Course Wizard successfully dismissed for this course
 wizard_introduction_text_p1#:#This is just a placeholder for the
@@ -118,15 +108,13 @@ wizard_introduction_text_p4#:#<b>Step 3</b>: Based on the selection in the 2nd s
 wizard_introduction_text_p5#:#<b>Step 4</b>: The last page offers some more settings, which will be applied to your course. With a click on "Execute import" the selected template will be imported and applied to the current course.
 wizard_introduction_text_p6#:#<b>Arrange Course without Assistance</b>: If you want to set up the course without help, click the button below "Set up without wizard".
 wizard_introduction_text_p7#:#<b>Close Modal</b>: If you click on the button "Close Modal", the cross in the upper right corner or somewhere outside of the modal, the window of the wizard will be closed. Use this to postpone the wizard to execute it on another day.
-
 wizard_postponed_info#:#By closing the Course Wizard, you have postponed it for the moment. Click on the button "Open Wizard" to show it again. If you want to arrange your course without assistance, open the Wizard and click on "Arrange Course Unassisted" or create an ILIAS-Object in this course.
 wizard_quit_text#:#Are you sure that you want to quit the course wizard? After clicking "Quit Course Wizard" there will be no way back.
 wizard_settings_text#:#Choose some additional settings that you want to apply to your course
-wizard_template_selection_text#:#Select the template on which you want to base your course
 wizard_template_selection_empty#:#There are currently no templates available in the selected department
-
+wizard_template_selection_text#:#Select the template on which you want to base your course
+wizard_title#:#Course Wizard for the Course:
 xcwi_add#:#Create Course Template Container
 xcwi_duplicate#:#Copy existing Course Template Container
 xcwi_new#:#Create new Course Template Container
-
 yes#:#Yes

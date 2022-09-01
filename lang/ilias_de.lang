@@ -1,8 +1,10 @@
+/**
+/ German Language File for Course-Wizard-Plugin
+**/
+<!-- language file start -->
 action#:#Aktion
+aria_tpl_selection_vc#:#Wechsle Vorlagen Container
 author#:#Autor
-obj_xcwi#:#Kurswizard
-objs_xcwi#:#Kursvorlagen
-
 btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
 btn_back#:#Zurück
 btn_close_modal#:#Modal schliessen
@@ -13,18 +15,17 @@ btn_postpone#:#Verschieben
 btn_propose_crs_template#:#Kursvorlage vorschlagen
 btn_quit_wizard#:#Wizard beenden
 btn_reactivate_wizard#:#Wizard öffnen
-conf_container_table_title#:#Übersicht der verfügbaren Kursvorlage Container Objekte
 cancel#:#Abbrechen
 change_status#:#Status Ändern
-configure#:#Konfigurieren
+conf_container_table_title#:#Übersicht der verfügbaren Kursvorlage Container Objekte
 configuration_saved#:#Einstellungen gespeichert
+configure#:#Konfigurieren
 create_crs_template_draft#:#Entwurf einer Kursvorlage erstellen
 create_crs_template_form#:#Neue Kursvorlage erstellen
 create_crs_template_success#:#Kursvorlage wurde erstellt!
 create_template#:#Vorlage erstellen
-
-aria_tpl_selection_vc#:#Wechsle Vorlagen Container
-
+filter_crs_input_desc#:#-> Ungefährer Filter. Die Eingabe "<strong>HBX25</strong>" findet z.B.: "<strong>H</strong>SLU.<strong>B</strong>A_<strong>X</strong>YZ.H<strong>25</strong>03"
+filter_crs_input_placeholder#:#Kurse Filtern
 form_crs_importer_role_input#:#Importerrolle ID
 form_crs_importer_role_input_info#:#Rollen ID einer existierenden globalen Rolle für ILIAS benutzende, welche den "Course Wizard" bedienen dürfen
 form_crs_importer_role_title#:#Titel der angegebenen Rolle
@@ -39,27 +40,25 @@ form_global#:#Global
 form_global_info#:#Als global definierte Kursvorlagen Container werden für den Wizard im gesamten Magazin angezeigt
 form_limited_scope#:#Limitierter Gültigkeitsbereich
 form_limited_scope_info#:#Kursvorlagen werden im Course Wizard nur innerhalb des angegebenen Gültigkeitsbereichs angezeigt
-form_title_container_config#:#Konfigurieren Sie einen Kursvorlagen Container:
-form_root_location_ref#:#Ref ID der Stammverzeichnisses
-form_root_location_ref_info#:#Diese "Reference ID" gibt an, in welchem der Kursvorlagen Container mit seinen Vorlagen angezeigt wird. Alle Kurse, welche im Magazinbaum unterhalb der angegebenen "Referenz ID" liegen, werden diesen Kursvorlagen Container im Wizard ersichtlich haben. Bei als "Global" definierten Containern spielt diser Wert keine Rolle.
 form_role_title#:#Bezeichnung für Container Adminrolle
 form_role_title_info#:#Die Personen, welche in dieses Rolle eingetragen werde, Verwalten die vorgeschlagenen Kursvorlagen
+form_root_location_ref#:#Ref ID der Stammverzeichnisses
+form_root_location_ref_info#:#Diese "Reference ID" gibt an, in welchem der Kursvorlagen Container mit seinen Vorlagen angezeigt wird. Alle Kurse, welche im Magazinbaum unterhalb der angegebenen "Referenz ID" liegen, werden diesen Kursvorlagen Container im Wizard ersichtlich haben. Bei als "Global" definierten Containern spielt diser Wert keine Rolle.
 form_skip_introduction#:#Einleitung für die nächsten Male Überspringen
 form_skip_introduction_info#:#Wenn ausgewählt, öffnet der Wizard für die nächsten Monate direkt auf der "Template auswählen" Seite
+form_title_container_config#:#Konfigurieren Sie einen Kursvorlagen Container:
 form_xcwi_container_scope#:#Gültigkeitsbereich
 form_xcwi_container_scope_info#:#Definiere den Gültigkeitsbereich dieses Kursvorlagen Containers
-
-filter_crs_input_placeholder#:#Kurse Filtern
-filter_crs_input_desc#:#-> Ungefährer Filter. Die Eingabe "<strong>HBX25</strong>" findet z.B.: "<strong>H</strong>SLU.<strong>B</strong>A_<strong>X</strong>YZ.H<strong>25</strong>03"
-
 global_available#:#Global verfügbar
-import_content_page_loading_title#:#Inhaltsseite
 import_content_page_loading_content#:#Kopiere Inhaltsseite von Vorlage...
-import_objects_loading_title#:#ILIAS Objekte
+import_content_page_loading_title#:#Inhaltsseite
 import_object_loading_content#:#Importiere ILIAS Objekte von Vorlage...
+import_objects_loading_title#:#ILIAS Objekte
 invalid_form_input#:#Ungültige Eingabe
 manage_proposals#:#Vorschläge verwalten
 no#:#Nein
+obj_xcwi#:#Kurswizard
+objs_xcwi#:#Kursvorlagen
 overview#:#Übersicht
 overview_approved_templates#:#Bestätigte
 overview_crs_templates#:#Kursvorlagen Übersicht
@@ -70,45 +69,36 @@ propose_template#:#Vorlage Vorschlagen
 propose_template_text#:#Möchten Sie den folgenden Kurs als Vorlage vorschlagen:
 quantity_admin_role_members#:#Anzahl Mitglieder in der Adminrolle
 quantity_crs_templates#:#Anzahl Kursvorlagen
-
 role_description_container_admin#:#Adminrolle für Kursvorlagen mit der Referenz ID:
 role_description_crs_template_editor#:#Adminrolle für Editoren für Kursvorlagen mit der Referenz ID:
 role_title_container_admin#:#Kursvorlagen Container Admin
 role_title_crs_template_editor#:#Kursvorlagen Editor
-
 root_location_of_wizard#:#Stammverzeichniss für Wizard
 save#:#Speichern
 settings#:#Einstellungen
-
-sort_object#:#Sortierung der Kursobjekte
+sort_by_date#:#Nach Erstellungsdatum
+sort_by_manually#:#Manuell
 sort_by_template#:#Wie im ausgewählten Template
 sort_by_title#:#Nach Objekttitel
-sort_by_manually#:#Manuell
-sort_by_date#:#Nach Erstellungsdatum
-
+sort_object#:#Sortierung der Kursobjekte
 status#:#Status
-status_draft#:#Entwurf
-status_pending#:#Ausstehend
-status_change_requested#:#Änderung Notwendig
-status_declined#:#Abgelehnt
 status_approved#:#Akzeptiert
+status_change_requested#:#Änderung Notwendig
 status_crs_tpl_changed_to#:#Status der Kursvorlage geändert zu:
+status_declined#:#Abgelehnt
+status_draft#:#Entwurf
 status_invalid_status_given#:#Ungültiger Status gegeben:
-
+status_pending#:#Ausstehend
 step_content_inheritance#:#Inhalte Vererben
 step_introduction#:#Einleitung
 step_settings#:#Einstellungen
 step_template_selection#:#Vorlage Auswählen
-
 template_container#:#Vorlagen Container
-template_title#:#Vorlagen Titel
 template_description#:#Vorlagen Beschreibung
+template_title#:#Vorlagen Titel
 tpl_selection_my_courses#:#Meine Kurse und Gruppen
-
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen
-
-wizard_title#:#Kurs Wizard für den Kurs:
 wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
 wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs mittels einer Vorlage einzurichten.
@@ -118,15 +108,13 @@ wizard_introduction_text_p4#:#<b>Schritt 3</b>: Aufgrund der Auswahl im 2. Schri
 wizard_introduction_text_p5#:#<b>Schritt 4</b>: Die letzte Seite bietet noch einige Einstellungsmöglichkeiten an, welche auf Ihren Kurs angewendet werden. Mit einem Klick auf "Import ausführen" wird die ausgewähle Vorlage importiert und auf den jetzigen Kurs angewendet.
 wizard_introduction_text_p6#:#<b>Kurs ohne Hilfe einrichten</b>: Möchten Sie den Kurs ohne Hilfe einrichten, so klicken Sie auf den Knopf unten "Ohne Wizard einrichten".
 wizard_introduction_text_p7#:#<b>Modal schliessen</b>: Wenn Sie auf "Modal schliessen", auf das Kreuz oben rechts oder irgendwo neben das Modal klicken, so schliesst sich dieses Fenster wieder. So können Sie den Wizard unterbrechen um ihn zu einem späteren Zeitpunkt auszuführen.
-
 wizard_postponed_info#:#Der Wizard wurde geschlossen. Klicken Sie unten auf "Wizard öffnen" um ihn wieder erneut anzuzeigen. Wenn Sie den Kurs ohne Hilfe einrichten möchten, öffnen Sie den Wizard und klicken Sie unten auf "Ohne Wizard einrichten" oder erstellen Sie ein ILIAS-Objekt in diesem Kurs.
 wizard_quit_text#:#Sind Sie sicher, dass Sie den Kurs ohne Hilfe einrichten möchten? Wenn Sie auf "Wizard beenden" klicken, wird der Wizard für diesen Kurs deaktiviert.
 wizard_settings_text#:#Wählen Sie zusätzliche Einstellungen, welche Sie auf diesen Kurs anwenden möchten
-wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der Ihr Kurs basieren soll
 wizard_template_selection_empty#:#Im ausgewählten Departement ist zurzeit noch keine Kursvorlage vorhanden.
-
+wizard_template_selection_text#:#Wählen Sie eine Kursvorlage aus, auf der Ihr Kurs basieren soll
+wizard_title#:#Kurs Wizard für den Kurs:
 xcwi_add#:#Neuen Kursvorlage Container erstellen
 xcwi_duplicate#:#Kopiere bereits existierenden Kursvorlage Container
 xcwi_new#:#Kursvorlage Container erstellen
-
 yes#:#Ja
