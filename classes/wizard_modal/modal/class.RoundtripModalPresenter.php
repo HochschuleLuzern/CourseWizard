@@ -66,7 +66,7 @@ class RoundtripModalPresenter implements ModalPresenter
         $json_config = $this->presenter->getJSConfigsAsString($replace_signal);
         $this->modal_template->setVariable('STEP_CONFIG_JSON', $json_config);
 
-        if($this->presenter instanceof LoadingScreenForModalPage) {
+        if ($this->presenter instanceof LoadingScreenForModalPage) {
             $this->modal_template->setCurrentBlock('loading_screen');
             $this->modal_template->setVariable('WIZARD_LOADING_CONTAINER_ID', $this->presenter->getHtmlWizardLoadingContainerDivId());
             $this->modal_template->setVariable('LOADING_SCREEN', $this->presenter->getLoadingScreen()->getAsHTMLDiv());

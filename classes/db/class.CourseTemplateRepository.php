@@ -34,7 +34,7 @@ class CourseTemplateRepository
     {
         $template_id = (int) $this->db->nextId(self::TABLE_NAME);
 
-        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, date('Y-m-d H:i:s') ,$template_container_ref_id, $editor_role_id);
+        $model = new CourseTemplate($template_id, $crs_ref_id, $crs_obj_id, $template_type, $status, $creator_user_id, date('Y-m-d H:i:s'), $template_container_ref_id, $editor_role_id);
 
         $this->db->insert(self::TABLE_NAME, array(
             self::COL_TEMPLATE_ID => array('integer', $model->getTemplateId()),

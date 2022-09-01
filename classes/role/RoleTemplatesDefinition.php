@@ -51,7 +51,7 @@ class RoleTemplatesDefinition
         $this->conf_key = $conf_key;
         $this->is_protected = $is_protected;
 
-        if(count($default_permissions) == 0) {
+        if (count($default_permissions) == 0) {
             $this->default_permissions = array(
                 'visible_read' => array(),
                 'write' => array(),

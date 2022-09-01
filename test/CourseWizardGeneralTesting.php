@@ -8,7 +8,8 @@ class CourseWizardGeneralTesting extends TestCase
      * @test
      * @small
      */
-    public function testDICElementReplacement() {
+    public function testDICElementReplacement()
+    {
         global $DIC;
         $ui_factory_mock = $this->createMock(\ILIAS\UI\Factory::class);
         $ui_factory_mock->expects($this->atLeastOnce())->method('legacy')->willReturn('');
@@ -22,7 +23,8 @@ class CourseWizardGeneralTesting extends TestCase
      * @test
      * @small
      */
-    public function testPrivateMethods(){
+    public function testPrivateMethods()
+    {
         //$this->createMock()
     }
 }

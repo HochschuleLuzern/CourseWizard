@@ -50,7 +50,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
             if ($screen_context_stack->current()->hasReferenceId()) {
                 $ref_id = $screen_context_stack->current()->getReferenceId()->toInt();
 
-                if(!isset($this->wizard_acces_checker) || is_null($this->wizard_acces_checker)) {
+                if (!isset($this->wizard_acces_checker) || is_null($this->wizard_acces_checker)) {
                     $this->wizard_acces_checker = new ilWizardAccessChecker();
                 }
 

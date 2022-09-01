@@ -77,7 +77,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             }
 
             $current_depth = $node['depth'] - $root['depth'];
-            if($this->try_to_default_omit_subgroups && !$first){
+            if ($this->try_to_default_omit_subgroups && !$first) {
 
                 // Is object direct child of course
                 // and is it of the type group
@@ -87,8 +87,8 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
                     && (substr($node['title'], 0, strlen($node['title']) - 2) == $crs_title)
                 ) {
                     $is_in_subgroup = true;
-                    //continue;
-                } else if ($is_in_subgroup && $current_depth > 1) {
+                //continue;
+                } elseif ($is_in_subgroup && $current_depth > 1) {
                     //continue;
                 } else {
                     $is_in_subgroup = false;
@@ -162,7 +162,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $this->tpl->setVariable('NAME_COPY', 'cp_options[' . $s['ref_id'] . '][type]');
             $this->tpl->setVariable('VALUE_COPY', \ilCopyWizardOptions::COPY_WIZARD_COPY);
             $this->tpl->setVariable('ID_COPY', $s['depth'] . '_' . $s['type'] . '_' . $s['ref_id'] . '_copy');
-            if(!isset($s['is_in_subgroup']) || (!$s['is_in_subgroup'])) {
+            if (!isset($s['is_in_subgroup']) || (!$s['is_in_subgroup'])) {
                 $this->tpl->setVariable('COPY_CHECKED', 'checked="checked"');
             }
             $this->tpl->parseCurrentBlock();

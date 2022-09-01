@@ -47,7 +47,6 @@ class ViewControlSubPage
         $tpl->setVariable('RADIO_CONTAINER_ID', $radio_container_id);
 
         if (count($this->radio_options) > 0) {
-
             if ($this->filter_enabled) {
                 $searchbar_id = uniqid('xcwi');
                 $tpl->setCurrentBlock('filter_bar');

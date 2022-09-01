@@ -24,7 +24,7 @@ class IntroductionPage extends BaseModalPagePresenter
     public function getStepContent() : string
     {
         $introductions = '';
-        for($i = 2; $i <= self::NUMBER_OF_INTRODUCTION_PARAGRAPHS; $i++) {
+        for ($i = 2; $i <= self::NUMBER_OF_INTRODUCTION_PARAGRAPHS; $i++) {
             $introductions .= '<p>' . $this->plugin->txt("wizard_introduction_text_p$i") . '</p>';
         }
 

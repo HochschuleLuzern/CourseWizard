@@ -31,8 +31,7 @@ class CourseTemplateRoleManagement
     private function setPermissionsForRole(int $target_role_id, int $role_template_id, int $crs_template_ref)
     {
         // If not done yet -> set role to use "Local Policy"
-        if(!$this->rbac_review->isRoleAssignedToObject($target_role_id, $crs_template_ref))
-        {
+        if (!$this->rbac_review->isRoleAssignedToObject($target_role_id, $crs_template_ref)) {
             $this->rbac_admin->assignRoleToFolder(
                 $target_role_id,
                 $crs_template_ref,

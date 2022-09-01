@@ -25,18 +25,18 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
     {
         global $DIC;
 
-        $this->state_machine                             = $state_machine;
-        $this->ui_factory                                = $ui_factory;
-        $this->js_creator                                = new JavaScriptPageConfig($this->state_machine);
-        $this->plugin                                    = new \ilCourseWizardPlugin();
+        $this->state_machine = $state_machine;
+        $this->ui_factory = $ui_factory;
+        $this->js_creator = new JavaScriptPageConfig($this->state_machine);
+        $this->plugin = new \ilCourseWizardPlugin();
 
         $ref_id = $DIC->http()->request()->getQueryParams()['ref_id'];
         $DIC->ctrl()->setParameterByClass(\ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
         $this->modal_render_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_MODAL);
         $this->save_form_data_base_url = $DIC->ctrl()->getLinkTargetByClass(\ilCourseWizardApiGUI::class, \ilCourseWizardApiGUI::CMD_ASYNC_SAVE_FORM);
 
-        $this->html_wizard_div_id                        = uniqid('xcwi_id_');
-        $this->html_wizard_step_container_div_id         = uniqid('xcwi_id_');
+        $this->html_wizard_div_id = uniqid('xcwi_id_');
+        $this->html_wizard_step_container_div_id = uniqid('xcwi_id_');
         $this->html_wizard_step_content_container_div_id = uniqid('xcwi_id_');
     }
 
@@ -64,10 +64,10 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
                 ->button()
                 ->standard($this->plugin->txt('btn_back'), '#')
                 ->withOnLoadCode(
-                function ($id) use ($js_code, $replace_signal) {
-                    return '$(' . $id . ').click(' . $js_code . ');';
-                }
-            );
+                    function ($id) use ($js_code, $replace_signal) {
+                        return '$(' . $id . ').click(' . $js_code . ');';
+                    }
+                );
         }
     }
 
@@ -92,10 +92,10 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
                 ->button()
                 ->primary($this->plugin->txt('btn_execute_import'), '#')
                 ->withOnLoadCode(
-                function ($id) use ($js_code, $replace_signal) {
-                    return '$(' . $id . ').click(' . $js_code . ');';
-                }
-            );
+                    function ($id) use ($js_code, $replace_signal) {
+                        return '$(' . $id . ').click(' . $js_code . ');';
+                    }
+                );
         }
     }
 
@@ -170,7 +170,7 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
             $this->getHtmlWizardStepContentContainerDivId()
         );
 
-        if($this instanceof LoadingScreenForModalPage) {
+        if ($this instanceof LoadingScreenForModalPage) {
             $this->js_creator->addCustomConfigElement(JavaScriptPageConfig::JS_HTML_WIZARD_LOADING_CONTAINER_DIV_ID, $this->getHtmlWizardLoadingContainerDivId());
             $this->js_creator->addCustomConfigElement(JavaScriptPageConfig::JS_HTML_WIZARD_COPY_OBJECTS_LOADING_DIV_ID, $this->getHtmlWizardLoadingContainerDivId());
         }

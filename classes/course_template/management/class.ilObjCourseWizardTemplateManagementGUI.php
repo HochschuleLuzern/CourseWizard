@@ -80,7 +80,6 @@ class ilObjCourseWizardTemplateManagementGUI
                                 CourseTemplate::STATUS_DECLINED);
 
         if (!in_array($status_code, $allowed_status)) {
-
             try {
                 $code_as_string = CourseTemplate::statusCodeToLanguageVariable($status_code);
             } catch (InvalidArgumentException $e) {

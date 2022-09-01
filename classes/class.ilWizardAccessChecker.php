@@ -16,8 +16,7 @@ class ilWizardAccessChecker
         ilRbacSystem $rbac_system = null,
         ServerRequestInterface $request = null,
         ilCtrl $ctrl = null
-    )
-    {
+    ) {
         global $DIC;
 
         $this->tree = $tree ?? $DIC->repositoryTree();
@@ -31,7 +30,7 @@ class ilWizardAccessChecker
     {
         $parent_type = ilObject::_lookupType($parent_ref_id, true);
 
-        if(($obj_type == 'crs' && $parent_type == 'cat') || ($obj_type == 'grp' && $parent_type == 'crs')) {
+        if (($obj_type == 'crs' && $parent_type == 'cat') || ($obj_type == 'grp' && $parent_type == 'crs')) {
             return true;
         } else {
             return false;
@@ -59,12 +58,12 @@ class ilWizardAccessChecker
 
     private function checkIfObjectHasOnlySubgroupsWithExtendedTitle(string $parent_obj_title, array $child_ref_ids)
     {
-        foreach($child_ref_ids as $child_node) {
+        foreach ($child_ref_ids as $child_node) {
             if ($child_node['type'] != 'grp') {
                 return false;
-            } else if (count($this->tree->getChilds($child_node['ref_id'])) > 0) {
+            } elseif (count($this->tree->getChilds($child_node['ref_id'])) > 0) {
                 return false;
-            } else if (!$this->isSubGroupTitleOf($parent_obj_title, $child_node['title'])) {
+            } elseif (!$this->isSubGroupTitleOf($parent_obj_title, $child_node['title'])) {
                 return false;
             }
         }
@@ -75,24 +74,23 @@ class ilWizardAccessChecker
     public function objectIsEmptyOrHasOnlyGroupsAsChildren(int $ref_id) : bool
     {
         $child_objects = $this->tree->getChilds($ref_id);
-        if(count($child_objects) <= 0) {
+        if (count($child_objects) <= 0) {
             return true;
         }
 
-        foreach($child_objects as $child_node) {
+        foreach ($child_objects as $child_node) {
             if ($child_node['type'] != 'grp') {
                 return false;
             }
         }
 
         return true;
-
     }
 
     public function objectHasOnlySubgroupsWithExtendedTitleAndIsNotEmpty(int $ref_id) : bool
     {
         $child_objects = $this->tree->getChilds($ref_id);
-        if(count($child_objects) <= 0) {
+        if (count($child_objects) <= 0) {
             return false;
         }
 

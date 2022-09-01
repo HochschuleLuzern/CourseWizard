@@ -86,7 +86,7 @@ class ilCourseWizardApiGUI
                         $db = $DIC->database();
                         $wizard_flow_repo = new WizardFlowRepository($db, $this->user);
                         $course_template_repo = new CourseTemplateRepository($db);
-                        $user_pref_repo   = new UserPreferencesRepository($db);
+                        $user_pref_repo = new UserPreferencesRepository($db);
 
                         $this->asyncBaseModal($wizard_flow_repo, $course_template_repo, $user_pref_repo);
                         break;
@@ -96,7 +96,7 @@ class ilCourseWizardApiGUI
                         $db = $DIC->database();
                         $wizard_flow_repo = new WizardFlowRepository($db, $this->user);
                         $course_template_repo = new CourseTemplateRepository($db);
-                        $user_pref_repo   = new UserPreferencesRepository($db);
+                        $user_pref_repo = new UserPreferencesRepository($db);
 
                         $this->asyncModal($wizard_flow_repo, $course_template_repo, $user_pref_repo);
                         break;
@@ -166,11 +166,9 @@ class ilCourseWizardApiGUI
         if (!$this->rbac_system->checkAccess('write', $target_ref_id)) {
             $this->logger->error('No permissions to execute crs import for following target ref id: ' . $target_ref_id);
         } else {
-
             $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
             if ($wizard_flow->getCurrentStatus() == WizardFlow::STATUS_IN_PROGRESS ||
                 $wizard_flow->getCurrentStatus() == WizardFlow::STATUS_POSTPONED) {
-
                 $wizard_flow = $wizard_flow->withQuitedStatus();
                 $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
 
@@ -211,10 +209,10 @@ class ilCourseWizardApiGUI
         $factory = new CourseImportObjectFactory($obj, $template_repo);
         $course_import_data = $factory->createCourseImportDataObject();
 
-        $template_obj_type  = ilObject::_lookupType($course_import_data->getTemplateCrsRefId(), true);
+        $template_obj_type = ilObject::_lookupType($course_import_data->getTemplateCrsRefId(), true);
         $target_obj_type = ilObject::_lookupType($course_import_data->getTargetCrsRefId(), true);
 
-        if(
+        if (
             ($template_obj_type != 'crs' && $template_obj_type != 'grp')
             ||
             ($target_obj_type != 'crs' && $target_obj_type != 'grp')
@@ -263,7 +261,7 @@ class ilCourseWizardApiGUI
             $this->logger->error('No permissions for the course wizard with target_ref_id = ' . $target_ref_id);
             exit;
         } else {
-            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
+            $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
             if ($wizard_flow->getCurrentStatus() == WizardFlow::STATUS_IN_PROGRESS) {
                 $wizard_flow = $wizard_flow->withPostponedStatus();
                 $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
@@ -276,8 +274,8 @@ class ilCourseWizardApiGUI
     public function asyncModal(
         WizardFlowRepository $wizard_flow_repo,
         CourseTemplateRepository $course_template_repo,
-        UserPreferencesRepository $user_pref_repo)
-    {
+        UserPreferencesRepository $user_pref_repo
+    ) {
         $query_params = $this->request->getQueryParams();
 
         try {
@@ -306,7 +304,12 @@ class ilCourseWizardApiGUI
         $this->checkSkipIntroFlagAndSetPreferences($user_pref_repo, $this->user);
 
         $modal_factory = new Modal\WizardModalFactory(
-            $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
+            $target_crs_object,
+            $course_template_repo,
+            $this->ctrl,
+            $this->request,
+            $this->ui_factory,
+            $this->ui_renderer,
             $this->plugin
         );
 
@@ -334,13 +337,13 @@ class ilCourseWizardApiGUI
     public function asyncBaseModal(
         WizardFlowRepository $wizard_flow_repo,
         CourseTemplateRepository $course_template_repo,
-        UserPreferencesRepository $user_preferences_repo)
-    {
+        UserPreferencesRepository $user_preferences_repo
+    ) {
         $query_params = $this->request->getQueryParams();
 
         try {
             $target_crs_object = $this->extractCrsObjFromQueryParams($query_params);
-            $wizard_flow      = $wizard_flow_repo->getWizardFlowForCrs($target_crs_object->getRefId());
+            $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_crs_object->getRefId());
         } catch (Exception $exception) {
             $this->logger->error('Problem with given ref_id (either no ID given or object is no course)');
             exit;
@@ -370,7 +373,12 @@ class ilCourseWizardApiGUI
         $state_machine = new Modal\Page\StateMachine($page, $this->ctrl);
 
         $modal_factory = new Modal\WizardModalFactory(
-            $target_crs_object, $course_template_repo, $this->ctrl, $this->request, $this->ui_factory, $this->ui_renderer,
+            $target_crs_object,
+            $course_template_repo,
+            $this->ctrl,
+            $this->request,
+            $this->ui_factory,
+            $this->ui_renderer,
             $this->plugin
         );
 
@@ -385,22 +393,21 @@ class ilCourseWizardApiGUI
 
     public function asyncSaveForm()
     {
-
     }
 
     private function extractCrsObjFromQueryParams(array $query_params) : ilObject
     {
-        $target_ref_id = (int)$query_params['ref_id'] ?? 0;
+        $target_ref_id = (int) $query_params['ref_id'] ?? 0;
 
-        if($target_ref_id == 0) {
+        if ($target_ref_id == 0) {
             throw new InvalidArgumentException('No valid ref_id given in query_params');
         }
 
         $type = ilObject::_lookupType($target_ref_id, true);
 
-        if($type == 'crs') {
+        if ($type == 'crs') {
             return new ilObjCourse($target_ref_id, true);
-        } else if ($type == 'grp') {
+        } elseif ($type == 'grp') {
             return new ilObjGroup($target_ref_id, true);
         }
 
@@ -409,9 +416,9 @@ class ilCourseWizardApiGUI
 
     private function extractWizardPageFromQueryParams(array $query_params, bool $throw_exception_on_null = true) : ?string
     {
-        if(isset($query_params['page']) && $query_params['page']) {
+        if (isset($query_params['page']) && $query_params['page']) {
             return $query_params['page'];
-        } else if($throw_exception_on_null) {
+        } elseif ($throw_exception_on_null) {
             throw new InvalidArgumentException('No page given in query_params');
         } else {
             return null;

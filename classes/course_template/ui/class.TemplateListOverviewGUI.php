@@ -97,5 +97,5 @@ abstract class TemplateListOverviewGUI
         return $this->additional_ui_elements;
     }
 
-    protected abstract function getCommandButtons(CourseTemplate $course_template) : array;
+    abstract protected function getCommandButtons(CourseTemplate $course_template) : array;
 }

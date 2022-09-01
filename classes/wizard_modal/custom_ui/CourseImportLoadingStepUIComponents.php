@@ -36,10 +36,10 @@ class CourseImportLoadingStepUIComponents
 
     public function getRenderedStatusIcon() : string
     {
-        if(is_null($this->rendered_status_icon)) {
+        if (is_null($this->rendered_status_icon)) {
             global $DIC;
 
-            if(!is_null($this->status_icon)) {
+            if (!is_null($this->status_icon)) {
                 $this->rendered_status_icon = $DIC->ui()->renderer()->render($this->status_icon);
             } else {
                 return '';
@@ -57,11 +57,13 @@ class CourseImportLoadingStepUIComponents
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_content_page_loading_title'),
                 $plugin->txt('import_content_page_loading_content'),
-                $loading_icon),
+                $loading_icon
+            ),
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_objects_loading_title'),
                 $plugin->txt('import_object_loading_content'),
-                $loading_icon)
+                $loading_icon
+            )
         );
     }
 
@@ -74,11 +76,12 @@ class CourseImportLoadingStepUIComponents
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_content_page_loading_title'),
                 $plugin->txt('import_content_page_loading_content'),
-                $success_icon),
+                $success_icon
+            ),
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_objects_loading_title'),
-                $progress->getHTML())
+                $progress->getHTML()
+            )
         );
-
     }
 }

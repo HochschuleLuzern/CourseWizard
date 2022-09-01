@@ -66,7 +66,7 @@ class CourseTemplateContainerTableDataProvider
             $this->ctrl->setParameterByClass(\ilPermissionGUI::class, 'ref_id', $ref_id);
             $link = $this->ctrl->getLinkTargetByClass([\ilObjPluginDispatchGUI::class, \ilObjCourseWizardGUI::class, \ilPermissionGUI::class], 'perm');
 
-            return $this->getAsRenderedLink((string)$number_of_role_members, $link);
+            return $this->getAsRenderedLink((string) $number_of_role_members, $link);
         } catch (Exception $e) {
             return (string) $number_of_role_members;
         }
@@ -81,7 +81,7 @@ class CourseTemplateContainerTableDataProvider
 
         $link = \ilLink::_getLink($ref_id, 'xcwi');
 
-        return $this->getAsRenderedLink((string)$number_of_templates, $link);
+        return $this->getAsRenderedLink((string) $number_of_templates, $link);
     }
 
     public function prepareTableDataWithAllContainers() : array

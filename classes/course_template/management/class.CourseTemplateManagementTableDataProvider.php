@@ -82,7 +82,7 @@ class CourseTemplateManagementTableDataProvider
             try {
                 $il_date_time = new \ilDateTime($model->getCreateDate(), IL_CAL_DATETIME);
                 $creation_date = \ilDatePresentation::formatDate($il_date_time);
-            } catch(\ilDateTimeException $e) {
+            } catch (\ilDateTimeException $e) {
                 $creation_date = '-';
             }
 

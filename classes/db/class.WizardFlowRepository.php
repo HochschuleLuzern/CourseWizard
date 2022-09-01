@@ -76,7 +76,8 @@ class WizardFlowRepository
         }
     }
 
-    private function getDateTimeImmutableOrNull(?string $val) {
+    private function getDateTimeImmutableOrNull(?string $val)
+    {
         return is_null($val) ? null : new \DateTimeImmutable($val);
     }
 
@@ -141,15 +142,15 @@ class WizardFlowRepository
 
         );
 
-        if(!is_null($wizard_flow->getExecutingUser())) {
+        if (!is_null($wizard_flow->getExecutingUser())) {
             $update_fields[self::COL_EXECUTING_USER] = array('integer', $wizard_flow->getExecutingUser());
         }
 
-        if(!is_null($wizard_flow->getFirstOpen())) {
+        if (!is_null($wizard_flow->getFirstOpen())) {
             $update_fields[self::COL_FIRST_OPEN_TS] = array('timestamp', $wizard_flow->getFirstOpen()->format('Y-m-d H:i:s'));
         }
 
-        if(!is_null($wizard_flow->getFinishedImport())) {
+        if (!is_null($wizard_flow->getFinishedImport())) {
             $update_fields[self::COL_FINISHED_IMPORT_TS] = array('timestamp', $wizard_flow->getFinishedImport()->format('Y-m-d H:i:s'));
         }
 

@@ -42,6 +42,5 @@ class RadioOptionGUI
         $tpl->setVariable('RENDERED_ITEM', $r->render($item));
         $tpl->setVariable('RADIO_OPTION_ID', $radio_option_id);
         $tpl->parseCurrentBlock();
-
     }
 }

@@ -113,7 +113,7 @@ class WizardFlow
 
     public function withImportingStatus($selected_template) : WizardFlow
     {
-        if($this->current_status == self::STATUS_IN_PROGRESS) {
+        if ($this->current_status == self::STATUS_IN_PROGRESS) {
             $clone = clone $this;
             $clone->current_status = self::STATUS_IMPORTING;
             $clone->selected_template = $selected_template;
@@ -129,7 +129,6 @@ class WizardFlow
         if ($this->current_status == self::STATUS_IN_PROGRESS
             || $this->current_status == self::STATUS_QUIT
             || $this->getCurrentStatus() == self::STATUS_POSTPONED) {
-
             $clone = clone $this;
             $clone->current_status = self::STATUS_QUIT;
             $clone->finished_import = new \DateTimeImmutable();

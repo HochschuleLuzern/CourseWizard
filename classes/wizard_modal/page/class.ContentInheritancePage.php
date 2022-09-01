@@ -34,7 +34,7 @@ class ContentInheritancePage extends BaseModalPagePresenter
         $this->crs_is_template = $crs_is_template;
         $this->is_multi_group_target = $is_multi_group_target;
 
-        if(!$this->crs_is_template && $this->is_multi_group_target) {
+        if (!$this->crs_is_template && $this->is_multi_group_target) {
             $this->hide_subgroups = true;
         } else {
             $this->hide_subgroups = false;

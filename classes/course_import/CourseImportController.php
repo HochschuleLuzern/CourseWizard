@@ -8,20 +8,19 @@ class CourseImportController
 
     private function importSelectedSpecificSettings(CourseImportData $course_import_data, int $target_obj_id)
     {
-        foreach($course_import_data->getSpecificSettingsData() as $key => $value) {
-
+        foreach ($course_import_data->getSpecificSettingsData() as $key => $value) {
             switch ($key) {
                 case CourseSettingsData::FORM_SORT_POSTVAR:
 
                     $sorting_changed = false;
-                    switch($value) {
+                    switch ($value) {
                         case 1: // Sort by title
                             $sort_value = \ilContainer::SORT_TITLE;
                             $sorting_changed = true;
                             break;
 
                         case 2: // Sort manually
-                            $sort_value =\ilContainer::SORT_MANUAL;
+                            $sort_value = \ilContainer::SORT_MANUAL;
                             $sorting_changed = true;
                             break;
 
@@ -34,7 +33,7 @@ class CourseImportController
                             break;
                     }
 
-                    if($sorting_changed) {
+                    if ($sorting_changed) {
                         $sorting = new \ilContainerSortingSettings($target_obj_id);
                         $sorting->setSortMode($sort_value);
                         $sorting->update();
@@ -53,7 +52,7 @@ class CourseImportController
         // clone settings
         ilContainerSortingSettings::_cloneSettings($source_obj_id, $target_obj_id);
 
-        if(\ilObject::_lookupType($source_obj_id) == ilObject::_lookupType($target_obj_id)) {
+        if (\ilObject::_lookupType($source_obj_id) == ilObject::_lookupType($target_obj_id)) {
             foreach (ilContainer::_getContainerSettings($source_obj_id) as $keyword => $value) {
                 ilContainer::_writeContainerSetting($target_obj_id, $keyword, $value);
             }
@@ -66,7 +65,7 @@ class CourseImportController
     {
         // Check status of wizard
         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($course_import_data->getTargetCrsRefId());
-        if($wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+        if ($wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
             throw new InvalidArgumentException('Invalid Status given: ' . $wizard_flow->getCurrentStatus());
         }
 

@@ -44,7 +44,7 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
                 return $this->rbac->isAssigned($a_user_id, $responsible_role_id);
                 break;
         }
-        $configs = $this->config_repo->getContainerConfiguration((int)$a_obj_id);
+        $configs = $this->config_repo->getContainerConfiguration((int) $a_obj_id);
 
         //$configs->getResponsibleRoleId();
 

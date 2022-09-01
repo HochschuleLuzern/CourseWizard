@@ -65,7 +65,7 @@ class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForMod
         $settings = \CourseSettingsData::getSettings();
         foreach ($settings as $setting) {
             $form_item = $this->settingToPropertyFormComponent($setting);
-            if($form_item) {
+            if ($form_item) {
                 $form->addItem($form_item);
             }
         }

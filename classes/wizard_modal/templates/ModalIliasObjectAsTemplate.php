@@ -8,7 +8,7 @@ class ModalIliasObjectAsTemplate implements ModalCourseTemplate
 
     public function __construct(\ilObject $ilias_obj)
     {
-        if(!($ilias_obj instanceof \ilObjCourse) && !($ilias_obj instanceof \ilObjGroup)) {
+        if (!($ilias_obj instanceof \ilObjCourse) && !($ilias_obj instanceof \ilObjGroup)) {
             throw new \InvalidArgumentException('Invalid object type for ILIAS object as Course Template');
         }
 
@@ -17,12 +17,12 @@ class ModalIliasObjectAsTemplate implements ModalCourseTemplate
 
     public function getRefId() : int
     {
-        return (int)$this->ilias_obj->getRefId();
+        return (int) $this->ilias_obj->getRefId();
     }
 
     public function getObjId() : int
     {
-        return (int)$this->ilias_obj->getId();
+        return (int) $this->ilias_obj->getId();
     }
 
     public function getCourseTitle() : string

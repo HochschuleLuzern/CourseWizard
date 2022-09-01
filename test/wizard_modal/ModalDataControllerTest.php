@@ -63,5 +63,4 @@ class ModalDataControllerTest extends TestCase
 
         // Assert
     }
-
 }

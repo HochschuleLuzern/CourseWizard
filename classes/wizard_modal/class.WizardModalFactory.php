@@ -43,8 +43,7 @@ class WizardModalFactory
         Factory $ui_factory,
         Renderer $ui_renderer,
         \ilCourseWizardPlugin $plugin
-    )
-    {
+    ) {
         $this->target_obj = $target_obj;
         $this->template_repository = $template_repository;
         $this->ctrl = $ctrl;
@@ -65,7 +64,7 @@ class WizardModalFactory
         foreach ($obj_ids as $container_obj_id) {
             $department_subpage = new ViewControlSubPage(\ilObject::_lookupTitle($container_obj_id), uniqid('xcwi'), false, $this->plugin);
             foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {
-                foreach ($this->template_repository->getAllApprovedCourseTemplates((int)$container_ref_id) as $crs_template) {
+                foreach ($this->template_repository->getAllApprovedCourseTemplates((int) $container_ref_id) as $crs_template) {
                     $obj = new ModalBaseCourseTemplate($crs_template, new \ilObjCourse($crs_template->getCrsRefId(), true));
                     $department_subpage->addRadioOption(new RadioOptionGUI($obj, $this->plugin));
                 }
@@ -92,7 +91,7 @@ class WizardModalFactory
                                 $this->plugin
                             )
                         );
-                    } else if ($type == 'grp') {
+                    } elseif ($type == 'grp') {
                         $grp = new \ilObjGroup($ref_id, true);
                         $inherit_subpage->addRadioOption(
                             new RadioOptionGUI(
@@ -157,7 +156,7 @@ class WizardModalFactory
                     throw new \InvalidArgumentException('Missing the argument template_id which is needed for the content inheritance page');
                 }
 
-                $ref_id = (int)$this->query_params[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID];
+                $ref_id = (int) $this->query_params[\ilCourseWizardApiGUI::GET_TEMPLATE_REF_ID];
                 $type = \ilObject::_lookupType($ref_id, true);
                 if ($type !== 'crs' && $type !== 'grp') {
                     throw new \InvalidArgumentException('Given reference ID is not for object of type course or group');
@@ -165,8 +164,8 @@ class WizardModalFactory
 
                 try {
                     $wizard_access_checker = new \ilWizardAccessChecker();
-                    $target_ref_id = (int)$this->query_params['ref_id'];
-                    if($wizard_access_checker->objectHasOnlySubgroupsWithExtendedTitleAndIsNotEmpty($target_ref_id)) {
+                    $target_ref_id = (int) $this->query_params['ref_id'];
+                    if ($wizard_access_checker->objectHasOnlySubgroupsWithExtendedTitleAndIsNotEmpty($target_ref_id)) {
                         $is_target_multi_group = true;
                     } else {
                         $is_target_multi_group = false;

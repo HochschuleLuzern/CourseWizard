@@ -339,7 +339,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         foreach ($crs_list_panels as $crs_list_panel) {
             $group_views[] = $crs_list_panel->buildOverviewAsGroupView();
             $additional_ui_elements = $crs_list_panel->getAdditionalUIElements();
-            foreach($additional_ui_elements as $ui_element) {
+            foreach ($additional_ui_elements as $ui_element) {
                 $container_content[] = $ui_element;
             }
         }

@@ -33,7 +33,6 @@ class RadioGroupViewControlGUI
         $sub_page_components = [];
 
         foreach ($this->sub_pages as $sub_page) {
-
             $title = $sub_page->getTitle();
             $sub_page_div = $sub_page->renderSubpageInTemplate(
                 new \ilTemplate('tpl.view_control_subpage.html', true, true, $this->plugin->getDirectory()),

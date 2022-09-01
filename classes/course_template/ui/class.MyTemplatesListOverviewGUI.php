@@ -11,7 +11,7 @@ class MyTemplatesListOverviewGUI extends TemplateListOverviewGUI
         $buttons = array();
         $buttons[] = $this->createShowButton($course_template);
 
-        if($course_template->getStatusAsCode() == CourseTemplate::STATUS_DRAFT) {
+        if ($course_template->getStatusAsCode() == CourseTemplate::STATUS_DRAFT) {
             $this->ctrl->setParameter($this->parent_gui_obj, \ilObjCourseWizardGUI::GET_DEP_ID, $course_template->getCrsRefId());
             $link = $this->ctrl->getLinkTarget($this->parent_gui_obj, \ilObjCourseWizardGUI::CMD_PROPOSE_TEMPLATE_MODAL); //\ilLink::_getLink($this->ref_id, $this->getType(), array('dep_id' => $crs_template->getCrsRefId()));
             $this->ctrl->setParameter($this->parent_gui_obj, \ilObjCourseWizardGUI::GET_DEP_ID, '');
