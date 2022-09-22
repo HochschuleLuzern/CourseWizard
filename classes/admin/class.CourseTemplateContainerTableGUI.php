@@ -107,7 +107,7 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
         );
     }
 
-    final protected function fillRow(array $row) : void
+    final protected function fillRow($row): void
     {
         foreach ($this->getColumnDefinition() as $index => $column) {
             switch ($column['field']) {
