@@ -98,7 +98,6 @@ il.CourseWizardFunctions = (function (scope) {
 	priv.showLoadingAnimation = function(button_id, show_spinner = false) {
 		il.UI.button.activateLoadingAnimation(button_id);
 		$('.modal-footer').children().each(function(number, element) {
-			console.log(element)
 			$( element ).addClass('disabled');
 		});
 		if(show_spinner) {
@@ -122,18 +121,6 @@ il.CourseWizardFunctions = (function (scope) {
 		storageEngine.setItem(currentWizardObj.targetRefId, json_obj);
 	};
 
-	pub.printCurrentObj = function() {
-		console.log(currentWizardObj);
-	};
-
-	pub.printCurrentConf = function() {
-		console.log(priv.wizardModalConfig);
-	};
-
-	priv.closeModalTriggered = function(event, signalData) {
-		console.log('Close Modal triggered');
-	};
-
 	pub.initNewModalPage = function (wizardModalConfig) {
 		priv.wizardModalConfig = wizardModalConfig;
 
@@ -142,11 +129,19 @@ il.CourseWizardFunctions = (function (scope) {
 		}
 
 		if(!priv.isInitialized) {
-			$('#' + priv.wizardModalConfig['wizardDivId']).parents('.modal.il-modal-roundtrip').on("hide.bs.modal", function(){
-				$.ajax(priv.wizardModalConfig['dismissModalUrl']).done(function() {
-					location.reload();
-				});
-			});
+			$('#' + priv.wizardModalConfig['wizardDivId'])
+			.parents('.modal.il-modal-roundtrip')
+			.on(
+				"hide.bs.modal",
+				function(){
+					$.ajax(priv.wizardModalConfig['dismissModalUrl'])
+					.done(
+						function() {
+							location.reload();
+						}
+					);
+				}
+			);
 		}
 
 		priv.isInitialized = true;
@@ -174,30 +169,31 @@ il.CourseWizardFunctions = (function (scope) {
 	};
 
 	pub.addInfoMessageToPage = function(messageUrl) {
+		if((typeof messageUrl) == 'string' && messageUrl != '') {
+			$.get(messageUrl, function(data, status)
+				{
+					if(status === "success") {
+						let adminRow = $("div.ilAdminRow");
+						let msgBox;
 
-		$.get(messageUrl, function(data, status)
-			{
-				console.log(data);
-				console.log(status);
-				if(status == "success") {
-					let adminRow = $("div.ilAdminRow");
-					let msgBox;
+						if(adminRow.count > 0) {
+							msgBox = $(data)
+							msgBox.hide();
+							adminRow.append(msgBox);
+						} else {
+							adminRow = '<div class="ilAdminRow">'+data+'</div>';
+							msgBox = $(adminRow);
+							msgBox.hide();
+							$('#ilSubTab').after(msgBox);
+						}
 
-					if(adminRow.count > 0) {
-						msgBox = $(data)
-						msgBox.hide();
-						adminRow.append(msgBox);
-					} else {
-						adminRow = '<div class="ilAdminRow">'+data+'</div>';
-						msgBox = $(adminRow);
-						msgBox.hide();
-						$('#ilSubTab').after(msgBox);
+						msgBox.fadeIn(800);
 					}
-
-					msgBox.fadeIn(800);
 				}
-			}
-		);
+			);
+
+		}
+
 	};
 
 	return pub;

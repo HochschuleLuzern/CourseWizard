@@ -296,9 +296,6 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     {
         global $DIC;
 
-        //$this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->ref_id);
-        //$this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'new_type', 'crs');
-        //$link = $this->ctrl->getLinkTargetByClass(ilRepositoryGUI::class, 'create');
         $link = $this->ctrl->getLinkTarget($this, self::CMD_CRS_TEMPLATE_CREATION_SITE);
 
         $btn = \ilLinkButton::getInstance();

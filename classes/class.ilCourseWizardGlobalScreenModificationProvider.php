@@ -14,13 +14,9 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
     {
         $ctrl = $this->dic->ctrl();
         $ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $ref_id);
-        $link = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
-        $btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal (Button to Google)", "http://www.ilias.de");
-        //$btn = $this->dic->ui()->factory()->button()->standard("Reactivate Modal (Link btn)", $link);
-        //$btn = $this->dic->ui()->factory()->link()->standard("Reactivate Modal (Link btn)", $link);
-        $btn_str = $this->dic->ui()->renderer()->render($btn);
-        $this->insertInfoTextToScreenWithJavaScript($this->plugin->txt('wizard_postponed_info'), [$btn]);
-        //ilUtil::sendInfo($this->plugin->txt('wizard_postponed_info') . ' ' . $btn_str, true);
+        $msg_url = $ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_GET_REACTIVATE_WIZARD_MESSAGE);
+
+        $this->insertInfoTextToScreenWithJavaScript($msg_url);
     }
 
     private function showWizardModal(int $ref_id)
@@ -36,11 +32,9 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
         return $this->context_collection->repository();
     }
 
-    private function insertInfoTextToScreenWithJavaScript($info_text, array $action_buttons = array())
+    private function insertInfoTextToScreenWithJavaScript(string $api_url_to_get_text)
     {
-        $msg_url = $this->dic->ctrl()->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_GET_REACTIVATE_WIZARD_MESSAGE);
-
-        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$msg_url');");
+        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$api_url_to_get_text');");
     }
 
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
