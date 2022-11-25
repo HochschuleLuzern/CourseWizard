@@ -11,7 +11,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
     const FORM_GLOBAL_ROLE = 'global_role';
     const FORM_CONT_IS_GLOBAL = 'is_global';
 
-    private ilGlobalTemplate $tpl;
+    private ilGlobalPageTemplate $tpl;
     private ilCtrl $ctrl;
 
     /** @var \Psr\Http\Message\RequestInterface|\Psr\Http\Message\ServerRequestInterface */

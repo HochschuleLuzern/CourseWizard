@@ -247,7 +247,7 @@ class CourseTemplateRepository
         $res = $this->db->query($sql);
 
         if ($row = $this->db->fetchAssoc($res)) {
-            return $row['cnt'];
+            return (int) $row['cnt'];
         }
 
         return 0;

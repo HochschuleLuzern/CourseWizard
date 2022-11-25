@@ -75,7 +75,7 @@ class CourseTemplateContainerTableDataProvider
     private function getNumberOfCrsTemplatesAsLink(int $obj_id) : string
     {
         $refs = \ilObject::_getAllReferences($obj_id);
-        $ref_id = array_pop($refs);
+        $ref_id = (int) array_pop($refs);
 
         $number_of_templates = $this->template_repo->getNumberOfCrsTemplates($ref_id);
 
@@ -100,7 +100,7 @@ class CourseTemplateContainerTableDataProvider
             $table_row[CourseTemplateContainerTableGUI::COL_QUANTITY_CRS_TEMPLATES] = $this->getNumberOfCrsTemplatesAsLink($conf->getObjId());
             $table_row[CourseTemplateContainerTableGUI::COL_QUANTITY_ADMIN_ROLE_MEMBERS] = $this->getNumberOfRoleMembersAsLink($conf->getResponsibleRoleId(), $conf->getObjId());
             $table_row[CourseTemplateContainerTableGUI::COL_IS_GLOBAL] = $conf->isGlobal() ? $this->plugin->txt('yes') : $this->plugin->txt('no');
-            $table_row[CourseTemplateContainerTableGUI::COL_ACTION_DROPDOWN] = $this->getActionDropdown($conf, $conf_link);
+            $table_row[CourseTemplateContainerTableGUI::COL_ACTION_DROPDOWN] = $this->getActionDropdown($conf_link);
 
             $data[] = $table_row;
         }
