@@ -93,9 +93,11 @@ step_content_inheritance#:#Inhalte Vererben
 step_introduction#:#Einleitung
 step_settings#:#Einstellungen
 step_template_selection#:#Vorlage Auswählen
+table_course_tempaltes#:#Kursvorlagen
 template_container#:#Vorlagen Container
 template_description#:#Vorlagen Beschreibung
 template_title#:#Vorlagen Titel
+template_proposed_date#:#Vorgeschlagen am...
 tpl_selection_my_courses#:#Meine Kurse und Gruppen
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen

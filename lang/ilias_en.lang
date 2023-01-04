@@ -93,9 +93,11 @@ step_content_inheritance#:#Content Inheritance
 step_introduction#:#Introduction
 step_settings#:#Settings
 step_template_selection#:#Template Selection
+table_course_tempaltes#:#Course Templates
 template_container#:#Template Container
 template_description#:#Description of the new Template
 template_title#:#Title of the new Template
+template_proposed_date#:#Proposed date
 tpl_selection_my_courses#:#My Courses and Groups
 view_course#:#View Course
 view_course_template#:#View Course Template

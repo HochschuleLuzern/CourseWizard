@@ -44,7 +44,6 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
             );
         }
 
-        // TODO: Add title as lang var
         $this->setTitle($this->plugin->txt('conf_container_table_title'));
         $this->setFormAction($this->ctrl->getFormAction($this->getParentObject(), $a_command));
 
@@ -55,7 +54,6 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
 
     protected function getColumnDefinition() : array
     {
-        // TODO: Add language here
         return array(
             array(
                 'field' => self::COL_CONTAINER_TITLE,
