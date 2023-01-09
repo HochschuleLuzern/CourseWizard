@@ -11,7 +11,7 @@ btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 btn_back#:#Back
 btn_close_modal#:#Close Modal
 btn_continue#:#Continue
-btn_delete_crs_template#:#Delete Course Template
+btn_delete_crs_template#:#Delete
 btn_execute_import#:#Execute Import
 btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
@@ -26,6 +26,9 @@ create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
 create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
+delete#:#Delete
+delete_template#:#Delete Template
+delete_template_text#:#Do you really want to delete this template:
 form_crs_importer_role_input#:#Importer Role ID
 form_crs_importer_role_input_info#:#Role ID of existing global role for users, which should be able to use the "Course Wizard" in their course
 form_crs_importer_role_title#:#Title of given Role

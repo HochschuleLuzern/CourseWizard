@@ -13,6 +13,8 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const CMD_MANAGE_PROPOSALS = 'manage_proposals';
     public const CMD_PROPOSE_TEMPLATE_MODAL = 'propose_template_modal';
     public const CMD_PROPOSE_TEMPLATE_CONFIRM = 'confirm_propose_template';
+    public const CMD_DELETE_TEMPLATE_MODAL = 'delete_template_modal';
+    public const CMD_DELETE_TEMPLATE_CONFIRM = 'confirm_delete_template';
     public const CMD_EDIT = 'edit';
     public const CMD_UPDATE = 'update';
     public const CMD_CRS_TEMPLATE_CREATION_SITE = 'crs_template_creation';
@@ -204,11 +206,19 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                         break;
 
                     case self::CMD_PROPOSE_TEMPLATE_MODAL:
-                        $this->printProposalModal();
+                        $this->showProposalModal();
                         break;
 
                     case self::CMD_PROPOSE_TEMPLATE_CONFIRM:
                         $this->proposeCourseTemplate();
+                        break;
+
+                    case self::CMD_DELETE_TEMPLATE_MODAL:
+                        $this->showDeleteModal();
+                        break;
+
+                    case self::CMD_DELETE_TEMPLATE_CONFIRM:
+                        $this->deleteCourseTemplate();
                         break;
 
                     case self::CMD_CRS_TEMPLATE_CREATION_SITE:
@@ -240,7 +250,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         parent::setTabs();
     }
 
-    protected function printProposalModal()
+    protected function showProposalModal()
     {
         global $DIC;
 
@@ -267,6 +277,33 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         die;
     }
 
+    protected function showDeleteModal()
+    {
+        global $DIC;
+
+        /** @var \ILIAS\UI\Factory $f */
+        $f = $DIC->ui()->factory();
+        /** @var \ILIAS\UI\Renderer $r */
+        $r = $DIC->ui()->renderer();
+
+        $repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
+        $template = $repo->getCourseTemplateByRefId((int) $_GET['dep_id']);
+
+        $title = \ilObject::_lookupTitle($template->getCrsObjId());
+        $description = \ilObject::_lookupDescription($template->getCrsObjId());
+        $image_path = ilObject::_getIcon($template->getCrsObjId());
+        $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
+
+        $form_action = $this->ctrl->getFormAction($this, self::CMD_DELETE_TEMPLATE_CONFIRM);
+        $modal = $f->modal()->interruptive($this->plugin->txt('delete_template'), $this->plugin->txt('delete_template_text'), $form_action)
+                   ->withActionButtonLabel($this->plugin->langVarAsPluginLangVar('delete'))
+                   ->withAffectedItems(array(
+                       $f->modal()->interruptiveItem($template->getTemplateId(), $title, $icon, $description)
+                   ));
+        echo $r->renderAsync($modal);
+        die;
+    }
+
     protected function proposeCourseTemplate()
     {
         global $DIC;
@@ -288,6 +325,30 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
 
             ilUtil::sendSuccess('Template proposed', true);
+            $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
+        }
+    }
+
+    protected function deleteCourseTemplate()
+    {
+        global $DIC;
+        if (isset($_POST['interruptive_items'])) {
+            $item_id = (int) $_POST['interruptive_items'][0];
+            $crs_template_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
+
+            /** @var ilCourseWizardConfig $plugin_config */
+            $plugin_config = $this->object->getPluginConfigObject();
+            $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateStatusManager(
+                $crs_template_repo,
+                new \CourseWizard\CourseTemplate\management\CourseTemplateRoleManagement(
+                    (int) ROLE_FOLDER_ID,
+                    $plugin_config->getCrsImporterRoleId()
+                )
+            );
+
+            $template_manager->deleteCourseTemplateById($item_id, $this->ref_id);
+
+            ilUtil::sendSuccess('Template deleted', true);
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
         }
     }

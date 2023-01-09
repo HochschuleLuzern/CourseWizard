@@ -28,6 +28,7 @@ class MyTemplatesListOverviewGUI extends TemplateListOverviewGUI
             $buttons[] = $this->ui_factory->button()->shy($this->plugin->txt('btn_propose_crs_template'), $propose_modal->getShowSignal());
         }
 
+        $buttons[] = $this->createDeleteButton($course_template);
         return $buttons;
     }
 }

@@ -8,6 +8,6 @@ class ApprovedTemplatesListOverviewGUI extends TemplateListOverviewGUI
 {
     protected function getCommandButtons(CourseTemplate $course_template) : array
     {
-        return array($this->createShowButton($course_template));
+        return array($this->createShowButton($course_template),$this->createDeleteButton($course_template) );
     }
 }

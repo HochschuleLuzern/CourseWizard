@@ -56,6 +56,24 @@ abstract class TemplateListOverviewGUI
         return $this->ui_factory->link()->standard($this->plugin->txt('view_course_template'), \ilLink::_getLink($course_template->getCrsRefId()))->withOpenInNewViewport(true);
     }
 
+    protected function createDeleteButton(CourseTemplate $course_template)
+    {
+        $this->ctrl->setParameter($this->parent_gui_obj, \ilObjCourseWizardGUI::GET_DEP_ID, $course_template->getCrsRefId());
+        $link = $this->ctrl->getLinkTarget($this->parent_gui_obj, \ilObjCourseWizardGUI::CMD_DELETE_TEMPLATE_MODAL); //\ilLink::_getLink($this->ref_id, $this->getType(), array('dep_id' => $crs_template->getCrsRefId()));
+        $this->ctrl->setParameter($this->parent_gui_obj, \ilObjCourseWizardGUI::GET_DEP_ID, '');
+
+        $delete_modal = $this->ui_factory
+            ->modal()
+            ->interruptive(
+                '',
+                '',
+                ''
+            )->withAsyncRenderUrl($link);
+
+        $this->additional_ui_elements[] = $delete_modal;
+        return $this->ui_factory->button()->shy($this->plugin->txt('btn_delete_crs_template'), $delete_modal->getShowSignal());
+    }
+
     public function buildOverviewAsGroupView() : \ILIAS\UI\Component\Item\Group
     {
         $courses = array();

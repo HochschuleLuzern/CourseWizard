@@ -9,7 +9,7 @@ btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
 btn_back#:#Zurück
 btn_close_modal#:#Modal schliessen
 btn_continue#:#Weiter
-btn_delete_crs_template#:#Kursvorlage löschen
+btn_delete_crs_template#:#Löschen
 btn_execute_import#:#Import ausführen
 btn_postpone#:#Verschieben
 btn_propose_crs_template#:#Kursvorlage vorschlagen
@@ -24,6 +24,9 @@ create_crs_template_draft#:#Entwurf einer Kursvorlage erstellen
 create_crs_template_form#:#Neue Kursvorlage erstellen
 create_crs_template_success#:#Kursvorlage wurde erstellt!
 create_template#:#Vorlage erstellen
+delete#:#Löschen
+delete_template#:#Vorlage Löschen
+delete_template_text#:#Möchten Sie diese Vorlage löschen:
 filter_crs_input_desc#:#-> Ungefährer Filter. Die Eingabe "<strong>HBX25</strong>" findet z.B.: "<strong>H</strong>SLU.<strong>B</strong>A_<strong>X</strong>YZ.H<strong>25</strong>03"
 filter_crs_input_placeholder#:#Kurse Filtern
 form_crs_importer_role_input#:#Importerrolle ID
