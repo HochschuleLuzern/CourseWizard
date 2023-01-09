@@ -53,7 +53,7 @@ abstract class TemplateListOverviewGUI
 
     protected function createShowButton(CourseTemplate $course_template) : Link
     {
-        return $this->ui_factory->link()->standard($this->plugin->txt('view_course_template'), \ilLink::_getLink($course_template->getCrsRefId()))->withOpenInNewViewport(true);
+        return $this->ui_factory->link()->standard($this->plugin->txt('view_course_template'), \ilLink::_getLink($course_template->getCrsRefId()))->withOpenInNewViewport(false);
     }
 
     protected function createDeleteButton(CourseTemplate $course_template)
