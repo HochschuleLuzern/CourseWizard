@@ -92,7 +92,7 @@ status_declined#:#Abgelehnt
 status_draft#:#Entwurf
 status_invalid_status_given#:#Ungültiger Status gegeben:
 status_pending#:#Ausstehend
-step_content_inheritance#:#Inhalte Vererben
+step_content_inheritance#:#Inhalte Selektieren
 step_introduction#:#Einleitung
 step_settings#:#Einstellungen
 step_template_selection#:#Vorlage Auswählen
@@ -102,7 +102,7 @@ template_title#:#Vorlagen Titel
 tpl_selection_my_courses#:#Meine Kurse und Gruppen
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen
-wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
+wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche übernommen werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
 wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs mittels einer Vorlage einzurichten.
 wizard_introduction_text_p2#:#<b>Schritt 1</b>: Lesen Sie diese Anleitung aufmerksam durch. Klicken Sie anschliessend auf "Weiter" am Ende der Seite um zum nächsten Schritt zu gelangen. Wenn Sie keine Hilfe beim Einrichten benötigen, klicken Sie auf den Knopf "Kurs Ohne Wizard einrichten" am Ende der Seite.

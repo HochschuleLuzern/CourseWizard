@@ -92,7 +92,7 @@ status_declined#:#Declined
 status_draft#:#Draft
 status_invalid_status_given#:#Invalid status given:
 status_pending#:#Pending
-step_content_inheritance#:#Content Inheritance
+step_content_inheritance#:#Content Selection
 step_introduction#:#Introduction
 step_settings#:#Settings
 step_template_selection#:#Template Selection
@@ -102,7 +102,7 @@ template_title#:#Title of the new Template
 tpl_selection_my_courses#:#My Courses and Groups
 view_course#:#View Course
 view_course_template#:#View Course Template
-wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
+wizard_content_inheritance_text#:#Select the content you wish to import into your course
 wizard_dismissed_info#:#Course Wizard successfully dismissed for this course
 wizard_introduction_text_p1#:#This is just a placeholder for the
 wizard_introduction_text_p2#:#<b>Step 1</b>: Read these instructions carefully. Click on the "Continue"-Button at the and of this page to proceed to the next step. If you don't need help with arranging this course, click on the button "Arrange Course Unassisted" at the end of this page.

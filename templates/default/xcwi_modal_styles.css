@@ -19,13 +19,20 @@
 	display: flex;
 	justify-content: center;
 	align-content: center;
-	flex-direction: column;
 	height: auto;
 	vertical-align: middle;
 	margin: 0 5px;
 	text-align: center;
 	border: 2px #0b58a2 dotted;
 	font-size: 10px;
+	align-items: center;
+}
+
+.xcwi_modal_navigation_step::after {
+	content: "\276D";
+	display: inline;
+	position: relative;
+	left: 2px;
 }
 
 .xcwi_modal_navigation_step.active {
