@@ -60,7 +60,7 @@ import_objects_loading_title#:#ILIAS Objekte
 invalid_form_input#:#Ungültige Eingabe
 manage_proposals#:#Vorschläge verwalten
 no#:#Nein
-obj_xcwi#:#Kurswizard
+obj_xcwi#:#Kursvorlage Container
 objs_xcwi#:#Kursvorlagen
 overview#:#Übersicht
 overview_approved_templates#:#Bestätigte
