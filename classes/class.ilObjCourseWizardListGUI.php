@@ -41,4 +41,11 @@ class ilObjCourseWizardListGUI extends ilObjectPluginListGUI
     {
         $this->setType(ilCourseWizardPlugin::ID);
     }
+
+    public function getCommandLink($a_cmd)
+    {
+        $cmd_link = "ilias.php?" . "ref_id=" . $this->ref_id . "&amp;cmd=" . $a_cmd .
+            "&amp;cmdClass=ilobjcoursewizardgui&amp;cmdNode=pj:m7&amp;baseClass=ilObjPluginDispatchGUI";
+        return $cmd_link;
+    }
 }
