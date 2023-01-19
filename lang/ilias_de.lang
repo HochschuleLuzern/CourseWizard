@@ -7,7 +7,7 @@ aria_tpl_selection_vc#:#Wechsle Vorlagen Container
 author#:#Autor
 btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
 btn_back#:#Zurück
-btn_close_modal#:#Modal schliessen
+btn_close_modal#:#Abbrechen
 btn_continue#:#Weiter
 btn_delete_crs_template#:#Löschen
 btn_execute_import#:#Import ausführen

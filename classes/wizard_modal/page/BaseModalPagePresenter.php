@@ -115,13 +115,6 @@ abstract class BaseModalPagePresenter implements ModalPagePresenter
         if ($btn = $this->getNextPageButton($replace_signal)) {
             $buttons[] = $btn;
         }
-
-        $url_quit_wizard = $this->modal_render_base_url . "&replacesignal={$replace_signal->getId()}&page=" . $this->state_machine->getPageForQuittingWizard() . "&previousPage=" . $this->state_machine->getPageForCurrentState();
-
-        $buttons[] = $this->ui_factory
-            ->button()
-            ->standard($this->plugin->txt('btn_arrange_crs_unassisted'), $replace_signal->withAsyncRenderUrl($url_quit_wizard));
-
         return $buttons;
     }
 

@@ -9,7 +9,7 @@ aria_tpl_selection_vc#:#Change template container
 author#:#Author
 btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 btn_back#:#Back
-btn_close_modal#:#Close Modal
+btn_close_modal#:#Cancel
 btn_continue#:#Continue
 btn_delete_crs_template#:#Delete
 btn_execute_import#:#Execute Import

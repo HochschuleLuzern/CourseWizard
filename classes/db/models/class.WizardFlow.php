@@ -102,13 +102,9 @@ class WizardFlow
 
     public function withInProgressStatus() : WizardFlow
     {
-        if ($this->current_status == self::STATUS_POSTPONED) {
-            $clone = clone $this;
-            $clone->current_status = self::STATUS_IN_PROGRESS;
-            return $clone;
-        } else {
-            throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to postponed Status');
-        }
+        $clone = clone $this;
+        $clone->current_status = self::STATUS_IN_PROGRESS;
+        return $clone;
     }
 
     public function withImportingStatus($selected_template) : WizardFlow
@@ -117,10 +113,9 @@ class WizardFlow
             $clone = clone $this;
             $clone->current_status = self::STATUS_IMPORTING;
             $clone->selected_template = $selected_template;
-
             return $clone;
         } else {
-            throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to postponed Status');
+            throw new \InvalidArgumentException('Illegal change of Status Code Nr. ' . $this->current_status . ' to importing Status');
         }
     }
 

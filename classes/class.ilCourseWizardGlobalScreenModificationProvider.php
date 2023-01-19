@@ -1,5 +1,8 @@
 <?php declare(strict_types = 1);
 
+use ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts;
+use ILIAS\GlobalScreen\Scope\Layout\Factory\MainBarModification;
+use ILIAS\GlobalScreen\Scope\Layout\Factory\MetaBarModification;
 class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen\Scope\Layout\Provider\AbstractModificationPluginProvider
 {
     /** @var ilWizardAccessChecker */
@@ -34,11 +37,16 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
 
     private function insertInfoTextToScreenWithJavaScript(string $api_url_to_get_text)
     {
-        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$api_url_to_get_text');");
+        $url = $api_url_to_get_text;
+        if($_GET["dismiss_modal"]){
+            $url .= "&dismiss_modal=1";
+        }
+        $this->dic->ui()->mainTemplate()->addOnloadCode("il.CourseWizardFunctions.addInfoMessageToPage('$url');");
     }
 
     public function getContentModification(\ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts $screen_context_stack) : ?\ILIAS\GlobalScreen\Scope\Layout\Factory\ContentModification
     {
+        global $DIC;
         // TODO: Needs refactoring
         try {
             if ($screen_context_stack->current()->hasReferenceId()) {
@@ -59,21 +67,19 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
                             $this->showWizardModal($ref_id);
                             break;
 
-                        case \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED:
-                            $this->showWizardInfoPostponed($ref_id);
-                            break;
-
                         case \CourseWizard\DB\Models\WizardFlow::STATUS_IMPORTING:
                             $this->showWizardInfoImportRunning();
                             break;
 
                         default:
+                            $this->showWizardInfoPostponed($ref_id);
                             break;
 
                     }
                 }
             }
         } catch (Exception $e) {
+            echo $e;
             // If there is a bug in showing the wizard like access-checking because of unhandled ILIAS-Context or something else
             // Do nothing. Do nothing means therefore -> do not show the wizard or any plugin-things
         }
