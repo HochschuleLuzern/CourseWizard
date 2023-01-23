@@ -104,7 +104,7 @@ class CourseImportController
             $source_obj_id
         )) {
             $orig_page = new ilContainerPage($source_obj_id);
-            $orig_page->copy($target_obj_id, "cont", $target_obj_id);
+            $orig_page->copy($target_obj_id, "cont", $target_obj_id, true);
         }
 
         return array();

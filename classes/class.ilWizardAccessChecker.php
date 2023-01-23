@@ -113,7 +113,7 @@ class ilWizardAccessChecker
 
         // Check for request on ilias.php
         if ($script_name == 'ilias.php' && isset($query_params['cmd'])) {
-            return $query_params['cmd'] == 'view' || $query_params['cmd'] == 'render';
+            return $query_params['cmd'] == 'view' || $query_params['cmd'] == 'render' || $query_params['cmd'] == 'frameset';
         } elseif ($script_name == 'ilias.php' && $this->ctrl->getCmd() == '') {
             return true;
         }

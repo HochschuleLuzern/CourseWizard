@@ -137,7 +137,7 @@ il.CourseWizardFunctions = (function (scope) {
 					$.ajax(priv.wizardModalConfig['dismissModalUrl'])
 					.done(
 						function() {
-							location.reload();
+							location.href = location.href.replace("#", "") + '&dismiss_modal=1';
 						}
 					);
 				}
@@ -176,24 +176,43 @@ il.CourseWizardFunctions = (function (scope) {
 						let adminRow = $("div.ilAdminRow");
 						let msgBox;
 
-						if(adminRow.count > 0) {
-							msgBox = $(data)
-							msgBox.hide();
-							adminRow.append(msgBox);
-						} else {
-							adminRow = '<div class="ilAdminRow">'+data+'</div>';
-							msgBox = $(adminRow);
-							msgBox.hide();
-							$('#ilSubTab').after(msgBox);
+						let objData = JSON.parse(data);
+
+						let message = '';
+						let button = '';
+
+						if (objData.message) {
+							message = objData.message;
+							message = message.trim();
 						}
 
-						msgBox.fadeIn(800);
+						if (objData.button) {
+							button = objData.button;
+							button = button.trim();
+						}
+
+						if(message) {
+							if (adminRow.count > 0) {
+								msgBox = $(message)
+								msgBox.hide();
+								adminRow.append(msgBox);
+							} else {
+								adminRow = '<div class="ilAdminRow">' + message + '</div>';
+								msgBox = $(adminRow);
+								msgBox.hide();
+								$('#ilSubTab').after(msgBox);
+							}
+							msgBox.fadeIn(800);
+						}
+
+						if(button) {
+							button = '<li><div class="navbar-form">' +  button + '</div></li>';
+							$('div.ilToolbarContainer ul.ilToolbarItems.nav.navbar-nav').append(button);
+						}
 					}
 				}
 			);
-
 		}
-
 	};
 
 	return pub;

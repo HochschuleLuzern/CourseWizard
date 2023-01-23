@@ -64,4 +64,18 @@ class CourseTemplateStatusManager
     {
         $this->role_manager->setRolePermissionsForChangeRequestStatus($crs_template_obj);
     }
+
+    public function deleteCourseTemplate(CourseTemplate $crs_template, $ref_id) : void
+    {
+
+        \ilRepUtil::deleteObjects($ref_id, array($crs_template->getCrsRefId()));
+        $this->crs_template_repo->deleteTemplate($crs_template);
+    }
+
+    public function deleteCourseTemplateById(int $item_id, $ref_id) : void
+    {
+        $course_template = $this->crs_template_repo->getCourseTemplateByTemplateId($item_id);
+        $this->deleteCourseTemplate($course_template, $ref_id);
+    }
+
 }

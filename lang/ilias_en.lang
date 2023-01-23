@@ -9,9 +9,9 @@ aria_tpl_selection_vc#:#Change template container
 author#:#Author
 btn_arrange_crs_unassisted#:#Arrange Course Unassisted
 btn_back#:#Back
-btn_close_modal#:#Close Modal
+btn_close_modal#:#Cancel
 btn_continue#:#Continue
-btn_delete_crs_template#:#Delete Course Template
+btn_delete_crs_template#:#Delete
 btn_execute_import#:#Execute Import
 btn_postpone#:#Postpone
 btn_propose_crs_template#:#Propose Course Template
@@ -26,6 +26,9 @@ create_crs_template_draft#:#Create Course Template Draft
 create_crs_template_form#:#Create new Course Template
 create_crs_template_success#:#Course Template successfully created!
 create_template#:#Create Template
+delete#:#Delete
+delete_template#:#Delete Template
+delete_template_text#:#Do you really want to delete this template:
 form_crs_importer_role_input#:#Importer Role ID
 form_crs_importer_role_input_info#:#Role ID of existing global role for users, which should be able to use the "Course Wizard" in their course
 form_crs_importer_role_title#:#Title of given Role
@@ -57,7 +60,7 @@ import_objects_loading_title#:#ILIAS Objects
 invalid_form_input#:#Invalid from input
 manage_proposals#:#Manage Proposals
 no#:#No
-obj_xcwi#:#Course wizard
+obj_xcwi#:#Course template container
 objs_xcwi#:#Course templates
 overview#:#Overview
 overview_approved_templates#:#Approved
@@ -89,7 +92,7 @@ status_declined#:#Declined
 status_draft#:#Draft
 status_invalid_status_given#:#Invalid status given:
 status_pending#:#Pending
-step_content_inheritance#:#Content Inheritance
+step_content_inheritance#:#Content Selection
 step_introduction#:#Introduction
 step_settings#:#Settings
 step_template_selection#:#Template Selection
@@ -101,7 +104,7 @@ template_proposed_date#:#Proposed date
 tpl_selection_my_courses#:#My Courses and Groups
 view_course#:#View Course
 view_course_template#:#View Course Template
-wizard_content_inheritance_text#:#Select the content which you want to inherit into your course
+wizard_content_inheritance_text#:#Select the content you wish to import into your course
 wizard_dismissed_info#:#Course Wizard successfully dismissed for this course
 wizard_introduction_text_p1#:#This is just a placeholder for the
 wizard_introduction_text_p2#:#<b>Step 1</b>: Read these instructions carefully. Click on the "Continue"-Button at the and of this page to proceed to the next step. If you don't need help with arranging this course, click on the button "Arrange Course Unassisted" at the end of this page.

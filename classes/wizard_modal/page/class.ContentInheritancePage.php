@@ -52,6 +52,11 @@ class ContentInheritancePage extends BaseModalPagePresenter
     {
         $table = new \CourseWizard\CustomUI\ContentInheritanceTableGUI(new \ilCourseWizardApiGUI(), 'showItemSelection', 'crs', $this->hide_subgroups);
         $table->parseSource($this->template_ref_id);
+
+        // hack to remove footer copy / link / omit row from row count
+        $table->setMaxCount(count($table->row_data)-1);
+        $table->setExternalSegmentation(true);
+
         return $table->getHTML();
     }
 

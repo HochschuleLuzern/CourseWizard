@@ -7,9 +7,9 @@ aria_tpl_selection_vc#:#Wechsle Vorlagen Container
 author#:#Autor
 btn_arrange_crs_unassisted#:#Ohne Wizard einrichten
 btn_back#:#Zurück
-btn_close_modal#:#Modal schliessen
+btn_close_modal#:#Abbrechen
 btn_continue#:#Weiter
-btn_delete_crs_template#:#Kursvorlage löschen
+btn_delete_crs_template#:#Löschen
 btn_execute_import#:#Import ausführen
 btn_postpone#:#Verschieben
 btn_propose_crs_template#:#Kursvorlage vorschlagen
@@ -24,6 +24,9 @@ create_crs_template_draft#:#Entwurf einer Kursvorlage erstellen
 create_crs_template_form#:#Neue Kursvorlage erstellen
 create_crs_template_success#:#Kursvorlage wurde erstellt!
 create_template#:#Vorlage erstellen
+delete#:#Löschen
+delete_template#:#Vorlage Löschen
+delete_template_text#:#Möchten Sie diese Vorlage löschen:
 filter_crs_input_desc#:#-> Ungefährer Filter. Die Eingabe "<strong>HBX25</strong>" findet z.B.: "<strong>H</strong>SLU.<strong>B</strong>A_<strong>X</strong>YZ.H<strong>25</strong>03"
 filter_crs_input_placeholder#:#Kurse Filtern
 form_crs_importer_role_input#:#Importerrolle ID
@@ -57,7 +60,7 @@ import_objects_loading_title#:#ILIAS Objekte
 invalid_form_input#:#Ungültige Eingabe
 manage_proposals#:#Vorschläge verwalten
 no#:#Nein
-obj_xcwi#:#Kurswizard
+obj_xcwi#:#Kursvorlage Container
 objs_xcwi#:#Kursvorlagen
 overview#:#Übersicht
 overview_approved_templates#:#Bestätigte
@@ -89,7 +92,7 @@ status_declined#:#Abgelehnt
 status_draft#:#Entwurf
 status_invalid_status_given#:#Ungültiger Status gegeben:
 status_pending#:#Ausstehend
-step_content_inheritance#:#Inhalte Vererben
+step_content_inheritance#:#Inhalte Selektieren
 step_introduction#:#Einleitung
 step_settings#:#Einstellungen
 step_template_selection#:#Vorlage Auswählen
@@ -101,7 +104,7 @@ template_proposed_date#:#Vorgeschlagen am...
 tpl_selection_my_courses#:#Meine Kurse und Gruppen
 view_course#:#Kurs ansehen
 view_course_template#:#Kursvorlage ansehen
-wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche in Ihren Kurs vererbt werden sollen
+wizard_content_inheritance_text#:#Wählen Sie die Inhalte aus, welche übernommen werden sollen
 wizard_dismissed_info#:#Kurs Wizard erfolgreich ausgeschaltet für diesen Kurs
 wizard_introduction_text_p1#:#Wie es aussieht befinden Sie sich in einem neuen / noch leeren Kurs. Benötigen Sie Hilfe beim Einrichten? Diese Kursmagierin hilft Ihnen in 4 Schritten den Kurs mittels einer Vorlage einzurichten.
 wizard_introduction_text_p2#:#<b>Schritt 1</b>: Lesen Sie diese Anleitung aufmerksam durch. Klicken Sie anschliessend auf "Weiter" am Ende der Seite um zum nächsten Schritt zu gelangen. Wenn Sie keine Hilfe beim Einrichten benötigen, klicken Sie auf den Knopf "Kurs Ohne Wizard einrichten" am Ende der Seite.

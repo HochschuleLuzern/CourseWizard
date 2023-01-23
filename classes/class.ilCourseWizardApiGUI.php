@@ -182,7 +182,7 @@ class ilCourseWizardApiGUI
     {
         $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($target_ref_id);
-        if ($wizard_flow->getCurrentStatus() == WizardFlow::STATUS_POSTPONED) {
+        if ($wizard_flow->getCurrentStatus() != WizardFlow::STATUS_IMPORTING) {
             $wizard_flow = $wizard_flow->withInProgressStatus();
             $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
             $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
@@ -192,13 +192,19 @@ class ilCourseWizardApiGUI
     {
         $target_ref_id = (int) $this->request->getQueryParams()['ref_id'] ?? 0;
         $this->ctrl->setParameterByClass(ilCourseWizardApiGUI::class, 'ref_id', $target_ref_id);
-
         $link_reactivate = $this->ctrl->getLinkTargetByClass(ilCourseWizardApiGUI::API_CTRL_PATH, ilCourseWizardApiGUI::CMD_PROCEED_POSTPONED_WIZARD, '');
         $btn_reactivate = $this->ui_factory->button()->standard($this->plugin->txt('btn_reactivate_wizard'), $link_reactivate);
 
+        $json = new stdClass();
 
-        $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate]);
-        echo $this->ui_renderer->renderAsync($message_box);
+        if($_GET["dismiss_modal"]){
+            //$message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'))->withButtons([$btn_reactivate]);
+            $message_box = $this->ui_factory->messageBox()->info($this->plugin->txt('wizard_postponed_info'));
+            $json->message = $this->ui_renderer->renderAsync($message_box);
+        }
+        $json->button = $this->ui_renderer->renderAsync($btn_reactivate);
+        echo json_encode($json);
+
     }
 
     public function executeCrsImport(CourseTemplateRepository $template_repo, WizardFlowRepository $wizard_flow_repo)
