@@ -54,7 +54,7 @@ class ContentInheritancePage extends BaseModalPagePresenter
         $table->parseSource($this->template_ref_id);
 
         // hack to remove footer copy / link / omit row from row count
-        $table->setMaxCount(count($table->row_data)-1);
+        $table->setMaxCount(count($table->getData())-1);
         $table->setExternalSegmentation(true);
 
         return $table->getHTML();

@@ -1,7 +1,11 @@
 <?php declare(strict_types = 1);
 
 use CourseWizard\admin\CourseTemplateContainerTableGUI;
-
+/**
+ * Class ilCourseWizardConfigGUI
+ * @author
+ * @ilCtrl_isCalledBy    ilCourseWizardConfigGUI: ilObjComponentSettingsGUI
+ */
 class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 {
     const CMD_CONFIGURE = 'configure';
@@ -57,7 +61,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
         return $form;
     }
 
-    public function performCommand($cmd)
+    public function performCommand($cmd): void
     {
         switch ($cmd) {
             case self::CMD_CONFIGURE:
@@ -110,9 +114,9 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             try {
                 $this->plugin_config->setCrsImporterRoleId($crs_importer_role_id);
                 $this->plugin_config->save();
-                ilUtil::sendSuccess($this->plugin_object->txt('confiugration_saved'));
+                ilCourseWizardPlugin::sendSuccess($this->plugin_object->txt('confiugration_saved'));
             } catch (InvalidArgumentException $e) {
-                ilUtil::sendFailure($this->plugin_object->txt('invalid_form_input') . "\n" . $this->plugin_object->txt($e->getMessage()), true);
+                ilCourseWizardPlugin::sendFailure($this->plugin_object->txt('invalid_form_input') . "\n" . $this->plugin_object->txt($e->getMessage()), true);
             }
 
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
@@ -181,7 +185,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $container_id = (int) ($this->request->getQueryParams()['container_id']);
         if ($container_id <= 0) {
-            ilUtil::sendFailure("Container ID of $container_id does not exist");
+            ilCourseWizardPlugin::sendFailure("Container ID of $container_id does not exist");
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
 
@@ -202,7 +206,7 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
 
         $container_id = (int) ($this->request->getQueryParams()['container_id']);
         if ($container_id <= 0) {
-            ilUtil::sendFailure("Container ID of $container_id does not exist", true);
+            ilCourseWizardPlugin::sendFailure("Container ID of $container_id does not exist", true);
             $this->ctrl->redirect($this, self::CMD_CONFIGURE);
         }
 
@@ -224,10 +228,10 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
             $conf_repo->setContainerConfiguration($conf);
 
             $this->ctrl->setParameter($this, 'container_id', $container_id);
-            ilUtil::sendSuccess($this->plugin_object->txt('container_conf_saved'), true);
+            ilCourseWizardPlugin::sendSuccess($this->plugin_object->txt('container_conf_saved'), true);
             $this->ctrl->redirect($this, self::CMD_EDIT_CONTAINER_CONF);
         } else {
-            ilUtil::sendFailure($this->plugin_object->txt('form_error'), true);
+            ilCourseWizardPlugin::sendFailure($this->plugin_object->txt('form_error'), true);
             $this->ctrl->redirect($this, self::CMD_EDIT_CONTAINER_CONF);
         }
     }

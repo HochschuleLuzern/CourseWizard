@@ -99,3 +99,8 @@ div.xcwi-template-selection__filter-input-help {
 	margin-left: 1em;
 	margin-top: 0;
 }
+
+div.xcwi_loading_content_container img{
+	width: 22px;
+	height: 22px;
+}

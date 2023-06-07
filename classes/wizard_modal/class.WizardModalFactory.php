@@ -60,7 +60,7 @@ class WizardModalFactory
 
         $view_control = new RadioGroupViewControlGUI($this->plugin);
 
-        $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId($_GET['ref_id']);
+        $obj_ids = CourseWizardSpecialQueries::fetchContainerObjectIdsForGivenRefId((int)$_GET['ref_id']);
         foreach ($obj_ids as $container_obj_id) {
             $department_subpage = new ViewControlSubPage(\ilObject::_lookupTitle($container_obj_id), uniqid('xcwi'), false, $this->plugin);
             foreach (\ilObject::_getAllReferences($container_obj_id) as $container_ref_id) {

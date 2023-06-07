@@ -89,6 +89,7 @@ class WizardFlowRepository
             self::TABLE_NAME,
             array(
                 self::COL_TARGET_REF_ID => array('integer', $wizard_flow->getCrsRefId()),
+                self::COL_EXECUTING_USER => array('integer', $wizard_flow->getExecutingUser()),
                 self::COL_WIZARD_STATUS => array('integer', $wizard_flow->getCurrentStatus()),
                 self::COL_FIRST_OPEN_TS => array('timestamp', $wizard_flow->getFirstOpen()->format('Y-m-d H:i:s'))
             )

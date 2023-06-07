@@ -72,7 +72,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             if ($node['type'] == 'rolf') {
                 continue;
             }
-            if (!$ilAccess->checkAccess('visible', '', $node['child'])) {
+            if (!$ilAccess->checkAccess('visible', '', (int)$node['child'])) {
                 continue;
             }
 
@@ -103,7 +103,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $r['type'] = $node['type'];
             $r['title'] = $node['title'];
             $r['copy'] = $objDefinition->allowCopy($node['type']);
-            $r['perm_copy'] = $ilAccess->checkAccess('copy', '', $node['child']);
+            $r['perm_copy'] = $ilAccess->checkAccess('copy', '', (int)$node['child']);
             $r['link'] = $objDefinition->allowLink($node['type']);
             $r['perm_link'] = true;
             $r['is_in_subgroup'] = $is_in_subgroup;
@@ -127,7 +127,8 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
     /**
      * @see ilTable2GUI::fillRow()
      */
-    protected function fillRow($s)
+
+    protected function fillRow($s): void
     {
         if ($s['last']) {
             $this->tpl->setCurrentBlock('footer_copy');
@@ -139,7 +140,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $this->tpl->setCurrentBlock('footer_omit');
             $this->tpl->setVariable('TXT_OMIT_ALL', $this->lng->txt('omit_all'));
             $this->tpl->parseCurrentBlock();
-            return true;
+            return;
         }
 
 
@@ -147,12 +148,12 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
             $this->tpl->touchBlock('padding');
             $this->tpl->touchBlock('end_padding');
         }
-        $this->tpl->setVariable('TREE_IMG', \ilObject::_getIcon(\ilObject::_lookupObjId($s['ref_id']), "tiny", $s['type']));
+        $this->tpl->setVariable('TREE_IMG', \ilObject::_getIcon(\ilObject::_lookupObjId((int)$s['ref_id']), "tiny", $s['type']));
         $this->tpl->setVariable('TREE_ALT_IMG', $this->lng->txt('obj_' . $s['type']));
         $this->tpl->setVariable('TREE_TITLE', $s['title']);
 
         if ($s['source']) {
-            return true;
+            return;
         }
 
         // Copy
@@ -202,7 +203,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
         $this->tpl->parseCurrentBlock();
     }
 
-    public function getHTML()
+    public function getHTML(): string
     {
         return parent::getHTML();
     }

@@ -142,7 +142,7 @@ class CourseTemplateContainerTableGUI extends \ilTable2GUI
                 case self::COL_ACTION_DROPDOWN:
                     $this->tpl->setCurrentBlock('column');
                     $this->tpl->setVariable('COLUMN_VALUE', $row[self::COL_ACTION_DROPDOWN]);
-                    $this->change_status_modals[] = $row['modal'];
+                    $this->change_status_modals[] = isset($row['modal']) ? $row['modal'] : null;
                     break;
                 default:
                     $this->tpl->setCurrentBlock('column');

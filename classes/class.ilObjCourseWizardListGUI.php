@@ -2,12 +2,12 @@
 
 class ilObjCourseWizardListGUI extends ilObjectPluginListGUI
 {
-    public function getGuiClass()
+    public function getGuiClass(): string
     {
         return ilObjCourseWizardGUI::class;
     }
 
-    public function initCommands()
+    public function initCommands() : array
     {
         $this->static_link_enabled = true;
         $this->delete_enabled = true;
@@ -42,10 +42,10 @@ class ilObjCourseWizardListGUI extends ilObjectPluginListGUI
         $this->setType(ilCourseWizardPlugin::ID);
     }
 
-    public function getCommandLink($a_cmd)
+    public function getCommandLink($a_cmd): string
     {
-        $cmd_link = "ilias.php?" . "ref_id=" . $this->ref_id . "&amp;cmd=" . $a_cmd .
-            "&amp;cmdClass=ilobjcoursewizardgui&amp;cmdNode=pj:m7&amp;baseClass=ilObjPluginDispatchGUI";
+        $cmd_link = $this->ctrl->getLinkTargetByClass([ilObjPluginDispatchGUI::class,ilObjCourseWizardGUI::class], $a_cmd);
         return $cmd_link;
     }
+
 }

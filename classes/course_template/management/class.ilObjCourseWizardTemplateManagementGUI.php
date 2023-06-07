@@ -30,7 +30,7 @@ class ilObjCourseWizardTemplateManagementGUI
 
         $this->template_management = $crs_template_controller;
         $this->parent_gui = $parent_gui;
-        $this->container_ref_id = (int) $this->parent_gui->object->getRefId();
+        $this->container_ref_id = (int) $this->parent_gui->getObject()->getRefId();
         $this->plugin = $plugin;
         $this->tpl = $tpl;
         $this->lng = $DIC->language();
@@ -60,7 +60,7 @@ class ilObjCourseWizardTemplateManagementGUI
 
         $table = new CourseWizard\CourseTemplate\CourseTemplateManagementTableGUI($this, self::CMD_MANAGE_PROPOSALS, $this->plugin);
 
-        $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->object, new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
+        $data_provider = new CourseWizard\CourseTemplate\CourseTemplateManagementTableDataProvider($this->parent_gui->getObject(), new \CourseWizard\DB\CourseTemplateRepository($DIC->database()));
         $data = $data_provider->getCourseTemplatesForManagementTable();
         $table->setData($data);
 
@@ -87,7 +87,7 @@ class ilObjCourseWizardTemplateManagementGUI
             }
 
             $failure_message = $this->plugin->txt('status_invalid_status_given') . ' ' . $this->plugin->txt($code_as_string);
-            ilUtil::sendFailure($failure_message, true);
+            ilCourseWizardPlugin::sendFailure($failure_message, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         } else {
             $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
@@ -103,7 +103,7 @@ class ilObjCourseWizardTemplateManagementGUI
             $crs_template_status_manager->changeStatusOfCourseTemplateById($template_id, $status_code);
 
             $success_message = $this->plugin->txt('status_crs_tpl_changed_to') . ' ' . $this->plugin->txt(CourseTemplate::statusCodeToLanguageVariable($status_code));
-            ilUtil::sendSuccess($success_message, true);
+            ilCourseWizardPlugin::sendSuccess($success_message, true);
             $ctrl->redirect($this, self::CMD_MANAGE_PROPOSALS);
         }
     }

@@ -23,7 +23,7 @@ class ilObjCourseWizardAccess extends ilObjectPluginAccess
         return $conf->getResponsibleRoleId();
     }
 
-    public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "")
+    public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = ""): bool
     {
         if ($a_user_id == "") {
             $a_user_id = $this->user->getId();

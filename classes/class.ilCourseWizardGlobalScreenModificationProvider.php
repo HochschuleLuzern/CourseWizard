@@ -10,7 +10,7 @@ class ilCourseWizardGlobalScreenModificationProvider extends \ILIAS\GlobalScreen
 
     private function showWizardInfoImportRunning()
     {
-        ilUtil::sendInfo("Import currently running", true);
+        ilCourseWizardPlugin::sendInfo("Import currently running", true);
     }
 
     private function showWizardInfoPostponed(int $ref_id)

@@ -34,7 +34,8 @@ class UserPreferences
     {
         $clone = clone $this;
         $clone->skip_introductions_clicked = $skip_intro;
-        $clone->skip_introductions_clicked_date = time();
+        $clone->skip_introductions_clicked_date = date('Y-m-d H:i:s');
+        /* time(); */
         return $clone;
     }
 }

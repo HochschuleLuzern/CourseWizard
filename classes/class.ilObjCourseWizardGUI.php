@@ -19,6 +19,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const CMD_UPDATE = 'update';
     public const CMD_CRS_TEMPLATE_CREATION_SITE = 'crs_template_creation';
     public const CMD_CREATE_NEW_CRS_TEMPLATE = 'create_crs_template';
+    public const CMD_CREATE = 'create';
 
     public const TAB_OVERVIEW = 'overview';
     public const TAB_MANAGE_PROPOSALS = 'manage_proposals';
@@ -37,18 +38,19 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
     public const FORM_CRS_TEMPLATE_TYPE = 'xcwi_template_type';
 
     /** @var ilCourseWizardPlugin */
-    protected $plugin;
+    /*  protected ?ilPlugin $plugin; */
 
-    /** @var ilObjCourseWizard */
-    public $object;
+     /** @var ilObjCourseWizard */
+    /* public ?ilObject $object; */
 
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
+        global $DIC;
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
+        $this->request = $DIC->http()->request();
     }
 
-
-    public function afterSave(ilObject $newObj)
+    public function afterSave(ilObject $newObj): void
     {
         if ($newObj instanceof ilObjCourseWizard) {
             $form = $this->initCreateForm('xcwi');
@@ -93,18 +95,18 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
         if (isset($params['ref_id'])) {
             $given_ref_id = $params['ref_id'];
-            $given_type = ilObject::_lookupType($given_ref_id, true);
+            $given_type = ilObject::_lookupType((int)$given_ref_id, true);
             if ($given_type == 'cat') {
                 return (int) $given_ref_id;
             } elseif ($given_type == 'xcwi') {
-                return (int) $this->tree->getParentId($given_ref_id);
+                return (int) $this->tree->getParentId((int)$given_ref_id);
             }
         }
 
         return null;
     }
 
-    public function initCreateForm($a_new_type)
+    public function initCreateForm($a_new_type) : \ilPropertyFormGUI
     {
         $form = parent::initCreateForm($a_new_type);
 
@@ -137,17 +139,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         return $form;
     }
 
-    public function getType()
+    public function getType() : string
     {
         return ilCourseWizardPlugin::ID;
     }
 
-    public function getAfterCreationCmd()
+    public function getAfterCreationCmd() : string
     {
         return self::CMD_SHOW_MAIN;
     }
 
-    public function getStandardCmd()
+    public function getStandardCmd() : string
     {
         return self::CMD_SHOW_MAIN;
     }
@@ -160,15 +162,15 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
      * The effect (together with the breadcrumbs-patch) is, that the xcwi-container is not
      * listed twice in the breadcrumbs when the object is opened
      */
-    public function addLocatorItems()
+    public function addLocatorItems(): void
     {
     }
 
-    public function performCommand($cmd)
+    public function performCommand($cmd): void
     {
         global $DIC;
 
-        if (strtolower($_GET['baseClass']) == 'ilrepositorygui') {
+        if ($cmd != self::CMD_CREATE && strtolower($_GET['baseClass']) == 'ilrepositorygui') {
             $this->ctrl->redirectByClass(['ilObjPluginDispatchGUI', self::class], $cmd);
         }
 
@@ -181,14 +183,16 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
             case strtolower(ilObjCourseWizardTemplateManagementGUI::class):
                 $crs_repo = new \CourseWizard\DB\CourseTemplateRepository($DIC->database());
-                $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this->object, $crs_repo);
-                $template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo, $this->tree);
+                $template_manager = new \CourseWizard\CourseTemplate\management\CourseTemplateManager($this->object,
+                    $crs_repo);
+                $template_collector = new \CourseWizard\CourseTemplate\CourseTemplateCollector($this->object, $crs_repo,
+                    $this->tree);
                 $gui = new ilObjCourseWizardTemplateManagementGUI($template_manager, $this, $this->plugin, $this->tpl);
 
                 $this->tabs->activateTab(self::TAB_MANAGE_PROPOSALS);
                 $this->ctrl->forwardCommand($gui);
 
-                // no break
+            // no break
             default:
                 switch ($cmd) {
                     case self::CMD_SHOW_MAIN:
@@ -229,13 +233,17 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
                         $this->createNewCrsTemplate();
                         break;
 
+                    case self::CMD_CREATE:
+                        $this->create();
+                        break;
+
                     default:
                         break;
                 }
         }
     }
 
-    public function setTabs()
+    public function setTabs(): void
     {
         $this->tabs->addTab(self::TAB_OVERVIEW, $this->plugin->txt('overview'), $this->ctrl->getLinkTarget($this, self::CMD_SHOW_MAIN));
 
@@ -267,7 +275,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text'), $form_action)
             ->withActionButtonLabel($this->plugin->langVarAsPluginLangVar('propose'))
             ->withAffectedItems(array(
-                $f->modal()->interruptiveItem($template->getTemplateId(), $title, $icon, $description)
+                $f->modal()->interruptiveItem((string)$template->getTemplateId(), $title, $icon, $description)
             ));
         echo $r->renderAsync($modal);
         die;
@@ -294,7 +302,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $modal = $f->modal()->interruptive($this->plugin->txt('delete_template'), $this->plugin->txt('delete_template_text'), $form_action)
                    ->withActionButtonLabel($this->plugin->langVarAsPluginLangVar('delete'))
                    ->withAffectedItems(array(
-                       $f->modal()->interruptiveItem($template->getTemplateId(), $title, $icon, $description)
+                       $f->modal()->interruptiveItem((string)$template->getTemplateId(), $title, $icon, $description)
                    ));
         echo $r->renderAsync($modal);
         die;
@@ -320,7 +328,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $template_manager->changeStatusOfCourseTemplateById($item_id, \CourseWizard\DB\Models\CourseTemplate::STATUS_PENDING);
 
 
-            ilUtil::sendSuccess('Template proposed', true);
+            ilCourseWizardPlugin::sendSuccess('Template proposed', true);
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
         }
     }
@@ -344,7 +352,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
             $template_manager->deleteCourseTemplateById($item_id, $this->ref_id);
 
-            ilUtil::sendSuccess('Template deleted', true);
+            ilCourseWizardPlugin::sendSuccess('Template deleted', true);
             $this->ctrl->redirect($this, self::CMD_SHOW_MAIN);
         }
     }
@@ -421,11 +429,13 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         //$radio_crs_template_type->setRequired(true);
         foreach (\CourseWizard\DB\Models\CourseTemplate::getCourseTemplateTypes() as $crs_template_type) {
             $option_title = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title']);
-            $option_value = $crs_template_type['type_code'];
+            $option_value = (string)$crs_template_type['type_code'];
             $option_info = $this->plugin->txt('form_crs_template_type_' . $crs_template_type['type_title'] . '_info');
             $radio_crs_template_type->addOption(new ilRadioOption($option_title, $option_value, $option_info));
         }
+        $radio_crs_template_type->setValue("0");
         $radio_crs_template_type->setDisabled(true);
+
         $form->addItem($radio_crs_template_type);
 
         $form->setFormAction($this->ctrl->getFormAction($this, self::CMD_CREATE_NEW_CRS_TEMPLATE));
@@ -457,10 +467,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
 
             $crs_obj = $this->object->createNewCourseTemplate($title, $description, $template_type);
 
-            ilUtil::sendSuccess($this->plugin->txt('create_crs_template_success'), true);
+            ilCourseWizardPlugin::sendSuccess($this->plugin->txt('create_crs_template_success'), true);
             $this->ctrl->redirectToURL(ilLink::_getLink($crs_obj->getRefId(), 'crs'));
         } else {
-            ilUtil::sendFailure($this->plugin->txt('invalid_form_input'), true);
+            ilCourseWizardPlugin::sendFailure($this->plugin->txt('invalid_form_input'), true);
             $this->ctrl->redirect($this, self::CMD_CRS_TEMPLATE_CREATION_SITE);
         }
     }

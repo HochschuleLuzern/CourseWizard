@@ -17,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * @author
  * @ilCtrl_isCalledBy    ilCourseWizardApiGUI: ilUIPluginRouterGUI
  */
-class ilCourseWizardApiGUI
+class ilCourseWizardApiGUI extends ilObjectCopyGUI
 {
     const STANDARD_BASE_CLASS = 'ilUIPluginRouterGUI';
     const STANDARD_CMD_CLASS = 'ilCourseWizardRouterGUI';
@@ -70,7 +70,7 @@ class ilCourseWizardApiGUI
         );
     }
 
-    public function executeCommand()
+    public function executeCommand(): void
     {
         global $DIC;
 
@@ -149,9 +149,9 @@ class ilCourseWizardApiGUI
         $json->performed_steps = null;
 
         include_once './Services/CopyWizard/classes/class.ilCopyWizardOptions.php';
-        $options = ilCopyWizardOptions::_getInstance((int) $_REQUEST['copy_id']);
+        $options = ilCopyWizardOptions::_getInstance((int) $_REQUEST['_copy_id']);
         $json->required_steps = $options->getRequiredSteps();
-        $json->id = (int) $_REQUEST['copy_id'];
+        $json->id = (int) $_REQUEST['_copy_id'];
 
         ilLoggerFactory::getLogger('obj')->debug('Update copy progress: ' . json_encode($json));
 
@@ -172,7 +172,7 @@ class ilCourseWizardApiGUI
                 $wizard_flow = $wizard_flow->withQuitedStatus();
                 $wizard_flow_repo->updateWizardFlowStatus($wizard_flow);
 
-                ilUtil::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
+                ilCourseWizardPlugin::sendSuccess($this->plugin->txt('wizard_dismissed_info'), true);
                 $this->ctrl->redirectToURL(ilLink::_getLink($target_ref_id, 'crs'));
             }
         }

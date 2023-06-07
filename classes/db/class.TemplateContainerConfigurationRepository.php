@@ -27,7 +27,7 @@ class TemplateContainerConfigurationRepository
 
     public function getContainerConfiguration(int $obj_id) : ?TemplateContainerConfiguration
     {
-        if ($this->data_cache[$obj_id]) {
+        if (isset($this->data_cache[$obj_id])) {
             return $this->data_cache[$obj_id];
         }
 

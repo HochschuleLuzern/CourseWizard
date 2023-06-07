@@ -22,7 +22,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->plugin_config = new ilCourseWizardConfig($plugin_config_repo);
     }
 
-    protected function initType()
+    protected function initType(): void
     {
         $this->setType(ilCourseWizardPlugin::ID);
     }
@@ -61,7 +61,7 @@ class ilObjCourseWizard extends ilObjectPlugin
         $this->createConfObj($root_location_ref, $role->getId(), $is_global);
     }
 
-    protected function doRead()
+    protected function doRead(): void
     {
         parent::doRead();
 
@@ -76,7 +76,7 @@ class ilObjCourseWizard extends ilObjectPlugin
     /**
      * Delete Course Wizard specific stuff
      */
-    protected function doDelete()
+    protected function doDelete(): void
     {
         parent::doDelete();
 

@@ -49,7 +49,7 @@ class CourseTemplateManagementTableDataProvider
 
         // ID of template to change
         $item = new \ilHiddenInputGUI('template_id');
-        $item->setValue($template_id);
+        $item->setValue((string)$template_id);
         $item->setRequired(true);
         $form->addItem($item);
 

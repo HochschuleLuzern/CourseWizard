@@ -6,6 +6,12 @@ use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;
 use CourseWizard\Modal\Page\LoadingScreenForModalPage;
 use ILIAS\UI\Implementation\Component\ReplaceSignal;
 use ILIAS\UI\Component\Modal\RoundTrip;
+use ILIAS\UI\Implementation\Component\Input\FormInputNameSource;
+use ILIAS\UI\Implementation\Component\Modal\RoundTrip as RoundTripImpl;
+use ILIAS\UI\Implementation\Component\Modal\Factory as ModalFactory;
+use ILIAS\UI\Component as C;
+use ILIAS\UI\Implementation\Component\SignalGeneratorInterface;
+use ILIAS\UI\Component\Input\Field\Factory as FieldFactory;
 
 class RoundtripModalPresenter implements ModalPresenter
 {
@@ -87,17 +93,51 @@ class RoundtripModalPresenter implements ModalPresenter
     public function getModalAsUIComponent() : RoundTrip
     {
         global $DIC;
+        /*
+        $modal = $this->ui_factory->modal()
+        $modalFactory =  new class() extends ModalFactory {
 
-        $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), []);
+            public function getSignalGenerator(): SignalGeneratorInterface
+            {
+                return  $this->signal_generator;
+            }
+            public function getFieldFactory(): FieldFactory
+            {
+                return  $this->field_factory;
+            }
+        };
+*/
+        $modal =  new class($this->getWizardTitle()) extends RoundTripImpl {
 
-        $replace_signal = $DIC->http()->request()->getQueryParams()['replacesignal']
+            public function __construct(string $title)
+            {
+                global $DIC;
+                parent::__construct(
+                    $DIC["ui.signal_generator"],
+                    $DIC["ui.factory.input.field"],
+                    new FormInputNameSource(),
+                    $title,
+                    [],
+                    [],
+                    null);
+            }
+            public function withContent($content): self
+            {
+                $clone = clone $this;
+                $clone->content = $content;
+
+                return $clone;
+            }
+        };
+
+        $replace_signal = isset($DIC->http()->request()->getQueryParams()['replacesignal'])
             ? new ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
             : $modal->getReplaceSignal();
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
 
         $modal = $modal->withContent([$this->renderModalWithTemplate($replace_signal)])
-                       ->withActionButtons($action_buttons)
+                        ->withActionButtons($action_buttons)
                        ->withCancelButtonLabel($this->plugin->langVarAsPluginLangVar('btn_close_modal'));
 
         return $modal;
