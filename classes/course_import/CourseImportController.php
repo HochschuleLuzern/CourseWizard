@@ -54,7 +54,9 @@ class CourseImportController
 
         if (\ilObject::_lookupType($source_obj_id) == ilObject::_lookupType($target_obj_id)) {
             foreach (ilContainer::_getContainerSettings($source_obj_id) as $keyword => $value) {
-                ilContainer::_writeContainerSetting($target_obj_id, $keyword, $value);
+                if (!is_null($keyword) && !is_null($value)) {
+                    ilContainer::_writeContainerSetting($target_obj_id, $keyword, $value);
+                }
             }
         }
 
