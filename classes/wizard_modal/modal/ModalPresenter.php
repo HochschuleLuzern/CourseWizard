@@ -9,5 +9,5 @@ interface ModalPresenter
 {
     public function getWizardTitle() : string;
     public function getModalAsUIComponent() : RoundTrip;
-    public function renderModalWithTemplate(ReplaceSignal $replace_signal) ;
+    public function renderModalWithTemplate() ;
 }

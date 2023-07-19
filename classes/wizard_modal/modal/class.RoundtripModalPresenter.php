@@ -57,7 +57,7 @@ class RoundtripModalPresenter implements ModalPresenter
         }
     }
 
-    public function renderModalWithTemplate(ReplaceSignal $replace_signal)
+    public function renderModalWithTemplate()
     {
         $this->modal_template->setVariable('WIZARD_MODAL_ID', $this->presenter->getHtmlWizardDivId());
 
@@ -68,9 +68,6 @@ class RoundtripModalPresenter implements ModalPresenter
 
         $this->modal_template->setVariable('STEP_DESCRIPTION', $this->presenter->getStepInstructions());
         $this->modal_template->setVariable('STEP_CONTENT', $this->presenter->getStepContent());
-
-        $json_config = $this->presenter->getJSConfigsAsString($replace_signal);
-        $this->modal_template->setVariable('STEP_CONFIG_JSON', $json_config);
 
         if ($this->presenter instanceof LoadingScreenForModalPage) {
             $this->modal_template->setCurrentBlock('loading_screen');
@@ -93,42 +90,8 @@ class RoundtripModalPresenter implements ModalPresenter
     public function getModalAsUIComponent() : RoundTrip
     {
         global $DIC;
-        /*
-        $modal = $this->ui_factory->modal()
-        $modalFactory =  new class() extends ModalFactory {
 
-            public function getSignalGenerator(): SignalGeneratorInterface
-            {
-                return  $this->signal_generator;
-            }
-            public function getFieldFactory(): FieldFactory
-            {
-                return  $this->field_factory;
-            }
-        };
-*/
-        $modal =  new class($this->getWizardTitle()) extends RoundTripImpl {
-
-            public function __construct(string $title)
-            {
-                global $DIC;
-                parent::__construct(
-                    $DIC["ui.signal_generator"],
-                    $DIC["ui.factory.input.field"],
-                    new FormInputNameSource(),
-                    $title,
-                    [],
-                    [],
-                    null);
-            }
-            public function withContent($content): self
-            {
-                $clone = clone $this;
-                $clone->content = $content;
-
-                return $clone;
-            }
-        };
+        $modal = $this->ui_factory->modal()->roundtrip($this->getWizardTitle(), [$this->renderModalWithTemplate()]);
 
         $replace_signal = isset($DIC->http()->request()->getQueryParams()['replacesignal'])
             ? new ReplaceSignal($DIC->http()->request()->getQueryParams()['replacesignal'])
@@ -136,9 +99,14 @@ class RoundtripModalPresenter implements ModalPresenter
 
         $action_buttons = $this->presenter->getPageActionButtons($replace_signal);
 
-        $modal = $modal->withContent([$this->renderModalWithTemplate($replace_signal)])
-                        ->withActionButtons($action_buttons)
-                       ->withCancelButtonLabel($this->plugin->langVarAsPluginLangVar('btn_close_modal'));
+        $json_config = $this->presenter->getJSConfigsAsString($replace_signal);
+
+        $modal = $modal->withActionButtons($action_buttons)
+                       ->withCancelButtonLabel($this->plugin->langVarAsPluginLangVar('btn_close_modal'))
+                       ->withAdditionalOnLoadCode(function ($id) use ($json_config) {
+                           return
+                               "il.CourseWizardFunctions.initNewModalPage($json_config);";
+                       });
 
         return $modal;
     }
