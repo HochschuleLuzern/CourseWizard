@@ -61,7 +61,7 @@ class ilWizardAccessChecker
         foreach ($child_ref_ids as $child_node) {
             if ($child_node['type'] != 'grp') {
                 return false;
-            } elseif (count($this->tree->getChilds($child_node['ref_id'])) > 0) {
+            } elseif (count($this->tree->getChilds(intval($child_node['ref_id']))) > 0) {
                 return false;
             } elseif (!$this->isSubGroupTitleOf($parent_obj_title, $child_node['title'])) {
                 return false;
