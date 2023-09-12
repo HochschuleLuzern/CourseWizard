@@ -67,7 +67,7 @@ class CourseImportController
     {
         // Check status of wizard
         $wizard_flow = $wizard_flow_repo->getWizardFlowForCrs($course_import_data->getTargetCrsRefId());
-        if ($wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS) {
+        if ($wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_IN_PROGRESS && $wizard_flow->getCurrentStatus() != \CourseWizard\DB\Models\WizardFlow::STATUS_POSTPONED) {
             throw new InvalidArgumentException('Invalid Status given: ' . $wizard_flow->getCurrentStatus());
         }
 
