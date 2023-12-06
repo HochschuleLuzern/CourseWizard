@@ -178,6 +178,10 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
             $cmd = self::CMD_PROPOSE_TEMPLATE_CONFIRM;
         }
 
+        if ($_GET['cmd'] == 'post' && $_GET['fallbackCmd'] == self::CMD_DELETE_TEMPLATE_CONFIRM) {
+            $cmd = self::CMD_DELETE_TEMPLATE_CONFIRM;
+        }
+
         $next_class = $this->ctrl->getNextClass();
         switch ($next_class) {
 
