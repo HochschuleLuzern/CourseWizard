@@ -61,8 +61,10 @@ class CourseImportObjectFactory
         $parsed_content_inheritance = array();
 
         foreach ($content_inheritance as $key => $value) {
-            $id = explode('_', $value['id'])[2];
-            $parsed_content_inheritance[$id] = array('type' => $value['value']);
+            if(count(explode('_', $value['id'])) >= 3) {
+                $id = explode('_', $value['id'])[2];
+                $parsed_content_inheritance[$id] = array('type' => $value['value']);
+            }
         }
 
         return $parsed_content_inheritance;
