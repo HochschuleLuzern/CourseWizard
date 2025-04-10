@@ -37,7 +37,7 @@ class ilCourseWizardApiGUI extends ilObjectCopyGUI
     const GET_TEMPLATE_REF_ID = 'template_ref_id';
 
     protected ilCtrl $ctrl;
-    protected RequestInterface $request;
+    protected ServerRequestInterface $request;
     protected Factory $ui_factory;
     protected Renderer $ui_renderer;
     protected ilRbacSystem $rbac_system;
