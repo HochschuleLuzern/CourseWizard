@@ -279,7 +279,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text'), $form_action)
             ->withActionButtonLabel($this->plugin->langVarAsPluginLangVar('propose'))
             ->withAffectedItems(array(
-                $f->modal()->interruptiveItem((string)$template->getTemplateId(), $title, $icon, $description)
+                $f->modal()->interruptiveItem()->standard((string)$template->getTemplateId(), $title, $icon, $description)
             ));
         echo $r->renderAsync($modal);
         die;
