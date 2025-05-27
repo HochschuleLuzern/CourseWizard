@@ -3,6 +3,7 @@
 namespace CourseWizard\CustomUI;
 
 use ILIAS\UI\Component\Image\Image;
+use ilUtil;
 
 class CourseImportLoadingStepUIComponents
 {
@@ -52,7 +53,7 @@ class CourseImportLoadingStepUIComponents
     {
         global $DIC;
 
-        $loading_icon = $DIC->ui()->factory()->image()->standard('templates/default/images/loader.svg', 'loading');
+        $loading_icon = $DIC->ui()->factory()->image()->standard(ilUtil::getImagePath('media/loader.svg'), 'loading');
         return array(
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_content_page_loading_title'),
@@ -71,7 +72,7 @@ class CourseImportLoadingStepUIComponents
     {
         global $DIC;
 
-        $success_icon = $DIC->ui()->factory()->image()->standard('templates/default/images/icon_ok.svg', 'success');
+        $success_icon = $DIC->ui()->factory()->image()->standard(ilUtil::getImagePath('standard/icon_ok.svg'), 'success');
         return array(
             new CourseImportLoadingStepUIComponents(
                 $plugin->txt('import_content_page_loading_title'),

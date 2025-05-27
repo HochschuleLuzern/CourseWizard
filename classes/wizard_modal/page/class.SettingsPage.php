@@ -4,6 +4,7 @@ namespace CourseWizard\Modal\Page;
 
 use CourseWizard\CustomUI\CourseImportLoadingGUI;
 use CourseWizard\CustomUI\CourseImportLoadingStepUIComponents;
+use ilUtil;
 
 class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForModalPage
 {
@@ -84,7 +85,7 @@ class SettingsPage extends BaseModalPagePresenter implements LoadingScreenForMod
     public function getLoadingSteps() : array
     {
         global $DIC;
-        $loading_icon = $DIC->ui()->renderer()->renderAsync($this->ui_factory->image()->standard('templates/default/images/loader.svg', 'loading'));
+        $loading_icon = $DIC->ui()->renderer()->renderAsync($this->ui_factory->image()->standard(ilUtil::getImagePath('media/loader.svg'), 'loading'));
 
         return CourseImportLoadingStepUIComponents::getLoadingSteps($this->plugin);
     }

@@ -273,7 +273,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $title = \ilObject::_lookupTitle($template->getCrsObjId());
         $description = \ilObject::_lookupDescription($template->getCrsObjId());
         $image_path = ilObject::_getIcon($template->getCrsObjId());
-        $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
+        $icon = $f->image()->standard(ilUtil::getImagePath('standard/icon_crs.svg'), '');
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_PROPOSE_TEMPLATE_CONFIRM);
         $modal = $f->modal()->interruptive($this->plugin->txt('propose_template'), $this->plugin->txt('propose_template_text'), $form_action)
@@ -300,7 +300,7 @@ class ilObjCourseWizardGUI extends ilObjectPluginGUI
         $title = \ilObject::_lookupTitle($template->getCrsObjId());
         $description = \ilObject::_lookupDescription($template->getCrsObjId());
         $image_path = ilObject::_getIcon($template->getCrsObjId());
-        $icon = $f->image()->standard('./templates/default/images/icon_crs.svg', '');
+        $icon = $f->image()->standard(ilUtil::getImagePath('standard/icon_crs.svg'), '');
 
         $form_action = $this->ctrl->getFormAction($this, self::CMD_DELETE_TEMPLATE_CONFIRM);
         $modal = $f->modal()->interruptive($this->plugin->txt('delete_template'), $this->plugin->txt('delete_template_text'), $form_action)

@@ -79,15 +79,15 @@ li.xcwi_import_list {
 }
 
 li.xcwi_loading {
-	list-style-image: url("../../../../../../../../../templates/default/images/loader.svg");
+	list-style-image: url("../../../../../../../../../templates/default/images/media/loader.svg");
 }
 
 li.xcwi_success {
-	list-style-image: url("../../../../../../../../../templates/default/images/icon_ok.svg");
+	list-style-image: url("../../../../../../../../../templates/default/images/standard/icon_ok.svg");
 }
 
 li.xcwi_failure {
-	list-style-image: url("../../../../../../../../../templates/default/images/icon_not_ok.svg");
+	list-style-image: url("../../../../../../../../../templates/default/images/standard/icon_not_ok.svg");
 }
 
 input.xcwi-template-selection__filter-input {
