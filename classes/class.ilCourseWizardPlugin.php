@@ -205,7 +205,7 @@ class ilCourseWizardPlugin extends ilRepositoryObjectPlugin
 
     public function langVarAsPluginLangVar(string $lang_var) : string
     {
-        return self::LANG_PREFIX . $lang_var;
+        return $this->txt($lang_var);
     }
 
     /**
