@@ -45,10 +45,12 @@ class CourseImportLoadingGUI
             $tpl->parseCurrentBlock();
         }
 
-        foreach ($css_files as $css_file) {
-            $tpl->setCurrentBlock("css_file");
-            $tpl->setVariable("CSS_FILE", $css_file['file']);
-            $tpl->parseCurrentBlock();
+        if ($tpl->blockExists("css_file")) {
+            foreach ($css_files as $css_file) {
+                $tpl->setCurrentBlock("css_file");
+                $tpl->setVariable("CSS_FILE", $css_file['file']);
+                $tpl->parseCurrentBlock();
+            }
         }
 
         /** @var CourseImportLoadingStepUIComponents $loading_step */
