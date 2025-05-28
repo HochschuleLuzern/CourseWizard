@@ -206,8 +206,12 @@ il.CourseWizardFunctions = (function (scope) {
 						}
 
 						if(button) {
+							/*
 							button = '<li><div class="navbar-form">' +  button + '</div></li>';
 							$('div.ilToolbarContainer ul.ilToolbarItems.nav.navbar-nav').append(button);
+							*/
+							button = '<div class="l-bar__element c-toolbar__item"><div class="navbar-form">' +  button + '</div></div>';
+							$('div.ilToolbarContainer div.l-bar__group.c-toolbar__main-body div.l-bar__group.c-toolbar__group').append(button);
 						}
 					}
 				}
