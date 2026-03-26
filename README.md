@@ -66,11 +66,11 @@ to build breadcrumbs). The plugin does not need this patch to work. But for the 
 - Navigate to the root directory of your ILIAS installation on the command line
 - Execute following command to create the directory for the plugin slot "Repository Object":
 ```bash
-mkdir -p Customizing/global/plugins/Services/Repository/RepositoryObject/
+mkdir -p public/Customizing/global/plugins/Services/Repository/RepositoryObject/
 ```
 - Switch to the directory for the plugin slot
 ```bash
-cd Customizing/global/plugins/Services/Repository/RepositoryObject/
+cd public/Customizing/global/plugins/Services/Repository/RepositoryObject/
 ```
 - Clone the git repository from Github
 ```bash
@@ -84,10 +84,10 @@ This plugin contains two patches for your ILIAS-Repository. One is mandatory by 
 - Enter following commands to apply the patches
 ```bash
 # This patch is mandatory
-git apply Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/patches/xcwi_crs_as_possible_subobj.patch
+git apply public/Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/patches/xcwi_crs_as_possible_subobj.patch
 
 # This patch is optional
-git apply Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/patches/xcwi_breadcrumbs_fix.patch
+git apply public/Customizing/global/plugins/Services/Repository/RepositoryObject/CourseWizard/patches/xcwi_breadcrumbs_fix.patch
 ```
 - Depending on your management of the ILIAS-Code-Base, you have to commit this patches to your repo. Otherwise, they could 
 be overwritten with the next update.
