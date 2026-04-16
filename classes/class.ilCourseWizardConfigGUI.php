@@ -98,7 +98,6 @@ class ilCourseWizardConfigGUI extends ilPluginConfigGUI
                     ++$counter;
                 }
 
-                include_once './Services/JSON/classes/class.ilJsonUtil.php';
                 echo ilJsonUtil::encode($result);
                 exit;
         }

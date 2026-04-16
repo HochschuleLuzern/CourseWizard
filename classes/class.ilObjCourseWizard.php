@@ -99,7 +99,6 @@ class ilObjCourseWizard extends ilObjectPlugin
         $rbacadmin = $DIC->rbac()->admin();
         $rbacreview = $DIC->rbac()->review();
 
-        include_once './Services/AccessControl/classes/class.ilObjRole.php';
         $role = ilObjRole::createDefaultRole(
             $role_title,
             "Admin role for Template Container" . $this->getId(),

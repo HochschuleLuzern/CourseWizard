@@ -148,7 +148,6 @@ class ilCourseWizardApiGUI extends ilObjectCopyGUI
         $json->percentage = null;
         $json->performed_steps = null;
 
-        include_once './Services/CopyWizard/classes/class.ilCopyWizardOptions.php';
         $options = ilCopyWizardOptions::_getInstance((int) $_REQUEST['_copy_id']);
         $json->required_steps = $options->getRequiredSteps();
         $json->id = (int) $_REQUEST['_copy_id'];
