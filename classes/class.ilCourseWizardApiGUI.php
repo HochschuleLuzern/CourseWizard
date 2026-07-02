@@ -392,7 +392,7 @@ class ilCourseWizardApiGUI extends ilObjectCopyGUI
         $modal = $modal_factory->buildModalFromStateMachine($title, $state_machine);
 
         $output = $modal->getRenderedModal(true);
-        echo $output . "<script src='./Services/CopyWizard/js/ilCopyRedirection.js'></script><script src='./Services/CopyWizard/js/ilContainer.js'></script>";
+        echo $output . "<script src='./assets/js/ilCopyRedirection.js'></script><script src='./assets/js/ilContainer.js'></script>";
         exit;
     }
 
