@@ -44,7 +44,7 @@ class ContentInheritanceTableGUI extends \ilTable2GUI
 
         $this->setEnableHeader(true);
         $this->setFormAction($this->ctrl->getFormAction($this->getParentObject()));
-        $this->setRowTemplate("tpl.obj_copy_selection_row.html", "Services/Object");
+        $this->setRowTemplate("tpl.obj_copy_selection_row.html", "components/ILIAS/ILIASObject");
         $this->setEnableTitle(true);
         $this->setEnableNumInfo(true);
         $this->setLimit(999999);
