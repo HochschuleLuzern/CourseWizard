@@ -22,7 +22,12 @@ il.CourseWizardFunctions = (function (scope) {
 	};
 
 	priv.triggerSignal = function(signal_id, event, triggerer, options) {
-		$(document).trigger(signal_id, {
+		// Trigger the signal on the triggering element (a node inside the modal),
+		// not on `document`. Since ILIAS 10 the modal replace-signal handler derives
+		// the modal id via `event.target.closest('.c-modal')` (see Modal/Renderer.php),
+		// which requires event.target to be a real DOM element inside the modal.
+		// jQuery bubbles the custom event up to the $(document).on(...) handler.
+		triggerer.trigger(signal_id, {
 			id: signal_id,
 			event: 'click',
 			triggerer: triggerer,
@@ -39,7 +44,7 @@ il.CourseWizardFunctions = (function (scope) {
 			priv.storeCurrentWizardObj()
 
 			priv.showLoadingAnimation(e.target.id);
-			priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+			priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e.currentTarget), {url: nextPageUrl});
 
 		} else {
 		}
@@ -50,7 +55,7 @@ il.CourseWizardFunctions = (function (scope) {
 
 		let nextPageUrl = priv.wizardModalConfig['nextPageUrl'] + '&skip_intro=' + (skip_introduction ? '1' : '0');
 		priv.showLoadingAnimation(e.target.id);
-		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: nextPageUrl});
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e.currentTarget), {url: nextPageUrl});
 
 	}
 
@@ -65,7 +70,7 @@ il.CourseWizardFunctions = (function (scope) {
 		priv.storeCurrentWizardObj();
 		priv.showLoadingAnimation(e.target.id);
 
-		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: priv.wizardModalConfig['nextPageUrl']});
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e.currentTarget), {url: priv.wizardModalConfig['nextPageUrl']});
 	};
 
 	pub.loadPreviousPage = function(e) {
@@ -75,7 +80,7 @@ il.CourseWizardFunctions = (function (scope) {
 			previousPageUrl += '&template_ref_id=' + currentWizardObj['templateRefId'];
 		}
 		priv.showLoadingAnimation(e.target.id);
-		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e), {url: previousPageUrl});
+		priv.triggerSignal(priv.wizardModalConfig['replaceSignal'], 'click', $(e.currentTarget), {url: previousPageUrl});
 	};
 
 	pub.executeImport = function(e) {
