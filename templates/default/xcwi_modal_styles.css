@@ -104,3 +104,23 @@ div.xcwi_loading_content_container img{
 	width: 22px;
 	height: 22px;
 }
+
+/*
+ * Keep the item actions dropdown ("View Course Template") inside the wizard modal.
+ *
+ * The core Dropdown JS (components/ILIAS/UI/resources/js/Dropdown/src/Dropdown.js,
+ * #align()) chooses left/right alignment by comparing against the viewport width
+ * (document.documentElement.clientWidth), not the width of the enclosing modal.
+ * Inside the (narrower) wizard modal it therefore always adds .dropdown-menu__right,
+ * so the menu opens rightward (min-width: 200px, white-space: nowrap) and overflows
+ * the modal's right edge -> the label gets clipped and a scrollbar appears.
+ *
+ * Force right-alignment here so the menu opens leftward and stays within the modal.
+ * Scoped to the template-selection subpage so no other dropdown is affected. The
+ * JS toggles alignment via classes only (no inline left/right styles), so !important
+ * reliably overrides the .dropdown-menu__right rule of the same specificity.
+ */
+.xcwi-template-selection__subpage .dropdown-menu {
+	right: 0 !important;
+	left: auto !important;
+}
